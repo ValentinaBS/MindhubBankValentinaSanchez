@@ -5,20 +5,21 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity // Creates an empty table
 public class Client {
-    @Id
+    @Id // Indicates Primary Key
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GenericGenerator(name = "native", strategy = "native") // Generates ID value automatically
     private long id;
     private String firstName;
     private String lastName;
     private String email;
 
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
-    Set<Account> accounts = new HashSet<>();
+    // How do we want to bring the data. EAGER brings Client with Account. LAZY brings Client only.
+    private Set<Account> accounts = new HashSet<>(); // Initialising a space to save all accounts, without duplicates
 
-    public Client(){ }
+    public Client(){ } // It's used to map by Hibernate. DTOs don't because they don´t persist.
     public Client(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;

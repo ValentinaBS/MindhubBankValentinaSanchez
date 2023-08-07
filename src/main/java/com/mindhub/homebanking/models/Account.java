@@ -1,29 +1,26 @@
 package com.mindhub.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 
-@Entity
+@Entity // Creates an empty table
 public class Account {
-    @Id
+    @Id // Indicates Primary Key
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GenericGenerator(name = "native", strategy = "native") // Generates ID value automatically
     private long id;
     private String number;
     private LocalDate creationDate;
     private Double balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="client_id")
-    private Client client;
+    // How do we want to bring the data. EAGER brings Account with the linked Client. LAZY brings Account only.
+    @JoinColumn(name="client_id") // Adds column in Account table, with the Foreign Key using the Client Primary Key
+    private Client client; // Property of the Account class
 
-    public Account(){}
+    public Account(){} // It's used to map by Hibernate. DTOs don't because they don´t persist.
     public Account(String number, LocalDate creationDate, Double balance) {
         this.number = number;
         this.creationDate = creationDate;
@@ -61,7 +58,7 @@ public class Account {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-    @JsonIgnore
+
     public Client getClient() {
         return client;
     }

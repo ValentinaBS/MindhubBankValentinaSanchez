@@ -5,4 +5,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface ClientRepository extends JpaRepository<Client, Long> {
-}
+} // Creates a repository to save the clients in the database

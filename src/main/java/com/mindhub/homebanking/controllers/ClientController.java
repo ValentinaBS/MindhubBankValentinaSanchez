@@ -11,12 +11,12 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@RestController
+@RestController // Methods in a RestController return JSON objects or XML. Spring doesn't know it exists if it doesn't have this annotation.
 @RequestMapping("/api")
 public class ClientController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientRepository clientRepository; // Interface. We do this to use methods, not properties.
 
     @RequestMapping("/clients")
     public List<ClientDTO> getClients() {
@@ -25,7 +25,7 @@ public class ClientController {
                 .stream()
                 .map(ClientDTO::new)
                 .collect(toList());
-    }
+    } // Servlet
 
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
