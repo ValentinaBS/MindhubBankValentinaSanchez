@@ -7,12 +7,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ClientDTO {
+
+    // ---- Properties ----
     private long id;
     private String firstName;
     private String lastName;
     private String email;
     private Set<AccountDTO> accounts = new HashSet<>();
 
+    // ---- Constructors ----
     public ClientDTO(Client client) {
 
         this.id = client.getId();
@@ -26,12 +29,9 @@ public class ClientDTO {
         this.accounts = client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toSet());
     }
 
+    // ---- Getters ----
     public Set<AccountDTO> getAccounts() {
         return accounts;
-    }
-
-    public void setAccounts(Set<AccountDTO> accounts) {
-        this.accounts = accounts;
     }
 
     public long getId() {

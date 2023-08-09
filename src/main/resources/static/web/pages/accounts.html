@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-for="http://www.w3.org/1999/XSL/Transform">
+<html lang="en" xmlns:v-for="http://www.w3.org/1999/XSL/Transform" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -72,6 +72,9 @@
                         <p class="card-text">
                             Creation date: {{ account.creationDate }}
                         </p>
+                        <a v-bind:href="'account.html?id=' + account.id" class="btn primary-btn py-2 fw-bold">
+                            Transactions
+                        </a>
                     </div>
                 </article>
             </template>

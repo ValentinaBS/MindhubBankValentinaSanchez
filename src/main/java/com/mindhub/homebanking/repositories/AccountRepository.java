@@ -5,4 +5,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface AccountRepository extends JpaRepository<Account, Long> {
-}
+} // Creates a repository to save the accounts in the database
