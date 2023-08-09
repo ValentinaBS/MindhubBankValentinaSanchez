@@ -10,8 +10,6 @@ import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
@@ -44,9 +42,9 @@ public class HomebankingApplication {
 
 			// Create transactions
 			Transaction trans1 = new Transaction(-2300.5, "Rent", LocalDateTime.now(), TransactionType.DEBIT);
-			Transaction trans2 = new Transaction(3550.0, "Wage pay", LocalDateTime.now(), TransactionType.CREDIT);
+			Transaction trans2 = new Transaction(3550.0, "Wage pay", LocalDateTime.now().minusDays(1), TransactionType.CREDIT);
 			Transaction trans3 = new Transaction(-1232.5, "Groceries", LocalDateTime.now(), TransactionType.DEBIT);
-			Transaction trans4 = new Transaction(250.0, "Birthday gift", LocalDateTime.now(), TransactionType.CREDIT);
+			Transaction trans4 = new Transaction(250.0, "Birthday gift", LocalDateTime.now().minusDays(2), TransactionType.CREDIT);
 
 			// Assign accounts to clients
 			client1.addAccount(account1);

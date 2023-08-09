@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity // Creates an empty table
+// public: any code can use the class. - private: can only be used inside the class.
 public class Client {
 
     // ---- Properties ----
@@ -24,6 +25,7 @@ public class Client {
     // Initialising a space to save all accounts, without duplicates
 
     // ---- Constructors ----
+    // Special method that creates an instance of a class, called with the new operator.
     public Client(){ } // It's used to map by Hibernate. DTOs don't because they don´t persist.
     public Client(String firstName, String lastName, String email) {
         this.firstName = firstName;

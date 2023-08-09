@@ -18,7 +18,7 @@ const options = {
         axios.get(`/api/accounts/${this.accountId}`)
         .then(res => {
             this.chosenAccount = res.data;
-            this.transactions = this.chosenAccount.transactions.sort((a, b) => a.transferDate.localeCompare(b.transferDate));
+            this.transactions = this.chosenAccount.transactions.sort((a, b) => b.transferDate - a.transferDate);
             console.log(this.transactions)
         })
         .catch(err => console.error(err))

@@ -26,15 +26,20 @@ public class ClientController {
         return clientRepository
                 .findAll()
                 .stream()
+                // creates a stream object to use the map() method
                 .map(ClientDTO::new)
+                // runs the ClientDTO constructor and passes the current Client as argument.
+                // returns a stream with the results .map(client -> new ClientDTO(client)
                 .collect(toList());
-    } // Servlet
+                // converts stream back to a list
+    } // Servlet. Tomcat is a servlet container.
 
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
         return clientRepository
                 .findById(id)
+                // Since it's only one Client, stream is not needed
                 .map(ClientDTO::new)
                 .orElse(null);
-    } // Servlet
+    } // Servlet. Tomcat is a servlet container.
 }
