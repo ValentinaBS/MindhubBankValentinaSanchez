@@ -19,7 +19,7 @@ public class ClientController {
     @Autowired
     // Injects ClientRepository to use it in this controller
     private ClientRepository clientRepository;
-    // Interface. We do this to use methods, not properties.
+    // Interface. We do this to use methods with clientRepository.
 
     @RequestMapping("/clients")
     public List<ClientDTO> getClients() {

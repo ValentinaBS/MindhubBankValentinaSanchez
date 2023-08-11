@@ -145,6 +145,10 @@ header h1 {
     header h1 {
         font-size: 4rem;
     }
+
+    .accounts-card {
+        width: 500px;
+    }
 }
 
 /* Account */

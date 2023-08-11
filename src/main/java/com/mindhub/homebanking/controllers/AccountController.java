@@ -20,7 +20,7 @@ public class AccountController {
     @Autowired
     // Injects ClientRepository to use it in this controller
     public AccountRepository accountRepository;
-    // Interface. We do this to use methods, not properties.
+    // Interface. We do this to use methods.
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts(){

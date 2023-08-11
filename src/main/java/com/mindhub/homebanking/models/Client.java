@@ -1,9 +1,14 @@
 package com.mindhub.homebanking.models;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity // Creates an empty table
 // public: any code can use the class. - private: can only be used inside the class.
@@ -24,6 +29,9 @@ public class Client {
     private Set<Account> accounts = new HashSet<>();
     // Initialising a space to save all accounts, without duplicates
 
+    @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
+    private Set<ClientLoan> clientLoans = new HashSet<>();
+
     // ---- Constructors ----
     // Special method that creates an instance of a class, called with the new operator.
     public Client(){ } // It's used to map by Hibernate. DTOs don't because they don´t persist.
@@ -35,9 +43,6 @@ public class Client {
 
     // ---- Getters & Setters ----
     public long getId() {return id;}
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -68,4 +73,19 @@ public class Client {
         accounts.add(account);
     }
 
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientLoans.add(clientLoan);
+    }
+
+    public List<Loan> getLoans() {
+        return clientLoans
+                .stream()
+                .map(ClientLoan::getLoan)
+                .collect(toList());
+    }
 }

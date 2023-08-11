@@ -85,9 +85,7 @@
                         <tr>
                             <td class="fw-bold" v-bind:class="[transaction.type == 'DEBIT' ? debitClass : creditClass]">{{ transaction.type }}</td>
                             <td>{{ transaction.type == 'DEBIT' ? '-' : '' }}${{ transaction.type == 'DEBIT' ? transaction.amount.toString().slice(1) : transaction.amount }}</td>
-                            <td>{{ new Date(transaction.transferDate).toLocaleDateString('en-US')
-                                + ' - '
-                                + new Date(transaction.transferDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}}
+                            <td>{{ formatDate(transaction.transferDate) }}
                             </td>
                             <td>{{ transaction.description }}</td>
                         </tr>

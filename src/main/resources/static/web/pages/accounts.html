@@ -16,7 +16,7 @@
 </head>
 
 <body>
-<div class="layout" id="app">
+<div class="layout" id="app" v-cloak>
     <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
         <a class="navbar-brand" href="#">
             <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
@@ -52,7 +52,7 @@
 
     <header class="container-fluid accounts-banner d-flex justify-content-center align-items-center">
         <h1 class="fw-bold text-white">
-            ¡Welcome, Melba!
+            ¡Welcome, {{ firstName }}!
         </h1>
     </header>
 
@@ -72,7 +72,7 @@
                         <p class="card-text">
                             Creation date: {{ account.creationDate }}
                         </p>
-                        <a v-bind:href="'account.html?id=' + account.id" class="btn primary-btn py-2 fw-bold">
+                        <a v-bind:href="'account.html?id=' + account.id" class="btn primary-btn py-2 fw-bold w-75">
                             Transactions
                         </a>
                     </div>
@@ -80,6 +80,33 @@
             </template>
             <template v-else>
                 <h3 class="text-center">You don't have any accounts. Open one with us!</h3>
+            </template>
+        </div>
+        <h2 class="mt-5">Your Loans</h2>
+        <div class="m-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
+            <template v-if="clientLoans.length > 0" v-for="loan of clientLoans">
+                <article class="card accounts-card shadow py-3">
+                    <div class="card-body">
+                        <h3 class="card-text mb-3">
+                            {{ loan.name }}
+                        </h3>
+                        <p class="card-text">
+                            Amount:
+                            <span class="d-block account-amount fw-bold fs-3">${{ Intl.NumberFormat('en-US').format(loan.amount) }}</span>
+                        </p>
+                        <p class="card-text">
+                            Payments: {{ loan.payments }} installments
+                        </p>
+                    </div>
+                </article>
+            </template>
+            <template v-else>
+                <div>
+                    <h3 class="text-center my-5">You don't have any loans. Get yours with us!</h3>
+                    <a href="loans.html" class="btn btn-lg primary-btn py-2 fw-bold w-50">
+                        Get a loan
+                    </a>
+                </div>
             </template>
         </div>
     </section>
