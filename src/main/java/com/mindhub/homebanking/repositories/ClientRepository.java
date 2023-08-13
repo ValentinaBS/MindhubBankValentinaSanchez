@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-// ClientRepository inherits from JpaRepository
+// ClientRepository inherits methods from JpaRepository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-} // Creates a repository to save the clients in the database
+} // Creates a repository to save/modify/obtain/delete the clients in the database

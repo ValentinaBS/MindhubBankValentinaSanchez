@@ -20,7 +20,7 @@ public class AccountController {
     @Autowired
     // Injects ClientRepository to use it in this controller
     public AccountRepository accountRepository;
-    // Interface. We do this to use methods.
+    // Interface. We do this to use methods with accountRepository.
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts(){
@@ -33,9 +33,6 @@ public class AccountController {
 
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable long id){
-        return accountRepository
-                .findById(id)
-                .map(AccountDTO::new)
-                .orElse(null);
+        return new AccountDTO(accountRepository.findById(id).orElse(null));
     }
 }
