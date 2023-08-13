@@ -38,7 +38,6 @@ public class ClientController {
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
         return new ClientDTO(clientRepository.findById(id).orElse(null));
-        // new ClientDTO(clientRepository.findById(id).orElse(null));
         // Since it's only one Client, stream and map are not needed
     } // Servlet. Tomcat is a servlet container.
 }

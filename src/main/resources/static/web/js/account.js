@@ -22,28 +22,6 @@ const options = {
             console.log(this.transactions)
         })
         .catch(err => console.error(err))
-    },
-    methods: {
-              formatDate(date){
-                   let newDate = new Date(date)
-                   let year = newDate.getFullYear()
-                   let day = newDate.getDay()
-                   let arrayYear = Array.from(year.toString()).slice(-2).join("")
-                   let month = newDate.getMonth() +1
-                   if(month < 10){
-                        month = "0" + month
-                   }
-                   let timeHours = newDate.getHours()
-                   let timeMinutes = newDate.getMinutes()
-                   if(timeHours < 10) {
-                        timeHours = "0" + timeHours
-                   }
-                   if(timeMinutes < 10) {
-                        timeMinutes = "0" + timeMinutes
-                   }
-                   let dayMonthYearTime = day + "/" + month + "/" + arrayYear + "-" + timeHours + ":" + timeMinutes
-                   return dayMonthYearTime
-              }
     }
 }
 
