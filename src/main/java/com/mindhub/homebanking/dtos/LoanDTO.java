@@ -11,7 +11,7 @@ public class LoanDTO {
     private long id;
     private String name;
     private double maxAmount;
-    private List<Integer> payments = new ArrayList<>();
+    private List<Integer> payments;
 
     // ---- Constructor ----
     public LoanDTO(Loan loan) {

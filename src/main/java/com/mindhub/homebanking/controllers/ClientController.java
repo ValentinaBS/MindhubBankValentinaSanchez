@@ -33,7 +33,7 @@ public class ClientController {
                 // returns a stream with the results .map(client -> new ClientDTO(client)
                 .collect(toList());
                 // converts stream back to a list
-    } // Servlet (listens to HTTP petitions and business logic). Tomcat is a servlet container.
+    } // Servlet (listens and responds to specific HTTP petitions and business logic). Tomcat is a servlet container.
 
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){

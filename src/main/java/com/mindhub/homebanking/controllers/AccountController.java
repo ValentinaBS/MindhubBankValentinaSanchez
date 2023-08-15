@@ -19,7 +19,7 @@ public class AccountController {
 
     @Autowired
     // Injects ClientRepository to use it in this controller
-    public AccountRepository accountRepository;
+    private AccountRepository accountRepository;
     // Interface. We do this to use methods with accountRepository.
 
     @RequestMapping("/accounts")

@@ -15,7 +15,7 @@ const options = {
             this.client = res.data;
             this.firstName = this.client.firstName;
             this.clientAccounts = this.client.accounts;
-            this.clientLoans = this.client.clientLoans
+            this.clientLoans = this.client.loans
         })
         .catch(err => console.error(err))
     }
