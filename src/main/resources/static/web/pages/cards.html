@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-for="http://www.w3.org/1999/XSL/Transform" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../images/favicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet">
+    <title>Mindhub Bank | My Cards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+<div class="layout" id="app">
+    <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
+        <a class="navbar-brand" href="#">
+            <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
+        </a>
+        <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapsibleNavbar">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
+            <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
+                <li class="nav-item text-center">
+                    <a class="nav-link rounded-2" href="accounts.html">Accounts</a>
+                </li>
+                <li class="nav-item text-center">
+                    <a class="nav-link rounded-2 active" href="cards.html">Cards</a>
+                </li>
+                <li class="nav-item text-center">
+                    <a class="nav-link rounded-2" href="#">Loans</a>
+                </li>
+                <li class="nav-item text-center">
+                    <a class="nav-link rounded-2" href="#">Transactions</a>
+                </li>
+            </ul>
+            <button class="btn log--out-mobile mt-4">
+                Log Out
+                <i class="bi bi-box-arrow-right ms-1"></i>
+            </button>
+        </div>
+        <button class="btn log--out-desktop">
+            Log Out
+            <i class="bi bi-box-arrow-right ms-1"></i>
+        </button>
+    </nav>
+
+    <section class="cards-section">
+        <h1 class="text-center my-5">
+            Your Cards
+        </h1>
+        <section class="mb-5">
+            <h2 class="text-center">
+                Debit
+            </h2>
+            <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
+                <template v-if="cardsDebit.length > 0" v-for:="card in cardsDebit">
+                    <div class="card-model mb-4 mt-3">
+                        <div class="card-inner">
+                            <div class="card-front"
+                                 :class="card.color == 'TITANIUM' ? 'card-front-titanium' :
+                                         card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
+                                <div class="card-bg"
+                                     :class="card.color == 'TITANIUM' ? 'card-bg-titanium' :
+                                         card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
+                                </div>
+                                <div class="card-glow"></div>
+                                <div class="card-type">{{ card.color }}</div>
+                                <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
+                                <div class="card-contactless">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
+                                        <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
+                0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
+                                    </svg>
+                                </div>
+                                <div class="card-chip"></div>
+                                <div class="card-holder">{{ card.cardholder }}</div>
+                                <div class="card-number">{{ card.number }}</div>
+                                <div class="card-valid">
+                                    {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                </div>
+                            </div>
+                            <div class="card-back"
+                                 :class="card.color == 'TITANIUM' ? 'card-back-titanium' :
+                                         card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
+                                <div class="card-signature">
+                                    {{ dateFormatter.format(new Date(card.thruDate)) }}
+                                </div>
+                                <div class="card-seccode">{{ card.cvv }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <h3 class="text-center mt-5">
+                        You don't have any debit cards. Get one with us!
+                    </h3>
+                </template>
+            </div>
+        </section>
+        <section class="mb-2">
+            <h2 class="text-center">
+                Credit
+            </h2>
+            <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
+                <template v-if="cardsCredit.length > 0" v-for:="card in cardsCredit">
+                    <div class="card-model mb-4 mt-3">
+                        <div class="card-inner">
+                            <div class="card-front"
+                                 :class="card.color == 'TITANIUM' ? 'card-front-titanium' :
+                                         card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
+                                <div class="card-bg"
+                                     :class="card.color == 'TITANIUM' ? 'card-bg-titanium' :
+                                         card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
+                                </div>
+                                <div class="card-glow"></div>
+                                <div class="card-type">{{ card.color }}</div>
+                                <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
+                                <div class="card-contactless">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
+                                        <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
+                0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
+                                    </svg>
+                                </div>
+                                <div class="card-chip"></div>
+                                <div class="card-holder">{{ card.cardholder }}</div>
+                                <div class="card-number">{{ card.number }}</div>
+                                <div class="card-valid">
+                                    {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                </div>
+                            </div>
+                            <div class="card-back"
+                                 :class="card.color == 'TITANIUM' ? 'card-back-titanium' :
+                                         card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
+                                <div class="card-signature">
+                                    {{ dateFormatter.format(new Date(card.thruDate)) }}
+                                </div>
+                                <div class="card-seccode">{{ card.cvv }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <h3 class="text-center mt-5">
+                        You don't have any debit cards. Get one with us!
+                    </h3>
+                </template>
+            </div>
+        </section>
+    </section>
+
+    <footer
+            class="mt-5 px-3 py-4 d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                    <i class="bi bi-facebook"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+            </li>
+        </ul>
+        <p class="mb-0 me-3 text-white">
+            ©Mindhub Bank 2023 - All rights reserved
+        </p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="../js/cards.js"></script>
+</body>
+
+</html>

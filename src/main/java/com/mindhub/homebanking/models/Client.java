@@ -30,6 +30,9 @@ public class Client {
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
     private Set<ClientLoan> clientLoans = new HashSet<>();
 
+    @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
+    private Set<Card> cards = new HashSet<>();
+
     // ---- Constructors ----
     // Special method that creates an instance of a class, called with the new operator.
     public Client(){ } // It's used to map by Hibernate. DTOs don't because they don´t persist.
@@ -85,5 +88,11 @@ public class Client {
                 .stream()
                 .map(ClientLoan::getLoan)
                 .collect(toList());
+    }
+
+    public Set<Card> getCards() {return cards;}
+    public void addCard(Card card) {
+        card.setClient(this);
+        cards.add(card);
     }
 }

@@ -18,6 +18,11 @@ const options = {
             this.clientLoans = this.client.loans
         })
         .catch(err => console.error(err))
+
+        this.moneyFormatter = new Intl.NumberFormat('en-US', {
+           style: 'currency',
+           currency: 'USD'
+        })
     }
 }
 

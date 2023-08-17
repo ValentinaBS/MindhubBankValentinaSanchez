@@ -30,7 +30,7 @@
                     <a class="nav-link active rounded-2" href="#">Accounts</a>
                 </li>
                 <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Cards</a>
+                    <a class="nav-link rounded-2" href="cards.html">Cards</a>
                 </li>
                 <li class="nav-item text-center">
                     <a class="nav-link rounded-2" href="#">Loans</a>
@@ -51,12 +51,12 @@
     </nav>
 
     <header class="container-fluid accounts-banner d-flex justify-content-center align-items-center">
-        <h1 class="fw-bold text-white">
+        <h2 class="accounts-welcome fw-bold text-white text-center">
             ¡Welcome, {{ firstName }}!
-        </h1>
+        </h2>
     </header>
 
-    <section class="text-center my-5 mx-4">
+    <section class="accounts-section text-center my-5 mx-4">
         <h1>Your Accounts</h1>
         <div class="m-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
             <template v-if="clientAccounts.length > 0" v-for="account of clientAccounts">
@@ -67,7 +67,9 @@
                         </p>
                         <p class="card-text">
                             Amount:
-                            <span class="d-block account-amount fw-bold fs-3">${{ Intl.NumberFormat('en-US').format(account.balance) }}</span>
+                            <span class="d-block account-amount fw-bold fs-3">
+                                {{ moneyFormatter.format(account.balance) }}
+                            </span>
                         </p>
                         <p class="card-text">
                             Creation date: {{ account.creationDate }}
@@ -101,7 +103,9 @@
                         </h3>
                         <p class="card-text">
                             Amount:
-                            <span class="d-block account-amount fw-bold fs-3">${{ Intl.NumberFormat('en-US').format(loan.amount) }}</span>
+                            <span class="d-block account-amount fw-bold fs-3">
+                                {{ moneyFormatter.format(loan.amount) }}
+                            </span>
                         </p>
                         <p class="card-text">
                             Payments: {{ loan.payments }} installments

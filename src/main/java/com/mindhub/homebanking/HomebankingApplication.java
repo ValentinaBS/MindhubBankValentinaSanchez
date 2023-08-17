@@ -19,7 +19,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean // Run this first, can only be used in methods
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		// CommandLineRunner are methods that can be implemented to run at application startup
 		return (args) -> {
 			// Create clients
@@ -74,7 +74,7 @@ public class HomebankingApplication {
 			Loan loan2 = new Loan("Personal", 100000, installmentsPersonal);
 			Loan loan3 = new Loan("Automotive", 300000, installmentsAutomotive);
 
-
+			// Create client loans
 			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60);
 			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12);
 			ClientLoan clientLoan3 = new ClientLoan(100000.0, 24);
@@ -102,6 +102,21 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
+
+			// Create cards
+			Card card1 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.DEBIT, CardColor.GOLD, "3333 5464 7777 4333", 243, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card2 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.CREDIT, CardColor.TITANIUM, "2332 6551 5554 2222", 987, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card3 = new Card(client2.getFirstName() + " " + client2.getLastName(), CardType.CREDIT, CardColor.SILVER, "1112 8895 4455 5541", 556, LocalDate.now(), LocalDate.now().plusYears(5));
+
+			// Assign cards to clients
+			client1.addCard(card1);
+			client1.addCard(card2);
+			client2.addCard(card3);
+
+			// Save cards to the database
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+			cardRepository.save(card3);
 		};
 	}
 }

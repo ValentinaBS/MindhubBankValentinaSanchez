@@ -28,10 +28,10 @@
         <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
             <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
                 <li class="nav-item text-center">
-                    <a class="nav-link active rounded-2" href="#">Accounts</a>
+                    <a class="nav-link active rounded-2" href="accounts.html">Accounts</a>
                 </li>
                 <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Cards</a>
+                    <a class="nav-link rounded-2" href="cards.html">Cards</a>
                 </li>
                 <li class="nav-item text-center">
                     <a class="nav-link rounded-2" href="#">Loans</a>
@@ -51,9 +51,9 @@
         </button>
     </nav>
 
-    <section class="text-center my-5 mx-4">
+    <section class="account-section text-center my-5 mx-4">
         <h1>Your Account</h1>
-        <article class="card account-card shadow py-4 my-4 mx-auto">
+        <div class="card account-card shadow py-4 my-4 mx-auto">
             <div class="card-body">
                 <p class="card-text">
                         Account number: {{ chosenAccount.number }}
@@ -61,14 +61,14 @@
                 <p class="card-text">
                     Amount:
                     <span class="d-block account-amount fw-bold fs-3">
-                        ${{ Intl.NumberFormat('en-US').format(chosenAccount.balance) }}
+                        {{ moneyFormatter.format(chosenAccount.balance) }}
                     </span>
                 </p>
                 <p class="card-text">
                     Creation date: {{ chosenAccount.creationDate }}
                 </p>
             </div>
-        </article>
+        </div>
         <h2 class="mt-5">Your Transactions</h2>
         <div class="table-responsive text-nowrap">
             <table class="table account-table my-3 mx-auto">
@@ -84,7 +84,7 @@
                     <template v-for:="transaction of transactions">
                         <tr>
                             <td class="fw-bold" v-bind:class="[transaction.type == 'DEBIT' ? debitClass : creditClass]">{{ transaction.type }}</td>
-                            <td>{{ transaction.type == 'DEBIT' ? '-' : '' }}${{ transaction.type == 'DEBIT' ? transaction.amount.toString().slice(1) : transaction.amount }}</td>
+                            <td>{{ transaction.type == 'DEBIT' ? '-' : '' }}{{ transaction.type == 'DEBIT' ? moneyFormatter.format(transaction.amount.toString().slice(1)) : moneyFormatter.format(transaction.amount) }}</td>
                             <td>
                                 {{ new Date(transaction.transferDate).toLocaleDateString('en-US')
                                 + ' - '

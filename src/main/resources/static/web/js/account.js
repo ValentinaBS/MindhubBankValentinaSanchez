@@ -8,7 +8,8 @@ const options = {
             transactions: [],
             urlParams: {},
             debitClass: 'debit',
-            creditClass: 'credit'
+            creditClass: 'credit',
+            moneyFormatter: {}
         }
     },
     created(){
@@ -19,9 +20,13 @@ const options = {
         .then(res => {
             this.chosenAccount = res.data;
             this.transactions = this.chosenAccount.transactions.sort((a, b) => a.id - b.id);
-            console.log(this.transactions)
         })
         .catch(err => console.error(err))
+
+        this.moneyFormatter = new Intl.NumberFormat('en-US', {
+           style: 'currency',
+           currency: 'USD'
+        })
     }
 }
 
