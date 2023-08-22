@@ -40,12 +40,12 @@
                     <a class="nav-link rounded-2" href="#">Transactions</a>
                 </li>
             </ul>
-            <button class="btn log--out-mobile mt-4">
+            <button @click="logOut" class="btn log--out-mobile mt-4">
                 Log Out
                 <i class="bi bi-box-arrow-right ms-1"></i>
             </button>
         </div>
-        <button class="btn log--out-desktop">
+        <button @click="logOut" class="btn log--out-desktop">
             Log Out
             <i class="bi bi-box-arrow-right ms-1"></i>
         </button>
@@ -70,17 +70,18 @@
             </div>
         </div>
         <h2 class="mt-5">Your Transactions</h2>
-        <div class="table-responsive text-nowrap">
-            <table class="table account-table my-3 mx-auto">
-                <thead class="table-head">
-                <tr class="text-center table-titles">
-                    <th class="account-corner-left" scope="col">Type</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Date</th>
-                    <th class="account-corner-right" scope="col">Description</th>
-                </tr>
-                </thead>
-                <tbody>
+        <template v-if="transactions.length > 0">
+            <div class="table-responsive text-nowrap">
+                <table class="table account-table my-3 mx-auto">
+                    <thead class="table-head">
+                    <tr class="text-center table-titles">
+                        <th class="account-corner-left" scope="col">Type</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date</th>
+                        <th class="account-corner-right" scope="col">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <template v-for:="transaction of transactions">
                         <tr>
                             <td class="fw-bold" v-bind:class="[transaction.type == 'DEBIT' ? debitClass : creditClass]">{{ transaction.type }}</td>
@@ -93,12 +94,18 @@
                             <td>{{ transaction.description }}</td>
                         </tr>
                     </template>
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+        <template v-else>
+            <h3 class="text-center my-4">
+                You haven't made any transactions with this account.
+            </h3>
+        </template>
     </section>
 
-    <img class="account-img" src="../images/banner-account.png" alt="Winter Club promotion">
+    <img class="account-img" src="../images/accounts/banner-account.png" alt="Winter Club promotion">
 
     <footer
             class="mt-5 px-3 py-4 d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">

@@ -24,9 +24,15 @@ const options = {
         .catch(err => console.error(err))
 
         this.moneyFormatter = new Intl.NumberFormat('en-US', {
-           style: 'currency',
-           currency: 'USD'
+            style: 'currency',
+            currency: 'USD'
         })
+    },
+    methods: {
+        logOut() {
+            axios.post('/api/logout')
+            .then(window.location.href = '/web/index.html')
+        }
     }
 }
 

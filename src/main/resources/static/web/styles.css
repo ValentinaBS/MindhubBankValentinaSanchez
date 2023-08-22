@@ -44,6 +44,17 @@ h1 {
     color: var(--dark);
 }
 
+.secondary-btn {
+    background-color: white;
+    color: var(--main);
+    border: 1px solid var(--main);
+}
+
+.secondary-btn:hover {
+    border: 1px solid var(--secondary);
+    color: var(--main);
+}
+
 .navbar {
     background-color: var(--main);
 }
@@ -114,6 +125,23 @@ h1 {
     transition: all 0.3s ease-in;
 }
 
+.small-text {
+    font-size: 0.8rem;
+}
+
+.form-control {
+    border-width: 2px;
+}
+
+.form-control::placeholder {
+    color: gray;
+}
+
+.form-control:focus {
+    border: 2px solid var(--main);
+    box-shadow: none;
+}
+
 /* Accounts */
 header {
     height: 13rem;
@@ -127,7 +155,7 @@ header {
     background:
         linear-gradient(rgba(0, 0, 0, 0.8),
             rgba(0, 0, 0, 0.5)),
-        url('images/banner-accounts.jpg');
+        url('images/accounts/banner-accounts.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -479,4 +507,90 @@ header {
     right: 20px;
     top: 18px;
     height: 2.5rem;
+}
+
+/* Login */
+.login-center {
+    display: flex;
+    align-items: center;
+}
+
+.login-background {
+    background-color: var(--main);
+}
+
+.login-container {
+    background-color: white;
+    width: 90%;
+    height: 800px;
+}
+
+.sign-up-container {
+    height: 1100px;
+}
+
+.login-logo {
+    width: 12rem;
+}
+
+.login-main {
+    margin: 2.5rem 0 4rem;
+}
+
+.form-show-password i {
+    display: block;
+    padding-top: 0.1rem;
+}
+
+.login-link {
+    text-decoration: none;
+    color: var(--main);
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.login-side {
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 0 0 1.9rem  1.9rem;
+}
+
+.login-error {
+    font-size: 0.9rem
+}
+
+.login-error i{
+    color: var(--debit);
+}
+
+.input-warning {
+    border: 2px solid var(--debit);
+}
+
+.form-left-width {
+    width: 300px;
+}
+
+@media only screen and (min-width: 768px) {
+    .form-left-width {
+        width: 350px;
+    }
+    .login-side {
+        display: block;
+        border-radius: 0 1.9rem 1.9rem 0;
+        object-fit: cover;
+        width: 50%; 
+        max-height: 100%;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .form-left-width {
+        width: 360px;
+    }
+    .login-container {
+        max-width: 900px;
+    }
 }
