@@ -22,6 +22,8 @@ public class WebAuthorization {
 
         http.authorizeRequests()
 
+                .antMatchers("/web/index.html").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/clients").hasAuthority("ADMIN")
 
@@ -31,9 +33,7 @@ public class WebAuthorization {
 
                 .antMatchers("/web/adminPages/**").hasAuthority("ADMIN")
 
-                .antMatchers("/web/pages/**").hasAuthority("CLIENT")
-
-                .antMatchers("/web/index.html").permitAll();
+                .antMatchers("/web/pages/**").hasAuthority("CLIENT");
 
         // Servlet
         http.formLogin()
