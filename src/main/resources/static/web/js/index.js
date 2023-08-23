@@ -70,8 +70,6 @@ const options = {
                 axios.post("/api/clients",`email=${this.emailInput}&password=${this.passwordInput}&firstName=${this.fNameInput}&lastName=${this.lNameInput}`)
                     .then(() => {
                         this.submitLogin();
-                        this.emailInput = "";
-                        this.passwordInput = "";
                         this.firstName = "";
                         this.lastName = "";
                     })
@@ -80,6 +78,8 @@ const options = {
                             console.log(error.response.data);
                             console.log(error.response.status);
                             console.log(error.response.headers);
+                            this.showErrorMessage = true;
+                            this.errorMessage = "Something went wrong. Check your information and try again.";
                         } else if (error.request) {
                             console.log(error.request);
                         } else {
@@ -106,11 +106,6 @@ const options = {
         },
         showPassword() {
             this.isPasswordShowing = !(this.isPasswordShowing);
-        }
-    },
-    computed: {
-        checkLoggedUser() {
-            this.roleChecker();
         }
     }
 }

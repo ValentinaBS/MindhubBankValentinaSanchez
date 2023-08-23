@@ -17,6 +17,7 @@ import java.util.List;
 public class HomebankingApplication {
 
 	@Autowired
+	// Injects passwordEncoder to encode passwords
 	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {

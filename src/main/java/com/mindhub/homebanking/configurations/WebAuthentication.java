@@ -13,25 +13,31 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
+// Configures the Spring Security module before running the app
 @Configuration
+// Inherits methods from the GlobalAuthenticationConfigurerAdapter class
 public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
     ClientRepository clientRepository;
 
     @Bean
+    // We can use PasswordEncoder in any part of the app
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override
+    // Override method init from GlobalAuthenticationConfigurerAdapter
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(inputName-> {
+        auth.userDetailsService(inputEmail-> {
 
-            Client client = clientRepository.findByEmail(inputName);
+            Client client = clientRepository.findByEmail(inputEmail);
 
             if (client != null) {
+                // Creates a new token/cookie for the user, a new session.
+                // We build the authenticated User with username, password and authority
                 if (client.getFirstName().equalsIgnoreCase("admin") && client.getEmail().toLowerCase().startsWith("admin")) {
                     return new User(client.getEmail(), client.getPassword(),
                             AuthorityUtils.createAuthorityList("ADMIN"));
@@ -41,7 +47,8 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
             }
             else {
-                throw new UsernameNotFoundException("Unknown user: " + inputName);
+                // Throws an exception in case a username doesn't match
+                throw new UsernameNotFoundException("Unknown user: " + inputEmail);
             }
 
         });

@@ -15,23 +15,22 @@ import javax.servlet.http.HttpSession;
 
 @EnableWebSecurity
 @Configuration
+// Configures the Spring Security module before running the app
 public class WebAuthorization {
 
     @Bean
+    // We want to add something to our app context and run it first
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
 
                 .antMatchers("/web/index.html").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/clients").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/clients", "/api/login", "/api/logout").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/clients", "/api/accounts/{id}").hasAuthority("ADMIN")
 
-                .antMatchers("/rest/**").hasAuthority("ADMIN")
-
-                .antMatchers("/h2-console").hasAuthority("ADMIN")
-
-                .antMatchers("/web/adminPages/**").hasAuthority("ADMIN")
+                .antMatchers("/rest/**", "/h2-console", "/web/adminPages/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/accounts/{id}").hasAuthority("ADMIN")
 
                 .antMatchers("/web/pages/**").hasAuthority("CLIENT");
 

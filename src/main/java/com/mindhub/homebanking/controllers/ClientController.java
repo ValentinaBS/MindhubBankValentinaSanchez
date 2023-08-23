@@ -1,9 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.configurations.WebAuthentication;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.models.ClientRole;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +38,7 @@ public class ClientController {
                 // returns a stream with the results .map(client -> new ClientDTO(client)
                 .collect(toList());
                 // converts stream back to a list
-    } // Servlet (listens and responds to specific HTTP petitions and business logic). Tomcat is a servlet container.
+    } // Servlet (Microprogram. listens and responds to specific HTTP petitions and business logic). Tomcat is a servlet container.
 
     @RequestMapping("/clients/current")
     public ClientDTO getClientCurrent (Authentication authentication) {
@@ -48,6 +46,7 @@ public class ClientController {
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    // ResponseEntity contains HTTP status code and an optional JSON body with more info
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {
