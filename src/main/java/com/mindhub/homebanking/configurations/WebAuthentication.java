@@ -31,12 +31,12 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     // Override method init from GlobalAuthenticationConfigurerAdapter
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(inputEmail-> {
+        auth.userDetailsService(inputName-> {
 
-            Client client = clientRepository.findByEmail(inputEmail);
+            Client client = clientRepository.findByEmail(inputName);
 
             if (client != null) {
-                // Creates a new token/cookie for the user, a new session.
+                // Creates a new cookie for the user, a new session.
                 // We build the authenticated User with username, password and authority
                 if (client.getFirstName().equalsIgnoreCase("admin") && client.getEmail().toLowerCase().startsWith("admin")) {
                     return new User(client.getEmail(), client.getPassword(),
@@ -48,7 +48,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
             }
             else {
                 // Throws an exception in case a username doesn't match
-                throw new UsernameNotFoundException("Unknown user: " + inputEmail);
+                throw new UsernameNotFoundException("Unknown user: " + inputName);
             }
 
         });
