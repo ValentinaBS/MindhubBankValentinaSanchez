@@ -26,11 +26,9 @@ public class WebAuthorization {
                 .antMatchers(HttpMethod.POST, "/api/clients", "/api/login", "/api/logout").permitAll()
                 .antMatchers("/web/index.html", "/web/styles.css", "/web/js/**", "/web/images/**").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/api/clients/current").hasAuthority("ADMIN")
-                .antMatchers("/rest/**", "/h2-console", "/web/adminPages/**", "/api/clients").hasAuthority("ADMIN")
+                .antMatchers("/rest/**", "/h2-console", "/web/adminPages/**", "/api/clients", "/api/clients/current").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.GET, "/api/clients/current", "/api/accounts/{id}").hasAuthority("CLIENT")
-                .antMatchers("/web/pages/**").hasAuthority("CLIENT")
+                .antMatchers("/web/pages/**", "/api/clients/current", "/api/accounts/{id}").hasAuthority("CLIENT")
 
                 .anyRequest().denyAll();
         // Servlet
