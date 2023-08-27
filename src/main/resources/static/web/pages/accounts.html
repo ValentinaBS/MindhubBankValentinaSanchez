@@ -74,7 +74,7 @@
                         <p class="card-text">
                             Creation date: {{ account.creationDate }}
                         </p>
-                        <a v-bind:href="'account.html?id=' + account.id" class="btn primary-btn py-2 fw-bold w-75">
+                        <a v-bind:href="'account.html?id=' + account.id" class="btn secondary-btn py-2 fw-bold w-75">
                             Transactions
                         </a>
                     </div>
@@ -84,6 +84,14 @@
                 <h3 class="text-center">You don't have any accounts. Open one with us!</h3>
             </template>
         </div>
+        <template v-if="clientAccounts.length >= 3"></template>
+        <template v-else>
+            <button @click="createAccount" class="btn primary-btn mt-5 mb-2 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
+                <i class="bi bi-plus-lg fs-5"></i>
+                Create a new account
+            </button>
+            <p>(Max. 3 accounts per client)</p>
+        </template>
         <h2 class="mt-5">Your Loans</h2>
         <div class="m-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
             <template v-if="clientLoans.length > 0" v-for="loan of clientLoans">
@@ -124,7 +132,9 @@
         </div>
     </section>
 
-    <footer class="mt-5 px-3 py-4 d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
+    <footer
+    class="mt-5 px-3 py-4">
+    <div class="d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link mx-3 rounded-1 fs-3" href="#">
@@ -145,7 +155,18 @@
         <p class="mb-0 me-3 text-white">
             ©Mindhub Bank 2023 - All rights reserved
         </p>
-    </footer>
+    </div>
+    <div class="d-flex flex-wrap pt-3 mt-3 justify-content-start justify-content-md-center border-top">
+        <a class="footer-link me-4 rounded-1 px-3 py-2" href="https://www.linkedin.com/in/valentina-belen-sanchez/">
+            <i class="bi bi-linkedin me-1"></i>
+            Valentina Belén Sánchez
+        </a>
+        <a class="footer-link rounded-1 px-3 py-2" href="https://github.com/ValentinaBS">
+            <i class="bi bi-github me-1"></i>
+            ValentinaBS
+        </a>
+    </div>
+</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

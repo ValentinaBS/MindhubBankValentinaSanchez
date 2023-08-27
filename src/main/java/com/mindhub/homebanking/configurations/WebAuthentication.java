@@ -36,15 +36,15 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
             Client client = clientRepository.findByEmail(inputName);
 
             if (client != null) {
-                // Creates a new cookie for the user, a new session.
-                // We build the authenticated User with username, password and authority
+                // Creates a new cookie for the user, a new session in the server.
+                // The browser can make petitions with that cookie and compare it to the session in the server.
                 if (client.getFirstName().equalsIgnoreCase("admin") && client.getEmail().toLowerCase().startsWith("admin")) {
                     return new User(client.getEmail(), client.getPassword(),
                             AuthorityUtils.createAuthorityList("ADMIN"));
                 }
                 return new User(client.getEmail(), client.getPassword(),
                         AuthorityUtils.createAuthorityList("CLIENT"));
-
+                // User represents an authenticated client, logged in. A registered user is client.
             }
             else {
                 // Throws an exception in case a username doesn't match

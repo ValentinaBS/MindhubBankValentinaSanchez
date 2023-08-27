@@ -10,182 +10,260 @@
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet">
     <title>Mindhub Bank | My Cards</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body>
-<div class="layout" id="app">
-    <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
-        <a class="navbar-brand" href="#">
-            <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
-        </a>
-        <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
+    <div class="layout" id="app">
+        <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
+            <a class="navbar-brand" href="accounts.html">
+                <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
+            </a>
+            <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapsibleNavbar">
-            <i class="bi bi-list"></i>
-        </button>
-        <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
-            <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="accounts.html">Accounts</a>
-                </li>
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2 active" href="cards.html">Cards</a>
-                </li>
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Loans</a>
-                </li>
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Transactions</a>
-                </li>
-            </ul>
-            <button @click="logOut" class="btn log--out-mobile mt-4">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
+                <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="accounts.html">Accounts</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2 active" href="cards.html">Cards</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="#">Loans</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="#">Transactions</a>
+                    </li>
+                </ul>
+                <button @click="logOut" class="btn log--out-mobile mt-4">
+                    Log Out
+                    <i class="bi bi-box-arrow-right ms-1"></i>
+                </button>
+            </div>
+            <button @click="logOut" class="btn log--out-desktop">
                 Log Out
                 <i class="bi bi-box-arrow-right ms-1"></i>
             </button>
-        </div>
-        <button @click="logOut" class="btn log--out-desktop">
-            Log Out
-            <i class="bi bi-box-arrow-right ms-1"></i>
-        </button>
-    </nav>
+        </nav>
 
-    <section class="cards-section">
-        <h1 class="text-center my-5">
-            Your Cards
-        </h1>
-        <section class="mb-5">
-            <h2 class="text-center">
-                Debit
-            </h2>
-            <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
-                <template v-if="cardsDebit.length > 0" v-for:="card in cardsDebit">
-                    <div class="card-model mb-4 mt-3">
-                        <div class="card-inner">
-                            <div class="card-front"
-                                 :class="card.color == 'TITANIUM' ? 'card-front-titanium' :
-                                         card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
-                                <div class="card-bg"
-                                     :class="card.color == 'TITANIUM' ? 'card-bg-titanium' :
-                                         card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
-                                </div>
-                                <div class="card-glow"></div>
-                                <div class="card-type">{{ card.color }}</div>
-                                <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
-                                <div class="card-contactless">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
-                                        <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
+        <section class="cards-section">
+            <h1 class="text-center mt-5">
+                Your Cards
+            </h1>
+            <section class="my-5">
+                <h2 class="text-center">
+                    Debit
+                </h2>
+                <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
+                    <template v-if="cardsDebit.length > 0" v-for:="card in cardsDebit">
+                        <div class="card-model mb-4 mt-3">
+                            <div class="card-inner">
+                                <div class="card-front" :class="card.color == 'PLATINUM' ? 'card-front-platinum' :
+                                            card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
+                                    <div class="card-bg" :class="card.color == 'PLATINUM' ? 'card-bg-platinum' :
+                                            card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
+                                    </div>
+                                    <div class="card-glow"></div>
+                                    <div class="card-type">{{ card.color }}</div>
+                                    <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
+                                    <div class="card-contactless">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
+                                            <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round"
+                                                d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
                 0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
-                                    </svg>
+                                        </svg>
+                                    </div>
+                                    <div class="card-chip"></div>
+                                    <div class="card-holder">{{ card.cardholder }}</div>
+                                    <div class="card-number">{{ card.number }}</div>
+                                    <div class="card-valid">
+                                        {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                    </div>
                                 </div>
-                                <div class="card-chip"></div>
-                                <div class="card-holder">{{ card.cardholder }}</div>
-                                <div class="card-number">{{ card.number }}</div>
-                                <div class="card-valid">
-                                    {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
+                                            card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
+                                    <div class="card-signature">
+                                        {{ dateFormatter.format(new Date(card.thruDate)) }}
+                                    </div>
+                                    <div class="card-seccode">{{ card.cvv }}</div>
                                 </div>
                             </div>
-                            <div class="card-back"
-                                 :class="card.color == 'TITANIUM' ? 'card-back-titanium' :
-                                         card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
-                                <div class="card-signature">
-                                    {{ dateFormatter.format(new Date(card.thruDate)) }}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <h3 class="text-center mt-5">
+                            You don't have any debit cards. Get one with us!
+                        </h3>
+                    </template>
+                </div>
+                <template v-if="cardsDebit.length >= 3"></template>
+                <template v-else>
+                    <a href="create-cards.html"
+                       class="cards-anchor btn primary-btn mt-5 mb-2 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
+                        <i class="bi bi-plus-lg fs-5"></i>
+                        Get a new debit card
+                    </a>
+                    <p class="text-center">(Max. 3 cards per card type)</p>
+                </template>
+            </section>
+            <section class="mb-2">
+                <h2 class="text-center">
+                    Credit
+                </h2>
+                <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
+                    <template v-if="cardsCredit.length > 0" v-for:="card in cardsCredit">
+                        <div class="card-model mb-4 mt-3">
+                            <div class="card-inner">
+                                <div class="card-front" :class="card.color == 'PLATINUM' ? 'card-front-platinum' :
+                                        card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
+                                    <div class="card-bg" :class="card.color == 'PLATINUM' ? 'card-bg-platinum' :
+                                            card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
+                                    </div>
+                                    <div class="card-glow"></div>
+                                    <div class="card-type">{{ card.color }}</div>
+                                    <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
+                                    <div class="card-contactless">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
+                                            <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round"
+                                                d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
+                0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
+                                        </svg>
+                                    </div>
+                                    <div class="card-chip"></div>
+                                    <div class="card-holder">{{ card.cardholder }}</div>
+                                    <div class="card-number">{{ card.number }}</div>
+                                    <div class="card-valid">
+                                        {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                    </div>
                                 </div>
-                                <div class="card-seccode">{{ card.cvv }}</div>
+                                <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
+                                        card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
+                                    <div class="card-signature">
+                                        {{ dateFormatter.format(new Date(card.thruDate)) }}
+                                    </div>
+                                    <div class="card-seccode">{{ card.cvv }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <h3 class="text-center mt-5">
+                            You don't have any debit cards. Get one with us!
+                        </h3>
+                    </template>
+                </div>
+                <template v-if="cardsCredit.length >= 3"></template>
+                <template v-else>
+                    <a href="create-cards.html"
+                       class="cards-anchor btn primary-btn mt-5 mb-2 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
+                        <i class="bi bi-plus-lg fs-5"></i>
+                        Get a new credit card
+                    </a>
+                    <p class="text-center">(Max. 3 cards per card type)</p>
+                </template>
+            </section>
+        </section>
+
+        <section class="text-center">
+            <h2>Blogs you may be interested in</h2>
+            <div class="mt-5 d-flex flex-column align-items-center row-gap-5">
+                <article class="card card-blogs border-0 shadow rounded-4 mb-3">
+                    <div class="row g-0">
+                        <img src="../images/cards/blog-security.jpg" class="img-borders-left img-fluid object-fit-cover col-md-6" alt="Person saving a coin in a piggy bank">
+                        <div class="col-md-6 py-4 py-md-5">
+                            <div class="card-body">
+                                <h4 class="card-title fw-bold fs-3">
+                                    We want to protect you from scams
+                                </h4>
+                                <p class="card-text">
+                                    As scams become increasingly sophisticated, it's crucial to stay vigilant.
+                                </p>
+                                <p class="card-text">
+                                    Watch this space for essential tips on spotting scams, securing your accounts, and keeping your finances safe.
+                                </p>
+                                <a href="#"
+                                class="btn primary-btn mt-4 mx-auto py-2 px-4 d-flex justify-content-center align-items-center column-gap-2">
+                                    <i class="bi bi-plus-lg fs-5"></i>
+                                    Read More
+                                </a>
                             </div>
                         </div>
                     </div>
-                </template>
-                <template v-else>
-                    <h3 class="text-center mt-5">
-                        You don't have any debit cards. Get one with us!
-                    </h3>
-                </template>
-            </div>
-        </section>
-        <section class="mb-2">
-            <h2 class="text-center">
-                Credit
-            </h2>
-            <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
-                <template v-if="cardsCredit.length > 0" v-for:="card in cardsCredit">
-                    <div class="card-model mb-4 mt-3">
-                        <div class="card-inner">
-                            <div class="card-front"
-                                 :class="card.color == 'TITANIUM' ? 'card-front-titanium' :
-                                         card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
-                                <div class="card-bg"
-                                     :class="card.color == 'TITANIUM' ? 'card-bg-titanium' :
-                                         card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
-                                </div>
-                                <div class="card-glow"></div>
-                                <div class="card-type">{{ card.color }}</div>
-                                <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
-                                <div class="card-contactless">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
-                                        <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
-                0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
-                                    </svg>
-                                </div>
-                                <div class="card-chip"></div>
-                                <div class="card-holder">{{ card.cardholder }}</div>
-                                <div class="card-number">{{ card.number }}</div>
-                                <div class="card-valid">
-                                    {{ dateFormatter.format(new Date(card.fromDate)) }}
-                                </div>
-                            </div>
-                            <div class="card-back"
-                                 :class="card.color == 'TITANIUM' ? 'card-back-titanium' :
-                                         card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
-                                <div class="card-signature">
-                                    {{ dateFormatter.format(new Date(card.thruDate)) }}
-                                </div>
-                                <div class="card-seccode">{{ card.cvv }}</div>
+                </article>
+                <article class="card card-blogs border-0 shadow rounded-4 mb-3">
+                    <div class="d-flex flex-column-reverse flex-md-row g-0">
+                        <div class="col-md-6 py-4 py-md-5">
+                            <div class="card-body">
+                                <h4 class="card-title fw-bold fs-3">
+                                    Join our online chats
+                                </h4>
+                                <p class="card-text">
+                                    Experts talk about investments, economics, health, and more!
+                                </p>
+                                <p class="card-text">
+                                    Get ready to deepen your understanding, ask burning questions, and stay ahead in these dynamic financial times. Stay tuned for enlightening dialogues that matter. 
+                                </p>
+                                <a href="#"
+                                class="btn primary-btn mt-4 mx-auto py-2 px-4 d-flex justify-content-center align-items-center column-gap-2">
+                                    <i class="bi bi-plus-lg fs-5"></i>
+                                    Read More
+                                </a>
                             </div>
                         </div>
+                        <img src="../images/cards/blog-videocalls.jpg" class="img-borders-right img-fluid object-fit-cover col-md-6" alt="Person holding a credit card">
                     </div>
-                </template>
-                <template v-else>
-                    <h3 class="text-center mt-5">
-                        You don't have any debit cards. Get one with us!
-                    </h3>
-                </template>
+                </article>
             </div>
         </section>
-    </section>
 
-    <footer
-            class="mt-5 px-3 py-4 d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
-                    <i class="bi bi-instagram"></i>
+        <footer
+            class="mt-5 px-3 py-4">
+            <div class="d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </li>
+                </ul>
+                <p class="mb-0 me-3 text-white">
+                    ©Mindhub Bank 2023 - All rights reserved
+                </p>
+            </div>
+            <div class="d-flex flex-wrap pt-3 mt-3 justify-content-start justify-content-md-center border-top">
+                <a class="footer-link me-4 rounded-1 px-3 py-2" href="https://www.linkedin.com/in/valentina-belen-sanchez/">
+                    <i class="bi bi-linkedin me-1"></i>
+                    Valentina Belén Sánchez
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
-                    <i class="bi bi-facebook"></i>
+                <a class="footer-link rounded-1 px-3 py-2" href="https://github.com/ValentinaBS">
+                    <i class="bi bi-github me-1"></i>
+                    ValentinaBS
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
-                    <i class="bi bi-whatsapp"></i>
-                </a>
-            </li>
-        </ul>
-        <p class="mb-0 me-3 text-white">
-            ©Mindhub Bank 2023 - All rights reserved
-        </p>
-    </footer>
-</div>
+            </div>
+        </footer>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="../js/cards.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="../js/cards.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 :root {
-    --main: #005A9F;
+    --main: #005a9f;
     --secondary: #65BBFF;
     --gray: #E4E4E5;
     --dark: #000F1B;
@@ -30,6 +30,17 @@ footer {
     background-color: var(--main);
 }
 
+.footer-link {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    transition: all 0.5s;
+    background-color: white;
+    color: var(--main);
+}
+
 h1 {
     font-weight: bold;
 }
@@ -51,8 +62,8 @@ h1 {
 }
 
 .secondary-btn:hover {
-    border: 1px solid var(--secondary);
-    color: var(--main);
+    background-color: var(--main);
+    color: white;
 }
 
 .navbar {
@@ -231,7 +242,7 @@ header {
 
 /* Cards */
 .cards-section {
-    min-height: 70vh;
+    margin-bottom: 6rem;
 }
 
 .card-model {
@@ -266,7 +277,7 @@ header {
     backface-visibility: hidden;
 }
 
-.card-front-titanium, .card-back-titanium {
+.card-front-platinum, .card-back-platinum {
     background: linear-gradient(321.03deg, #6E6D68 0%, #14130E 91.45%);
 }
 
@@ -340,11 +351,11 @@ header {
     border-top-left-radius: 100%;
 }
 
-.card-bg-titanium::before {
+.card-bg-platinum::before {
     background: linear-gradient(321.03deg, #6E6D68 0%, #14130E 91.45%);
 }
 
-.card-bg-titanium::after {
+.card-bg-platinum::after {
     background: linear-gradient(321.03deg, #6E6D68 0%, #14130E 91.45%);
 }
 
@@ -507,6 +518,50 @@ header {
     right: 20px;
     top: 18px;
     height: 2.5rem;
+}
+
+.cards-anchor {
+    max-width: 240px;
+}
+
+.form-check-input {
+    border: 1px solid var(--dark);
+}
+
+.form-check-input:checked {
+    background-color: var(--main);
+}
+
+.form-check-input:focus {
+    border-color: var(--dark);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2) inset, 0px 0px 8px rgba(0, 90, 159, 0.8);
+}
+
+.card-blogs {
+    max-width: 90%;
+}
+
+.card-blogs a {
+    max-width: 240px;
+}
+
+.img-borders-left, .img-borders-right {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+@media only screen and (min-width: 768px) {
+    .img-borders-left {
+        border-radius: 0.5rem 0 0 0.5rem;
+    }
+    .img-borders-right {
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .card-blogs {
+        max-width: 950px;
+    }
 }
 
 /* Login */

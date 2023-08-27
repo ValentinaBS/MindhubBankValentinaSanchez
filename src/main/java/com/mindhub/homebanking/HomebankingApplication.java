@@ -29,7 +29,7 @@ public class HomebankingApplication {
 		// CommandLineRunner are methods that can be implemented to run at application startup
 		return (args) -> {
 			// Create clients
-			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("MelBA1998!"));
+			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("MelBA98!"));
 			Client client2 = new Client("Alex", "Fulsch", "alexfu@mindhub.com", passwordEncoder.encode("FlyHigh87?"));
 			Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin123"));
 
@@ -113,7 +113,7 @@ public class HomebankingApplication {
 
 			// Create cards
 			Card card1 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.DEBIT, CardColor.GOLD, "3333 5464 7777 4333", 243, LocalDate.now(), LocalDate.now().plusYears(5));
-			Card card2 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.CREDIT, CardColor.TITANIUM, "2332 6551 5554 2222", 987, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card2 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.CREDIT, CardColor.PLATINUM, "2332 6551 5554 2222", 987, LocalDate.now(), LocalDate.now().plusYears(5));
 			Card card3 = new Card(client2.getFirstName() + " " + client2.getLastName(), CardType.CREDIT, CardColor.SILVER, "1112 8895 4455 5541", 556, LocalDate.now(), LocalDate.now().plusYears(5));
 
 			// Assign cards to clients

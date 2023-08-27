@@ -37,6 +37,7 @@ public class Client {
     // ---- Constructors ----
     // Special method that creates an instance of a class, called with the new operator.
     public Client(){ } // It's used to map by Hibernate. DTOs don't because they don´t persist.
+    // Para pasar un registro de la base de datos a Objeto Java, Hibernate necesita un constructor vacío.
     public Client(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;

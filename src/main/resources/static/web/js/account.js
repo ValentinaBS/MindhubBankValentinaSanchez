@@ -21,7 +21,9 @@ const options = {
             this.chosenAccount = res.data;
             this.transactions = this.chosenAccount.transactions.sort((a, b) => a.id - b.id);
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+            window.location.href = '/web/pages/accounts.html'
+        })
 
         this.moneyFormatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
