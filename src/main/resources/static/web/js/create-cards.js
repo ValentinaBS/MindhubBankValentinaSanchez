@@ -3,8 +3,8 @@ const { createApp } = Vue;
 const options = {
     data() {
         return {
-            cardType: null,
-            cardColor: null,
+            cardType: "",
+            cardColor: "",
             errorMessage: ""
         }
     },
@@ -13,8 +13,8 @@ const options = {
             axios.post('/api/clients/current/cards', `color=${this.cardColor}&type=${this.cardType}`)
                 .then(res => {
                     console.log(res)
-                    this.cardType = null;
-                    this.cardColor = null;
+                    this.cardType = "";
+                    this.cardColor = "";
                     window.location.href = '/web/pages/cards.html'
                 })
                 .catch(error => {
@@ -22,11 +22,7 @@ const options = {
                         console.log(error.response.data);
                         console.log(error.response.status);
                         console.log(error.response.headers);
-                        if(error.response.status == 400) {
-                            this.errorMessage = "Please don't leave any empty fields."
-                        } else {
-                            this.errorMessage = error.response.data;
-                        }
+                        this.errorMessage = error.response.data;
                     } else if (error.request) {
                         console.log(error.request);
                     } else {

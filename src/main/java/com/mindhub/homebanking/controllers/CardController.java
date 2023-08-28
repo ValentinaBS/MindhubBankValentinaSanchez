@@ -55,7 +55,7 @@ public class CardController {
         Client authClient = clientRepository.findByEmail(authentication.getName());
         String cardHolder = authClient.getFirstName() + " " + authClient.getLastName();
         List<Card> filteredCardsByType = cardRepository.findByClientAndType(authClient, type);
-        List<Card> filteredCardsByColor = filteredCardsByType.stream().filter(card -> card.getColor() == color).collect(toList());
+        List<Card> filteredCardsByColorAndType = cardRepository.findByClientAndColorAndType(authClient, color, type);
 
         if (color == null || type == null) {
             return new ResponseEntity<>("Please don't leave any empty fields.", HttpStatus.FORBIDDEN);
@@ -63,7 +63,7 @@ public class CardController {
         if(filteredCardsByType.size() >= 3){
             return new ResponseEntity<>("You can't create more than 3 " + type.toString().toLowerCase() + " cards.", HttpStatus.FORBIDDEN);
         }
-        if(!filteredCardsByColor.isEmpty()) {
+        if(!filteredCardsByColorAndType.isEmpty()) {
             return new ResponseEntity<>("You can't create another " + color.toString().toLowerCase() + " card in " + type.toString().toLowerCase(), HttpStatus.FORBIDDEN);
         }
 
