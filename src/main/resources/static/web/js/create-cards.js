@@ -3,8 +3,8 @@ const { createApp } = Vue;
 const options = {
     data() {
         return {
-            cardType: "",
-            cardColor: "",
+            cardType: "EMPTY",
+            cardColor: "EMPTY",
             errorMessage: ""
         }
     },
@@ -13,9 +13,9 @@ const options = {
             axios.post('/api/clients/current/cards', `color=${this.cardColor}&type=${this.cardType}`)
                 .then(res => {
                     console.log(res)
-                    this.cardType = "";
-                    this.cardColor = "";
                     window.location.href = '/web/pages/cards.html'
+                    this.cardType = "EMPTY";
+                    this.cardColor = "EMPTY";
                 })
                 .catch(error => {
                     if (error.response) {

@@ -57,8 +57,11 @@ public class CardController {
         List<Card> filteredCardsByType = cardRepository.findByClientAndType(authClient, type);
         List<Card> filteredCardsByColorAndType = cardRepository.findByClientAndColorAndType(authClient, color, type);
 
-        if (color == null || type == null) {
-            return new ResponseEntity<>("Please don't leave any empty fields.", HttpStatus.FORBIDDEN);
+        if(type.equals(CardType.EMPTY)) {
+            return new ResponseEntity<>("You must select a type of card", HttpStatus.FORBIDDEN);
+        }
+        if(color.equals(CardColor.EMPTY)) {
+            return new ResponseEntity<>("You must select a card color", HttpStatus.FORBIDDEN);
         }
         if(filteredCardsByType.size() >= 3){
             return new ResponseEntity<>("You can't create more than 3 " + type.toString().toLowerCase() + " cards.", HttpStatus.FORBIDDEN);
