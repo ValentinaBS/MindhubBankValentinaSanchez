@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @EnableWebSecurity
+// Enables security configurations for this class
 @Configuration
 // Configures the Spring Security module before running the app
 public class WebAuthorization {
@@ -26,11 +27,11 @@ public class WebAuthorization {
         // We assign who has access to which endpoint
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/clients", "/api/login", "/api/logout").permitAll()
-                .antMatchers("/web/index.html", "/web/styles.css", "/web/js/**", "/web/images/**", "/api/clients/current").permitAll()
+                .antMatchers("/web/index.html", "/web/styles.css", "/web/js/**", "/web/images/**").permitAll()
 
-                .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**").hasAuthority("ADMIN")
+                .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**", "/api/clients/current").hasAuthority("ADMIN")
 
-                .antMatchers("/web/pages/**", "/api/clients/current/accounts", "/api/clients/current/cards", "/api/accounts/{id}").hasAuthority("CLIENT")
+                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}").hasAuthority("CLIENT")
 
                 .anyRequest().denyAll();
 

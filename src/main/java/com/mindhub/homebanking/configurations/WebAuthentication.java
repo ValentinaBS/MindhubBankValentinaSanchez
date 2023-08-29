@@ -19,7 +19,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @Bean
     // We can use PasswordEncoder in any part of the app
@@ -31,9 +31,9 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     // Override method init from GlobalAuthenticationConfigurerAdapter
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(inputName-> {
+        auth.userDetailsService(inputEmail-> {
 
-            Client client = clientRepository.findByEmail(inputName);
+            Client client = clientRepository.findByEmail(inputEmail);
 
             if (client != null) {
                 // Creates a new cookie for the user, a new session in the server.
@@ -44,11 +44,11 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
                 }
                 return new User(client.getEmail(), client.getPassword(),
                         AuthorityUtils.createAuthorityList("CLIENT"));
-                // User represents an authenticated client, logged in. A registered user is client.
+                // User represents an authenticated user, logged in. A registered user is client.
             }
             else {
                 // Throws an exception in case a username doesn't match
-                throw new UsernameNotFoundException("Unknown user: " + inputName);
+                throw new UsernameNotFoundException("Unknown user email: " + inputEmail);
             }
 
         });

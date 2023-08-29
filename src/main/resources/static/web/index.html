@@ -34,7 +34,7 @@
                                 <input
                                         type="text"
                                         class="form-control"
-                                        :class="showErrorMessage && lNameInput == '' ? 'input-warning' : ''"
+                                        :class="showErrorMessage && fNameInput == '' ? 'input-warning' : ''"
                                         id="fName"
                                         v-model="fNameInput"
                                         placeholder="Jane"
@@ -51,7 +51,7 @@
                                 <input
                                         type="text"
                                         class="form-control"
-                                        :class="showErrorMessage && fNameInput == '' ? 'input-warning' : ''"
+                                        :class="showErrorMessage && lNameInput == '' ? 'input-warning' : ''"
                                         id="lName"
                                         v-model="lNameInput"
                                         placeholder="Doe"

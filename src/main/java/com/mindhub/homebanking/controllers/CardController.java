@@ -50,12 +50,12 @@ public class CardController {
     }
 
     @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
-    public ResponseEntity<Object> createCards(@RequestParam CardColor color, @RequestParam CardType type, Authentication authentication) {
+    public ResponseEntity<Object> createCard(@RequestParam CardColor color, @RequestParam CardType type, Authentication authentication) {
 
         Client authClient = clientRepository.findByEmail(authentication.getName());
         String cardHolder = authClient.getFirstName() + " " + authClient.getLastName();
         List<Card> filteredCardsByType = cardRepository.findByClientAndType(authClient, type);
-        List<Card> filteredCardsByColorAndType = cardRepository.findByClientAndColorAndType(authClient, color, type);
+        boolean filteredCardsByColorAndType = cardRepository.existsByClientAndColorAndType(authClient, color, type);
 
         if(type.equals(CardType.EMPTY)) {
             return new ResponseEntity<>("You must select a type of card", HttpStatus.FORBIDDEN);
@@ -66,7 +66,7 @@ public class CardController {
         if(filteredCardsByType.size() >= 3){
             return new ResponseEntity<>("You can't create more than 3 " + type.toString().toLowerCase() + " cards.", HttpStatus.FORBIDDEN);
         }
-        if(!filteredCardsByColorAndType.isEmpty()) {
+        if(filteredCardsByColorAndType) {
             return new ResponseEntity<>("You can't create another " + color.toString().toLowerCase() + " card in " + type.toString().toLowerCase(), HttpStatus.FORBIDDEN);
         }
 
