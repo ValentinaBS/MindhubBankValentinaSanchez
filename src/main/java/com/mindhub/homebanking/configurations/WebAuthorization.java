@@ -26,10 +26,11 @@ public class WebAuthorization {
 
         // We assign who has access to which endpoint
         http.authorizeRequests()
+
                 .antMatchers(HttpMethod.POST, "/api/clients", "/api/login", "/api/logout").permitAll()
                 .antMatchers("/web/index.html", "/web/styles.css", "/web/js/**", "/web/images/**").permitAll()
 
-                .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**", "/api/clients/current").hasAuthority("ADMIN")
+                .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**").hasAuthority("ADMIN")
 
                 .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}").hasAuthority("CLIENT")
 
@@ -48,7 +49,7 @@ public class WebAuthorization {
         http.logout().logoutUrl("/api/logout");
 
         // turn off checking for CSRF(Cross-Site Request Forgery) tokens
-        // Two step token validation to avoid copying it
+        // Two step token validation
         http.csrf().disable();
 
         // disabling frameOptions so h2-console can be accessed

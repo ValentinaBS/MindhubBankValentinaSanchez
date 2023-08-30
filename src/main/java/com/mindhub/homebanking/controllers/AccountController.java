@@ -34,9 +34,10 @@ public class AccountController {
 
     private String getRandomAccountNumber() {
         String formattedAccountNumber;
+        int randomNumber;
         do {
             // Generates a random number between 0 (inclusive) and 99999999 (exclusive)
-            int randomNumber = new Random().nextInt(100000000);
+            randomNumber = new Random().nextInt(100000000);
             // Ensures that the output will always be in an 8-digit format
             formattedAccountNumber = "VIN-" + String.format("%08d", randomNumber);
         } while (accountRepository.existsByNumber(formattedAccountNumber)); // Avoids repeated account numbers
@@ -55,6 +56,7 @@ public class AccountController {
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
+        // authentication != null
         Client authClient = clientRepository.findByEmail(authentication.getName());
 
         if(authClient.getAccounts().size() >= 3){
@@ -76,6 +78,7 @@ public class AccountController {
         Client currentClient = clientRepository.findByEmail(authentication.getName());
         Account account = accountRepository.findById(id).orElse(null);
 
+        // existsByClientAndId
         if(currentClient.getId() == account.getClient().getId()) {
             return new ResponseEntity<>(new AccountDTO(account), HttpStatus.OK);
         } else {

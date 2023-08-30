@@ -49,7 +49,7 @@ public class ClientController {
 
     @RequestMapping("/clients/current")
     // an instance of the Authentication class contains info about the current user
-    public ClientDTO getClientCurrent (Authentication authentication) {
+    public ClientDTO getClientCurrent(Authentication authentication) {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
 
@@ -76,6 +76,7 @@ public class ClientController {
         if (clientRepository.existsByEmail(email)) {
             return new ResponseEntity<>("Email already in use.", HttpStatus.FORBIDDEN);
         }
+        // Hacer método externo
         if(!(Pattern.matches("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", email))){
             return new ResponseEntity<>("Your email address must be in the next format: email@example.com", HttpStatus.FORBIDDEN);
         }
@@ -84,8 +85,10 @@ public class ClientController {
         }
 
         if (firstName.equalsIgnoreCase("admin") && email.toLowerCase().startsWith("admin")) {
+
             clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
             return new ResponseEntity<>("Admin has been created successfully", HttpStatus.CREATED);
+
         } else {
 
             Client newClient = new Client(firstName, lastName, email, passwordEncoder.encode(password));
@@ -104,7 +107,7 @@ public class ClientController {
 
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        return new ClientDTO(clientRepository.findById(id).orElse(null));
         // Since it's only one Client, stream and map are not needed
+        return new ClientDTO(clientRepository.findById(id).orElse(null));
     } // Servlet. Tomcat is a servlet container.
 }

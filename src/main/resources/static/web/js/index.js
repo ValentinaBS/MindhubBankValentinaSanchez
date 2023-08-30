@@ -27,7 +27,11 @@ const options = {
         submitLogin() {
             axios.post("/api/login", `email=${this.emailInput}&password=${this.passwordInput}`)
                 .then(res => {
-                    this.roleChecker();
+                    if (this.emailInput.startsWith("admin")) {
+                        window.location.href = "/web/adminPages/manager.html"
+                    } else {
+                        window.location.href = "/web/pages/accounts.html"
+                    }
                     this.emailInput = "";
                     this.passwordInput = "";
                     this.showErrorMessage = false;
@@ -73,17 +77,6 @@ const options = {
                         console.log('Error', error.message);
                     }
                     console.log(error.config);
-                })
-        },
-        roleChecker() {
-            axios.get("/api/clients/current")
-                .then(res => {
-                    this.currentClient = res.data;
-                    if (this.currentClient.firstName == "admin" && this.currentClient.email.includes("admin")) {
-                        window.location.href = "/web/adminPages/manager.html"
-                    } else {
-                        window.location.href = "/web/pages/accounts.html"
-                    }
                 })
         },
         logOut() {

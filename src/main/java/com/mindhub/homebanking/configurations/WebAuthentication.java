@@ -22,7 +22,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
     private ClientRepository clientRepository;
 
     @Bean
-    // We can use PasswordEncoder in any part of the app
+    // We can use PasswordEncoder in any part of the app to encrypt a password
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
@@ -42,9 +42,9 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
                     return new User(client.getEmail(), client.getPassword(),
                             AuthorityUtils.createAuthorityList("ADMIN"));
                 }
+                // User represents an authenticated user, logged in. A registered user is client.
                 return new User(client.getEmail(), client.getPassword(),
                         AuthorityUtils.createAuthorityList("CLIENT"));
-                // User represents an authenticated user, logged in. A registered user is client.
             }
             else {
                 // Throws an exception in case a username doesn't match

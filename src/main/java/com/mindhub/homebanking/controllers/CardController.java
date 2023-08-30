@@ -54,8 +54,6 @@ public class CardController {
 
         Client authClient = clientRepository.findByEmail(authentication.getName());
         String cardHolder = authClient.getFirstName() + " " + authClient.getLastName();
-        List<Card> filteredCardsByType = cardRepository.findByClientAndType(authClient, type);
-        boolean filteredCardsByColorAndType = cardRepository.existsByClientAndColorAndType(authClient, color, type);
 
         if(type.equals(CardType.EMPTY)) {
             return new ResponseEntity<>("You must select a type of card", HttpStatus.FORBIDDEN);
@@ -63,9 +61,8 @@ public class CardController {
         if(color.equals(CardColor.EMPTY)) {
             return new ResponseEntity<>("You must select a card color", HttpStatus.FORBIDDEN);
         }
-        if(filteredCardsByType.size() >= 3){
-            return new ResponseEntity<>("You can't create more than 3 " + type.toString().toLowerCase() + " cards.", HttpStatus.FORBIDDEN);
-        }
+
+        boolean filteredCardsByColorAndType = cardRepository.existsByClientAndColorAndType(authClient, color, type);
         if(filteredCardsByColorAndType) {
             return new ResponseEntity<>("You can't create another " + color.toString().toLowerCase() + " card in " + type.toString().toLowerCase(), HttpStatus.FORBIDDEN);
         }
