@@ -64,6 +64,14 @@ public class ClientController {
         return formattedAccountNumber;
     }
 
+    private boolean regExpEmailValidation(String input) {
+        return Pattern.matches("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", input);
+    }
+
+    private boolean regExpPassValidation(String input) {
+        return Pattern.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}", input);
+    }
+
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     // ResponseEntity contains HTTP status code and an optional JSON body with more info
     public ResponseEntity<Object> register(
@@ -76,11 +84,10 @@ public class ClientController {
         if (clientRepository.existsByEmail(email)) {
             return new ResponseEntity<>("Email already in use.", HttpStatus.FORBIDDEN);
         }
-        // Hacer método externo
-        if(!(Pattern.matches("[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", email))){
+        if(!regExpEmailValidation(email)){
             return new ResponseEntity<>("Your email address must be in the next format: email@example.com", HttpStatus.FORBIDDEN);
         }
-        if(!(Pattern.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}", password))){
+        if(!regExpPassValidation(password)){
             return new ResponseEntity<>("Your password must have between 8-15 characters, one uppercase letter, one lowercase letter, one number and one special character.", HttpStatus.FORBIDDEN);
         }
 

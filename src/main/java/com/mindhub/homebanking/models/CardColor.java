@@ -6,6 +6,4 @@ public enum CardColor {
     SILVER,
     PLATINUM,
 
-    EMPTY
-
 }

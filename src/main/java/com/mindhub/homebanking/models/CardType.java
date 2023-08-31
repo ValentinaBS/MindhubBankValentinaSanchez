@@ -5,6 +5,4 @@ public enum CardType {
     CREDIT,
     DEBIT,
 
-    EMPTY
-
 }

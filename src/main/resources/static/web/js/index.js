@@ -78,10 +78,6 @@ const options = {
                     }
                     console.log(error.config);
                 })
-        },
-        logOut() {
-            axios.post('/api/logout')
-                .then(window.location.href = '/web/index.html')
         }
     }
 }

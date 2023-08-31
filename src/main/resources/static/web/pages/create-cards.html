@@ -11,6 +11,7 @@
     <title>Mindhub Bank | Create Card</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../styles.css">
 </head>
@@ -37,7 +38,7 @@
                         <a class="nav-link rounded-2" href="#">Loans</a>
                     </li>
                     <li class="nav-item text-center">
-                        <a class="nav-link rounded-2" href="#">Transactions</a>
+                        <a class="nav-link rounded-2" href="transfers.html">Transactions</a>
                     </li>
                 </ul>
                 <button @click="logOut" class="btn log--out-mobile mt-4">
@@ -58,64 +59,67 @@
             <p class="mb-4 text-center">
                 Get a new credit/debit card just for you!
             </p>
-            <form @submit.prevent
-                class="d-flex flex-column justify-content-md-evenly align-items-center px-5 pb-md-4 py-5 text-center mx-auto">
-                <fieldset class="mb-3 text-start">
-                    <legend>Choose the card type:</legend>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="cardType" id="debit" value="DEBIT"
-                            v-model="cardType">
-                        <label class="form-check-label" for="debit">
-                            Debit
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="cardType" id="credit" value="CREDIT"
-                            v-model="cardType">
-                        <label class="form-check-label" for="credit">
-                            Credit
-                        </label>
-                    </div>
-                </fieldset>
-                <fieldset class="mt-5 text-start">
-                    <legend>Choose the card color:</legend>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="cardColor" id="silver" value="SILVER"
-                            v-model="cardColor">
-                        <label class="form-check-label" for="silver">
-                            Silver
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="cardColor" id="gold" value="GOLD"
-                            v-model="cardColor">
-                        <label class="form-check-label" for="gold">
-                            Gold
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="cardColor" id="platinum" value="PLATINUM"
-                            v-model="cardColor">
-                        <label class="form-check-label" for="platinum">
-                            Platinum
-                        </label>
-                    </div>
-                </fieldset>
-                <template v-if="errorMessage">
-                    <div class="login-error d-flex align-items-center justify-content-center mt-4">
-                        <i class="bi bi-x-circle-fill fs-5 me-1"></i>
-                        {{ errorMessage }}
-                    </div>
-                </template>
-                <button @click="createCard"
-                    class="btn primary-btn my-5 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
-                    <i class="bi bi-plus-lg fs-5"></i>
-                    Create a new card
-                </button>
-            </form>
+            <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center gap-5">
+                <form @submit.prevent
+                    class="create-cards-form d-flex flex-column justify-content-md-evenly align-items-center px-5 pb-md-4 pb-4 pt-5 text-center mx-auto mx-md-0 shadow rounded-1">
+                    <fieldset class="mb-3 text-start">
+                        <legend>Choose the card type:</legend>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cardType" id="debit" value="DEBIT"
+                                v-model="cardType">
+                            <label class="form-check-label" for="debit">
+                                Debit
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cardType" id="credit" value="CREDIT"
+                                v-model="cardType">
+                            <label class="form-check-label" for="credit">
+                                Credit
+                            </label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="mt-5 text-start">
+                        <legend>Choose the card color:</legend>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cardColor" id="silver" value="SILVER"
+                                v-model="cardColor">
+                            <label class="form-check-label" for="silver">
+                                Silver
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cardColor" id="gold" value="GOLD"
+                                v-model="cardColor">
+                            <label class="form-check-label" for="gold">
+                                Gold
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="cardColor" id="platinum" value="PLATINUM"
+                                v-model="cardColor">
+                            <label class="form-check-label" for="platinum">
+                                Platinum
+                            </label>
+                        </div>
+                    </fieldset>
+                    <template v-if="errorMessage">
+                        <div class="login-error d-flex align-items-center justify-content-center mt-4">
+                            <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                            {{ errorMessage }}
+                        </div>
+                    </template>
+                    <button @click="createCard"
+                        class="btn primary-btn my-5 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
+                        <i class="bi bi-plus-lg fs-5"></i>
+                        Create a new card
+                    </button>
+                </form>
+                <img class="create-cards-img ms-lg-5" src="../images/cards/create-cards.svg" alt="Handrawn man holding a card">
+            </div>
         </section>
 
-        <section class="text-center mt-5">
+        <section class="text-center">
             <h2>Blogs you may be interested in</h2>
             <div class="mt-5 d-flex flex-column align-items-center row-gap-5">
                 <article class="card card-blogs border-0 shadow rounded-4 mb-3">
@@ -209,6 +213,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
     <script src="../js/create-cards.js"></script>
 </body>
 

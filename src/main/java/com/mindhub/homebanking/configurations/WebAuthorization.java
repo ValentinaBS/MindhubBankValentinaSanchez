@@ -32,7 +32,7 @@ public class WebAuthorization {
 
                 .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**").hasAuthority("ADMIN")
 
-                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}").hasAuthority("CLIENT")
+                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}", "/api/transactions").hasAuthority("CLIENT")
 
                 .anyRequest().denyAll();
 

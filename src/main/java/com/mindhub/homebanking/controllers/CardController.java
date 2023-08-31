@@ -53,27 +53,32 @@ public class CardController {
     public ResponseEntity<Object> createCard(@RequestParam CardColor color, @RequestParam CardType type, Authentication authentication) {
 
         Client authClient = clientRepository.findByEmail(authentication.getName());
-        String cardHolder = authClient.getFirstName() + " " + authClient.getLastName();
 
-        if(type.equals(CardType.EMPTY)) {
-            return new ResponseEntity<>("You must select a type of card", HttpStatus.FORBIDDEN);
+        if (authClient != null) {
+            String cardHolder = authClient.getFirstName() + " " + authClient.getLastName();
+
+            if(type.toString().isBlank()) {
+                return new ResponseEntity<>("You must select a type of card", HttpStatus.FORBIDDEN);
+            }
+            if(type.toString().isBlank()) {
+                return new ResponseEntity<>("You must select a card color", HttpStatus.FORBIDDEN);
+            }
+
+            boolean filteredCardsByColorAndType = cardRepository.existsByClientAndColorAndType(authClient, color, type);
+            if(filteredCardsByColorAndType) {
+                return new ResponseEntity<>("You can't create another " + color.toString().toLowerCase() + " card in " + type.toString().toLowerCase(), HttpStatus.FORBIDDEN);
+            }
+
+            String cardNumber = getRandomCardNumber();
+            int cvv = getRandomCvvNumber();
+
+            Card newCard = new Card(cardHolder, type, color, cardNumber, cvv, LocalDate.now(), LocalDate.now().plusYears(5));
+            authClient.addCard(newCard);
+            cardRepository.save(newCard);
+
+            return new ResponseEntity<>("Card has been created successfully", HttpStatus.CREATED);
         }
-        if(color.equals(CardColor.EMPTY)) {
-            return new ResponseEntity<>("You must select a card color", HttpStatus.FORBIDDEN);
-        }
 
-        boolean filteredCardsByColorAndType = cardRepository.existsByClientAndColorAndType(authClient, color, type);
-        if(filteredCardsByColorAndType) {
-            return new ResponseEntity<>("You can't create another " + color.toString().toLowerCase() + " card in " + type.toString().toLowerCase(), HttpStatus.FORBIDDEN);
-        }
-
-        String cardNumber = getRandomCardNumber();
-        int cvv = getRandomCvvNumber();
-
-        Card newCard = new Card(cardHolder, type, color, cardNumber, cvv, LocalDate.now(), LocalDate.now().plusYears(5));
-        authClient.addCard(newCard);
-        cardRepository.save(newCard);
-
-        return new ResponseEntity<>("Card has been created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Unknown user", HttpStatus.UNAUTHORIZED);
     }
 }

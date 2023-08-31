@@ -53,23 +53,35 @@ public class AccountController {
                 .collect(toList());
     }
 
+    @RequestMapping("clients/current/accounts")
+    public List<AccountDTO> getClientCurrentAccounts(Authentication authentication) {
+        return accountRepository
+                .findByClient(clientRepository.findByEmail(authentication.getName()))
+                .stream()
+                .map(AccountDTO::new)
+                .collect(toList());
+    }
+
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
-        // authentication != null
         Client authClient = clientRepository.findByEmail(authentication.getName());
 
-        if(authClient.getAccounts().size() >= 3){
-            return new ResponseEntity<>("You can't create more than 3 accounts.", HttpStatus.FORBIDDEN);
+        if (authClient != null) {
+            if(authClient.getAccounts().size() >= 3){
+                return new ResponseEntity<>("You can't create more than 3 accounts.", HttpStatus.FORBIDDEN);
+            }
+
+            String formattedAccountNumber = getRandomAccountNumber();
+
+            Account newAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0);
+            authClient.addAccount(newAccount);
+            accountRepository.save(newAccount);
+
+            return new ResponseEntity<>("Account has been created successfully", HttpStatus.CREATED);
         }
 
-        String formattedAccountNumber = getRandomAccountNumber();
-
-        Account newAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0);
-        authClient.addAccount(newAccount);
-        accountRepository.save(newAccount);
-
-        return new ResponseEntity<>("Account has been created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Unknown user", HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping("/accounts/{id}")
@@ -78,8 +90,7 @@ public class AccountController {
         Client currentClient = clientRepository.findByEmail(authentication.getName());
         Account account = accountRepository.findById(id).orElse(null);
 
-        // existsByClientAndId
-        if(currentClient.getId() == account.getClient().getId()) {
+        if(account != null && accountRepository.existsByIdAndClient_Id(id, currentClient.getId())) {
             return new ResponseEntity<>(new AccountDTO(account), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Unauthorized access", HttpStatus.FORBIDDEN);

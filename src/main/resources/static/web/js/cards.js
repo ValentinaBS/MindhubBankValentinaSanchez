@@ -27,8 +27,24 @@ const options = {
     },
     methods: {
         logOut() {
-            axios.post('/api/logout')
-            .then(window.location.href = '/web/index.html')
+            Swal.fire({
+              title: 'Are you sure you want to log out?',
+              icon: 'warning',
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'btn primary-btn btn-lg',
+                cancelButton: 'btn secondary-btn btn-lg me-4'
+              },
+              showCancelButton: true,
+              confirmButtonText: 'Log out',
+              cancelButtonText: 'Cancel',
+              reverseButtons: true
+            }).then(result => {
+              if (result.isConfirmed) {
+                axios.post('/api/logout')
+                .then(window.location.href = '/web/index.html')
+              }
+            })
         }
     }
 }

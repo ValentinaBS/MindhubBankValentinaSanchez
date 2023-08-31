@@ -140,7 +140,7 @@ h1 {
     font-size: 0.8rem;
 }
 
-.form-control {
+.form-control, .form-select {
     border-width: 2px;
 }
 
@@ -148,7 +148,7 @@ h1 {
     color: gray;
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
     border: 2px solid var(--main);
     box-shadow: none;
 }
@@ -564,6 +564,30 @@ header {
     }
 }
 
+.create-cards {
+    margin-bottom: 8rem;
+}
+
+.create-cards-form {
+    max-width: 320px;
+}
+
+@media only screen and (min-width: 768px) {
+    .create-cards-form {
+        max-width: 400px;
+    }
+}
+
+.create-cards-img {
+    max-width: 300px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .create-cards-img {
+        max-width: 500px;
+    }
+}
+
 /* Login */
 .login-center {
     display: flex;
@@ -647,5 +671,26 @@ header {
     }
     .login-container {
         max-width: 900px;
+    }
+}
+
+/* Transfers */
+.transfers-form {
+    max-width: 320px;
+}
+
+@media only screen and (min-width: 768px) {
+    .transfers-form {
+        max-width: 400px;
+    }
+}
+
+.transfer-img  {
+    max-width: 300px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .transfer-img  {
+        max-width: 500px;
     }
 }

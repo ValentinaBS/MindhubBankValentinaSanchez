@@ -3,7 +3,7 @@ const { createApp } = Vue;
 const options = {
     data(){
         return {
-            accountId: 1,
+            accountId: null,
             chosenAccount: {},
             transactions: [],
             urlParams: {},
@@ -19,7 +19,9 @@ const options = {
         axios.get(`/api/accounts/${this.accountId}`)
         .then(res => {
             this.chosenAccount = res.data;
-            this.transactions = this.chosenAccount.transactions.sort((a, b) => a.id - b.id);
+            this.transactions = this.chosenAccount.transactions.sort((a, b) => {
+                return (a.transferDate > b.transferDate) ? -1 : ((a.transferDate < b.transferDate) ? 1 : 0);
+            });
         })
         .catch(err => {
             window.location.href = '/web/pages/accounts.html'
@@ -32,8 +34,24 @@ const options = {
     },
     methods: {
         logOut() {
-            axios.post('/api/logout')
-            .then(window.location.href = '/web/index.html')
+            Swal.fire({
+              title: 'Are you sure you want to log out?',
+              icon: 'warning',
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'btn primary-btn btn-lg',
+                cancelButton: 'btn secondary-btn btn-lg me-4'
+              },
+              showCancelButton: true,
+              confirmButtonText: 'Log out',
+              cancelButtonText: 'Cancel',
+              reverseButtons: true
+            }).then(result => {
+              if (result.isConfirmed) {
+                axios.post('/api/logout')
+                .then(window.location.href = '/web/index.html')
+              }
+            })
         }
     }
 }
