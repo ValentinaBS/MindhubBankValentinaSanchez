@@ -20,7 +20,7 @@ public class Loan {
     private long id;
     private String name;
     private double maxAmount;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name="payments")
     private List<Integer> payments = new ArrayList<>();
 
