@@ -4,22 +4,15 @@ import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.CardColor;
 import com.mindhub.homebanking.models.CardType;
 import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.CardRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.CardService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Random;
-
-import static java.util.stream.Collectors.toList;
 
 @RestController
 // Methods in a RestController return JSON objects or XML. This controller will work with API REST.
@@ -28,9 +21,9 @@ import static java.util.stream.Collectors.toList;
 public class CardController {
 
     @Autowired
-    private CardRepository cardRepository;
+    private CardService cardService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     private String getRandomCardNumber() {
         String cardNumber;
@@ -40,7 +33,7 @@ public class CardController {
                     + "-" + (int)((Math.random() * (9999-1000)) + 1000)
                     + "-" + (int)((Math.random() * (9999-1000)) + 1000)
                     + "-" + (int)((Math.random() * (9999-1000)) + 1000);
-        } while (cardRepository.existsByNumber(cardNumber)); // Avoid repeated card numbers
+        } while (cardService.existsByNumber(cardNumber)); // Avoid repeated card numbers
         return cardNumber;
     }
 
@@ -49,10 +42,10 @@ public class CardController {
         return (int) ((Math.random() * (999 - 100)) + 100);
     }
 
-    @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
+    @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> createCard(@RequestParam CardColor color, @RequestParam CardType type, Authentication authentication) {
 
-        Client authClient = clientRepository.findByEmail(authentication.getName());
+        Client authClient = clientService.findByEmail(authentication.getName());
 
         if (authClient != null) {
             String cardHolder = authClient.getFirstName() + " " + authClient.getLastName();
@@ -64,7 +57,7 @@ public class CardController {
                 return new ResponseEntity<>("You must select a card color", HttpStatus.FORBIDDEN);
             }
 
-            boolean filteredCardsByColorAndType = cardRepository.existsByClientAndColorAndType(authClient, color, type);
+            boolean filteredCardsByColorAndType = cardService.existsByClientAndColorAndType(authClient, color, type);
             if(filteredCardsByColorAndType) {
                 return new ResponseEntity<>("You can't create another " + color.toString().toLowerCase() + " card in " + type.toString().toLowerCase(), HttpStatus.FORBIDDEN);
             }
@@ -74,7 +67,7 @@ public class CardController {
 
             Card newCard = new Card(cardHolder, type, color, cardNumber, cvv, LocalDate.now(), LocalDate.now().plusYears(5));
             authClient.addCard(newCard);
-            cardRepository.save(newCard);
+            cardService.saveCard(newCard);
 
             return new ResponseEntity<>("Card has been created successfully", HttpStatus.CREATED);
         }

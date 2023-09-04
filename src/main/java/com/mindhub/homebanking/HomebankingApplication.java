@@ -30,7 +30,7 @@ public class HomebankingApplication {
 		return (args) -> {
 			// Create clients
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("MelBA98!"));
-			Client client2 = new Client("Alex", "Fulsch", "alexfu@mindhub.com", passwordEncoder.encode("FlyHigh87?"));
+			Client client2 = new Client("Alex", "Fulsch", "alexfu@mindhub.com", passwordEncoder.encode("a"));
 			Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin123"));
 
 			// Save clients to the database

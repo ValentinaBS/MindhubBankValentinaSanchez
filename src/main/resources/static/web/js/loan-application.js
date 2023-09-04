@@ -3,51 +3,90 @@ const { createApp } = Vue;
 const options = {
     data() {
         return {
+            currentClient: [],
             clientAccounts: [],
-            destinataryType: "Others",
+            currentClientLoans: [],
+            allLoans: [],
+            availableLoans: [],
+            selectedLoan: [],
+            selectedLoanInstallments: [],
+
+            inputLoan: "",
             destinatary: "",
-            origin: "",
             amount: "",
-            description: "",
+            installments: "",
+
             errorMessage: "",
             moneyFormatter: {}
         }
     },
-    created() {
-        this.loadCurrentClient();
+    async created() {
+      try {
+        // Use Promise.all to await multiple Axios requests concurrently
+        const [loansResponse, currentClientResponse, accountsResponse] = await Promise.all([
+          axios.get('/api/loans'),
+          axios.get('/api/clients/current'),
+          axios.get('/api/clients/current/accounts')
+        ]);
+
+        // Handle loans response
+        this.allLoans = loansResponse.data;
+        console.log(this.allLoans);
+
+        // Handle current client loans response
+        this.currentClient = currentClientResponse.data;
+        this.currentClientLoans = this.currentClient.loans;
+        console.log(this.currentClientLoans);
+
+        // Handle accounts response
+        this.clientAccounts = accountsResponse.data;
+        console.log(this.clientAccounts);
+
+        // Now that all data is loaded, update availableLoans
+        this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
 
         this.moneyFormatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        })
+          style: 'currency',
+          currency: 'USD'
+        });
+
+      } catch (error) {
+        console.error(error);
+      }
     },
     methods: {
-        loadCurrentClient() {
-            axios.get('/api/clients/current/accounts')
-                .then(res => {
-                    this.clientAccounts = res.data;
-                })
-                .catch(err => console.error(err))
+        showSelectedInstallments() {
+            this.selectedLoan = this.allLoans.find(loan => loan.name == this.inputLoan);
+            this.selectedLoanInstallments = this.selectedLoan.payments.sort((a, b) => a - b);
         },
-        sendTransaction() {
-            const amountRegex = new RegExp(/^[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$/);
+        sendLoanRequest() {
+            const amountRegex = new RegExp(/^[0-9]+\.[0-9]{2}$/);
 
+            if (this.inputLoan == "") {
+                this.errorMessage = "Please enter a type of loan";
+                return
+            }
+            if (this.destinatary == "") {
+                this.errorMessage = "Please enter an account to deposit the loan";
+                return
+            }
+            if (this.installments == "") {
+                this.errorMessage = "Please enter a number of installments";
+                return
+            }
             if (this.amount == "") {
-                this.errorMessage = "Please enter an amount for the transaction";
+                this.errorMessage = "Please enter an amount for the loan";
                 return
             }
             if (!(amountRegex.test(this.amount))) {
                 this.errorMessage = "Please enter a numeric amount with the next format: 1000.00";
                 return
             }
-            if (this.destinataryType == "Others" && this.origin == this.destinatary) {
-                this.errorMessage = "You can't transfer money to the same account";
-                return
-            }
 
             this.errorMessage = "";
             Swal.fire({
-                title: 'Are you sure you want to make this transaction?',
+                title: 'Are you sure you want to ask for this loan?',
+                text: "You won't be able to revert this!",
                 icon: 'info',
                 buttonsStyling: false,
                 customClass: {
@@ -60,12 +99,12 @@ const options = {
                 reverseButtons: true
             }).then(result => {
                 if (result.isConfirmed) {
-                    axios.post('/api/transactions', `amount=${this.amount}&description=${this.description}&accountOrigin=${this.origin}&accountDestination=${this.destinatary}`)
+                    axios.post('/api/loans', {id: this.selectedLoan.id, amount: this.amount, payments: this.installments, destinataryAccountNumber: this.destinatary})
                         .then(res => {
                             Swal.fire({
                                 position: 'center',
                                 icon: 'success',
-                                title: 'Your transaction has been made!',
+                                title: 'Your loan has been approved!',
                                 showConfirmButton: true,
                                 buttonsStyling: false,
                                 customClass: {
@@ -74,13 +113,13 @@ const options = {
                             })
                                 .then(result => {
                                     if (result.isConfirmed) {
-                                        document.location.reload()
+                                        window.location.href = '/web/pages/accounts.html'
                                     }
                                 })
+                            this.inputLoan = "";
                             this.destinatary = "";
-                            this.origin = "";
-                            this.amount = null;
-                            this.description = "";
+                            this.amount = "";
+                            this.installments = "";
                         })
                         .catch(error => {
                             if (error.response) {

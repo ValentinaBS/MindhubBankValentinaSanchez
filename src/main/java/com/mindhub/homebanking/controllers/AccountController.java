@@ -1,11 +1,10 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Pattern;
-
-import static java.util.stream.Collectors.toList;
 
 @RestController
 // Methods in a RestController return JSON objects or XML. This controller will work with API REST.
@@ -26,11 +21,9 @@ import static java.util.stream.Collectors.toList;
 public class AccountController {
 
     @Autowired
-    // Injects AccountRepository to use it in this controller
-    private AccountRepository accountRepository;
-    // Interface. We do this to use methods with accountRepository.
+    private AccountService accountService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     private String getRandomAccountNumber() {
         String formattedAccountNumber;
@@ -40,32 +33,24 @@ public class AccountController {
             randomNumber = new Random().nextInt(100000000);
             // Ensures that the output will always be in an 8-digit format
             formattedAccountNumber = "VIN-" + String.format("%08d", randomNumber);
-        } while (accountRepository.existsByNumber(formattedAccountNumber)); // Avoids repeated account numbers
+        } while (accountService.existsByNumber(formattedAccountNumber)); // Avoids repeated account numbers
         return formattedAccountNumber;
     }
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDTO> getAccounts(){
-        return accountRepository
-                .findAll()
-                .stream()
-                .map(AccountDTO::new)
-                .collect(toList());
+        return accountService.getAccountsDTO();
     }
 
-    @RequestMapping("clients/current/accounts")
+    @GetMapping("clients/current/accounts")
     public List<AccountDTO> getClientCurrentAccounts(Authentication authentication) {
-        return accountRepository
-                .findByClient(clientRepository.findByEmail(authentication.getName()))
-                .stream()
-                .map(AccountDTO::new)
-                .collect(toList());
+        return accountService.getClientCurrentAccountsDTO(authentication.getName());
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
-        Client authClient = clientRepository.findByEmail(authentication.getName());
+        Client authClient = clientService.findByEmail(authentication.getName());
 
         if (authClient != null) {
             if(authClient.getAccounts().size() >= 3){
@@ -76,7 +61,7 @@ public class AccountController {
 
             Account newAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0);
             authClient.addAccount(newAccount);
-            accountRepository.save(newAccount);
+            accountService.saveAccount(newAccount);
 
             return new ResponseEntity<>("Account has been created successfully", HttpStatus.CREATED);
         }
@@ -84,13 +69,13 @@ public class AccountController {
         return new ResponseEntity<>("Unknown user", HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(@PathVariable long id, Authentication authentication){
 
-        Client currentClient = clientRepository.findByEmail(authentication.getName());
-        Account account = accountRepository.findById(id).orElse(null);
+        Client currentClient = clientService.findByEmail(authentication.getName());
+        Account account = accountService.findById(id);
 
-        if(account != null && accountRepository.existsByIdAndClient_Id(id, currentClient.getId())) {
+        if(account != null && accountService.existsByIdAndClient_Id(id, currentClient.getId())) {
             return new ResponseEntity<>(new AccountDTO(account), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Unauthorized access", HttpStatus.FORBIDDEN);

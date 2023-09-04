@@ -4,9 +4,9 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.models.TransactionType;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +25,11 @@ import java.util.regex.Pattern;
 public class TransactionController {
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     private boolean regExpAmountValidation(String input) {
         return Pattern.matches("[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{2}", input);
@@ -40,7 +40,7 @@ public class TransactionController {
     public ResponseEntity<Object> createTransaction(@RequestParam Double amount, @RequestParam String description,
                                                     @RequestParam String accountOrigin, @RequestParam String accountDestination, Authentication authentication) {
 
-        Client authClient = clientRepository.findByEmail(authentication.getName());
+        Client authClient = clientService.findByEmail(authentication.getName());
 
         if (authClient != null) {
             if (amount == null || amount == 0.0) {
@@ -62,8 +62,8 @@ public class TransactionController {
                 return new ResponseEntity<>("You can't transfer money to the same account", HttpStatus.FORBIDDEN);
             }
 
-            Account originAccount = accountRepository.findByNumber(accountOrigin);
-            Account destinationAccount = accountRepository.findByNumber(accountDestination);
+            Account originAccount = accountService.findByNumber(accountOrigin);
+            Account destinationAccount = accountService.findByNumber(accountDestination);
 
             if (!authClient.getAccounts().contains(originAccount)) {
                 return new ResponseEntity<>("This account doesn't belong to the current user", HttpStatus.FORBIDDEN);
@@ -74,17 +74,17 @@ public class TransactionController {
 
             Transaction debitTransaction = new Transaction(-amount, description + " | " + accountOrigin, LocalDateTime.now(), TransactionType.DEBIT);
             originAccount.addTransaction(debitTransaction);
-            transactionRepository.save(debitTransaction);
+            transactionService.saveTransaction(debitTransaction);
 
             Transaction creditTransaction = new Transaction(amount, description + " | " + accountDestination, LocalDateTime.now(), TransactionType.CREDIT);
             destinationAccount.addTransaction(creditTransaction);
-            transactionRepository.save(creditTransaction);
+            transactionService.saveTransaction(creditTransaction);
 
             originAccount.setBalance(originAccount.getBalance() - amount);
-            accountRepository.save(originAccount);
+            accountService.saveAccount(originAccount);
 
             destinationAccount.setBalance(destinationAccount.getBalance() + amount);
-            accountRepository.save(destinationAccount);
+            accountService.saveAccount(destinationAccount);
 
             return new ResponseEntity<>("The transaction has been created successfully", HttpStatus.CREATED);
         }

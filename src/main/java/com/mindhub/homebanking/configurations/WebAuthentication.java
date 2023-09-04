@@ -34,6 +34,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
         auth.userDetailsService(inputEmail-> {
 
             Client client = clientRepository.findByEmail(inputEmail);
+            // A registered user is client.
 
             if (client != null) {
                 // Creates a new cookie for the user, a new session in the server.
@@ -42,7 +43,6 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
                     return new User(client.getEmail(), client.getPassword(),
                             AuthorityUtils.createAuthorityList("ADMIN"));
                 }
-                // User represents an authenticated user, logged in. A registered user is client.
                 return new User(client.getEmail(), client.getPassword(),
                         AuthorityUtils.createAuthorityList("CLIENT"));
             }
