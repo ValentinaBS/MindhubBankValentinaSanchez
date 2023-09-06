@@ -8,7 +8,6 @@ const options = {
             currentClientLoans: [],
             allLoans: [],
             availableLoans: [],
-            selectedLoan: [],
             selectedLoanInstallments: [],
 
             inputLoan: "",
@@ -20,44 +19,44 @@ const options = {
             moneyFormatter: {}
         }
     },
-    async created() {
-      try {
-        // Use Promise.all to await multiple Axios requests concurrently
-        const [loansResponse, currentClientResponse, accountsResponse] = await Promise.all([
-          axios.get('/api/loans'),
-          axios.get('/api/clients/current'),
-          axios.get('/api/clients/current/accounts')
-        ]);
+    created() {
+        this.loadLoans();
+        //this.loadCurrentLoans();
+        this.loadAccounts();
 
-        // Handle loans response
-        this.allLoans = loansResponse.data;
-        console.log(this.allLoans);
-
-        // Handle current client loans response
-        this.currentClient = currentClientResponse.data;
-        this.currentClientLoans = this.currentClient.loans;
-        console.log(this.currentClientLoans);
-
-        // Handle accounts response
-        this.clientAccounts = accountsResponse.data;
-        console.log(this.clientAccounts);
-
-        // Now that all data is loaded, update availableLoans
-        this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
+        // Only show unrepeated loans
+        //this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
 
         this.moneyFormatter = new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD'
         });
-
-      } catch (error) {
-        console.error(error);
-      }
     },
     methods: {
+        loadLoans(){
+            axios.get('/api/loans')
+            .then(res => {
+                this.allLoans = res.data;
+                console.log(this.allLoans);
+            })
+        },
+/*        loadCurrentLoans(){
+            axios.get('/api/clients/current')
+            .then(res => {
+                this.currentClient = res.data;
+                this.currentClientLoans = this.currentClient.loans;
+                console.log(this.currentClientLoans);
+            })
+        },*/
+        loadAccounts(){
+            axios.get('/api/clients/current/accounts')
+            .then(res => {
+                this.clientAccounts = res.data;
+                console.log(this.clientAccounts);
+            })
+        },
         showSelectedInstallments() {
-            this.selectedLoan = this.allLoans.find(loan => loan.name == this.inputLoan);
-            this.selectedLoanInstallments = this.selectedLoan.payments.sort((a, b) => a - b);
+            this.selectedLoanInstallments = this.inputLoan.payments.sort((a, b) => a - b);
         },
         sendLoanRequest() {
             const amountRegex = new RegExp(/^[0-9]+\.[0-9]{2}$/);
@@ -99,7 +98,7 @@ const options = {
                 reverseButtons: true
             }).then(result => {
                 if (result.isConfirmed) {
-                    axios.post('/api/loans', {id: this.selectedLoan.id, amount: this.amount, payments: this.installments, destinataryAccountNumber: this.destinatary})
+                    axios.post('/api/loans', {id: this.inputLoan.id, amount: this.amount, payments: this.installments, destinataryAccountNumber: this.destinatary})
                         .then(res => {
                             Swal.fire({
                                 position: 'center',

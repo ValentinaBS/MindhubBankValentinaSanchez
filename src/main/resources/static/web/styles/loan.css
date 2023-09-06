@@ -1,25 +1,25 @@
-.transfers-form {
+.loan-form {
     width: 320px;
 }
 
-.transfer-img  {
+.loan-img  {
     max-width: 300px;
 }
 
 @media only screen and (min-width: 768px) {
-    .transfers-form {
+    .loan-form {
         width: 350px;
     }
 }
 
 @media only screen and (min-width: 1024px) {
-    .transfer-img  {
+    .loan-img  {
         max-width: 400px;
     }
 }
 
 @media only screen and (min-width: 1280px) {
-    .transfers-form {
+    .loan-form {
         width: 500px;
     }
 }

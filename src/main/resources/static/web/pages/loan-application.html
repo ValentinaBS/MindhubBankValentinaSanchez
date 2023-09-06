@@ -14,6 +14,7 @@
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/loan.css">
 </head>
 
 <body>
@@ -58,22 +59,22 @@
             </h1>
             <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center gap-5">
                 <form @submit.prevent
-                    class="transfers-form d-flex flex-column justify-content-md-evenly px-5 pb-md-4 py-5 mx-auto mx-md-0 shadow rounded-1">
+                    class="loan-form d-flex flex-column justify-content-md-evenly px-5 pb-md-4 py-5 mx-auto mx-md-0 shadow rounded-1">
                     <fieldset class="my-4 text-start">
                         <label class="form-check-label" for="loanTypes">
                             Select a type of loan:
                         </label>
                         <select id="loanTypes" class="form-select mb-1" v-model="inputLoan" @change="showSelectedInstallments" aria-describedby="loanMaxAmount">
                             <option disabled value="">- Select a loan -</option>
-                            <template v-for="loan of availableLoans">
-                                <option :value="loan.name">
+                            <template v-for="loan of allLoans">
+                                <option :value="loan">
                                     {{ loan.name }}
                                 </option>
                             </template>
                         </select>
                         <template v-if="inputLoan">
                             <span id="loanMaxAmount" class="form-text">
-                                Maximum amount: {{ moneyFormatter.format(selectedLoan.maxAmount) }}
+                                Maximum amount: {{ moneyFormatter.format(inputLoan.maxAmount) }}
                             </span>
                         </template>
                     </fieldset>
@@ -104,7 +105,7 @@
                         <label class="form-check-label" for="installments">
                             Select a number of installments:
                         </label>
-                        <select id="installments" class="form-select" v-model="installments">
+                        <select id="installments" class="form-select" v-model="installments" aria-describedby="installmentsAmount">
                             <option disabled value="">- Select an installment -</option>
                             <template v-for="installment of selectedLoanInstallments">
                                 <option :value="installment">
@@ -112,6 +113,11 @@
                                 </option>
                             </template>
                         </select>
+                        <template v-if="installments && !(isNaN(amount))">
+                            <span id="installmentsAmount" class="form-text">
+                                Amount to pay per installment: {{ moneyFormatter.format((amount * 1.20) / installments) }}
+                            </span>
+                        </template>
                     </fieldset>
                     <template v-if="errorMessage">
                         <div class="error d-flex align-items-center justify-content-center mt-4">
@@ -125,7 +131,7 @@
                         Get your loan
                     </button>
                 </form>
-                <img class="transfer-img ms-lg-5" src="../images/loan-application/loan.svg" alt="Handrawn man holding papers">
+                <img class="loan-img ms-lg-5" src="../images/loan-application/loan.svg" alt="Handrawn man holding papers">
             </div>
         </section>
 
