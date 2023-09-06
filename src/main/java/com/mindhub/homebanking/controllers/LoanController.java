@@ -41,15 +41,13 @@ public class LoanController {
 
         Client authClient = clientService.findByEmail(authentication.getName());
 
-        if (authClient != null) {
-
             if (loanApplicationDTO.getDestinataryAccountNumber().isBlank()) {
                 return new ResponseEntity<>("You must specify an account number", HttpStatus.FORBIDDEN);
             }
-            if (loanApplicationDTO.getAmount() == 0.0 || loanApplicationDTO.getAmount() == null) {
+            if (loanApplicationDTO.getAmount() <= 0.0 || loanApplicationDTO.getAmount() == null) {
                 return new ResponseEntity<>("You must specify an amount", HttpStatus.FORBIDDEN);
             }
-            if (loanApplicationDTO.getPayments() == 0  || loanApplicationDTO.getPayments() == null) {
+            if (loanApplicationDTO.getPayments() <= 0  || loanApplicationDTO.getPayments() == null) {
                 return new ResponseEntity<>("You must specify the installments", HttpStatus.FORBIDDEN);
             }
 
@@ -88,8 +86,6 @@ public class LoanController {
             accountService.saveAccount(account);
 
             return new ResponseEntity<>("The loan has been requested successfully", HttpStatus.CREATED);
-        }
 
-        return new ResponseEntity<>("Unknown user", HttpStatus.UNAUTHORIZED);
     }
 }
