@@ -69,7 +69,7 @@ public class LoanController {
             if (!(loan.getPayments().contains(loanApplicationDTO.getPayments()))) {
                 return new ResponseEntity<>("This loan doesn't have " + loanApplicationDTO.getPayments().toString() + " installments", HttpStatus.FORBIDDEN);
             }
-            if(authClient.getLoans().contains(loan)){
+            if(clientLoanService.existsByClientAndLoan(authClient, loan)){
                 return new ResponseEntity<>("This kind of loan has been requested already", HttpStatus.FORBIDDEN);
             }
 

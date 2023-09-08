@@ -28,7 +28,7 @@ public class HomebankingApplication {
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		// CommandLineRunner are methods that can be implemented to run at application startup
 		return (args) -> {
-			// Create clients
+/*			// Create clients
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("MelBA98!"));
 			Client client2 = new Client("Alex", "Fulsch", "alexfu@mindhub.com", passwordEncoder.encode("a"));
 			Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin123"));
@@ -39,16 +39,16 @@ public class HomebankingApplication {
 			clientRepository.save(client3);
 
 			// Create accounts
-			Account account1 = new Account("VIN-0001", LocalDate.now(), 5000.0);
-			Account account2 = new Account("VIN-0002", LocalDate.now().plusDays(1), 7500.0);
-			Account account3 = new Account("VIN-0003", LocalDate.now(), 9000.0);
-			Account account4 = new Account("VIN-0004", LocalDate.now().plusDays(2), 3200.5);
+			Account account1 = new Account("VIN-00000001", LocalDate.now(), 1249.5);
+			Account account2 = new Account("VIN-00000002", LocalDate.now().plusDays(1), 1267.5);
+			Account account3 = new Account("VIN-00000003", LocalDate.now(), 0.0);
+			Account account4 = new Account("VIN-00000004", LocalDate.now().plusDays(2), 0.0);
 
 			// Create transactions
 			Transaction trans1 = new Transaction(-2300.5, "Rent", LocalDateTime.now(), TransactionType.DEBIT);
 			Transaction trans2 = new Transaction(3550.0, "Wage pay", LocalDateTime.now().minusDays(1), TransactionType.CREDIT);
 			Transaction trans3 = new Transaction(-1232.5, "Groceries", LocalDateTime.now(), TransactionType.DEBIT);
-			Transaction trans4 = new Transaction(250.0, "Birthday gift", LocalDateTime.now().minusDays(2), TransactionType.CREDIT);
+			Transaction trans4 = new Transaction(2500.0, "Birthday gift", LocalDateTime.now().minusDays(2), TransactionType.CREDIT);
 
 			// Assign accounts to clients
 			client1.addAccount(account1);
@@ -124,7 +124,7 @@ public class HomebankingApplication {
 			// Save cards to the database
 			cardRepository.save(card1);
 			cardRepository.save(card2);
-			cardRepository.save(card3);
+			cardRepository.save(card3);*/
 		};
 	}
 }
