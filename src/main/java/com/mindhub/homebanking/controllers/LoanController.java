@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -35,6 +36,10 @@ public class LoanController {
         return loanService.getLoansDTO();
     }
 
+    private boolean regExpAmountValidation(Double input) {
+        return Pattern.matches("[0-9]+\\.[0-9]{2}", input.toString());
+    }
+
     @Transactional
     @PostMapping("/loans")
     public ResponseEntity<Object> createLoan(@RequestBody LoanApplicationDTO loanApplicationDTO, Authentication authentication) {
@@ -49,6 +54,9 @@ public class LoanController {
             }
             if (loanApplicationDTO.getPayments() <= 0  || loanApplicationDTO.getPayments() == null) {
                 return new ResponseEntity<>("You must specify the installments", HttpStatus.FORBIDDEN);
+            }
+            if (!regExpAmountValidation(loanApplicationDTO.getAmount())) {
+                return new ResponseEntity<>("Please enter a numeric amount with the next format: 1000.00", HttpStatus.FORBIDDEN);
             }
 
             Loan loan = loanService.findById(loanApplicationDTO.getId());

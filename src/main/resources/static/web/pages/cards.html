@@ -126,7 +126,10 @@
                                             card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
                                     </div>
                                     <div class="card-glow"></div>
-                                    <div class="card-type">{{ card.color }}</div>
+                                    <div class="card-type">
+                                        {{ card.color }}
+                                        {{ card.thruDate < currentDate ? '(Expired)' : '' }}
+                                    </div>
                                     <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
                                     <div class="card-contactless">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
@@ -144,7 +147,7 @@
                                 </div>
                                 <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
                                         card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
-                                    <div class="card-signature">
+                                    <div class="card-signature" :class="card.thruDate < currentDate ? 'text-danger' : ''">
                                         {{ dateFormatter.format(new Date(card.thruDate)) }}
                                     </div>
                                     <div class="card-seccode">{{ card.cvv }}</div>

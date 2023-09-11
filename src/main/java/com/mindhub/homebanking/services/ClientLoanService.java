@@ -7,7 +7,6 @@ import com.mindhub.homebanking.models.Loan;
 public interface ClientLoanService {
 
     boolean existsByClientAndLoan(Client client, Loan loan);
-    // existsbyClientAndLoan
     void saveClientLoan(ClientLoan clientLoan);
 
 }

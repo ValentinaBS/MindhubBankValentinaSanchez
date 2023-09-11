@@ -7,7 +7,8 @@ const options = {
             clientCards: [],
             cardsDebit: [],
             cardsCredit: [],
-            dateFormatter: {}
+            dateFormatter: {},
+            currentDate: ""
         }
     },
     created(){
@@ -24,6 +25,15 @@ const options = {
             month: '2-digit',
             year: '2-digit'
         })
+
+        const newDate = new Date();
+
+        // Get the year, month, and day components
+        const year = newDate.getFullYear();
+        const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1 and pad with leading zeros
+        const day = String(newDate.getDate()).padStart(2, '0');
+
+        this.currentDate = `${year}-${month}-${day}`;
     },
     methods: {
         logOut() {

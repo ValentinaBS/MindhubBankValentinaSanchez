@@ -74,4 +74,11 @@ public class CardController {
 
         return new ResponseEntity<>("Unknown user", HttpStatus.UNAUTHORIZED);
     }
+
+    @DeleteMapping("/clients/current/cards/{id}")
+    public ResponseEntity<Object> deleteCard(@PathVariable Long id) {
+        Card card = cardService.findById(id);
+        cardService.deleteCard(card);
+        return new ResponseEntity<>("Card deleted successfully", HttpStatus.OK);
+    }
 }

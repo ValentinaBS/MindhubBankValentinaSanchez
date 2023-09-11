@@ -33,7 +33,7 @@ public class WebAuthorization {
                 .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**").hasAuthority("ADMIN")
 
                 .antMatchers(HttpMethod.POST, "/api/loans").hasAuthority("CLIENT")
-                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}", "/api/transactions", "/api/loans").hasAuthority("CLIENT")
+                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}", "/api/transactions", "/api/loans", "/api/clients/current/cards/{id}").hasAuthority("CLIENT")
 
                 .anyRequest().denyAll();
 
