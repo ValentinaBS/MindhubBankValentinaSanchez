@@ -66,7 +66,7 @@
                         </label>
                         <select id="loanTypes" class="form-select mb-1" v-model="inputLoan" @change="showSelectedInstallments" aria-describedby="loanMaxAmount">
                             <option disabled value="">- Select a loan -</option>
-                            <template v-for="loan of allLoans">
+                            <template v-for="loan of availableLoans">
                                 <option :value="loan">
                                     {{ loan.name }}
                                 </option>

@@ -21,11 +21,7 @@ const options = {
     },
     created() {
         this.loadLoans();
-        //this.loadCurrentLoans();
         this.loadAccounts();
-
-        // Only show unrepeated loans
-        //this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
 
         this.moneyFormatter = new Intl.NumberFormat('en-US', {
           style: 'currency',
@@ -37,23 +33,32 @@ const options = {
             axios.get('/api/loans')
             .then(res => {
                 this.allLoans = res.data;
-                console.log(this.allLoans);
+                this.loadCurrentLoans();
             })
+            .catch(error => {
+                console.error("Error loading all loans:", error);
+            });
         },
-/*        loadCurrentLoans(){
+        loadCurrentLoans(){
             axios.get('/api/clients/current')
             .then(res => {
                 this.currentClient = res.data;
                 this.currentClientLoans = this.currentClient.loans;
-                console.log(this.currentClientLoans);
+
+                this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
             })
-        },*/
+            .catch(error => {
+                console.error("Error loading current loans:", error);
+            });
+        },
         loadAccounts(){
             axios.get('/api/clients/current/accounts')
             .then(res => {
                 this.clientAccounts = res.data;
-                console.log(this.clientAccounts);
             })
+            .catch(error => {
+                console.error("Error loading client accounts:", error);
+            });
         },
         showSelectedInstallments() {
             this.selectedLoanInstallments = this.inputLoan.payments.sort((a, b) => a - b);
