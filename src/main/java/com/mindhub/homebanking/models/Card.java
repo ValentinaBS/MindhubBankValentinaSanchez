@@ -20,6 +20,7 @@ public class Card {
     private int cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
+    private Boolean isActive;
 
     // ---- Relations ----
     @ManyToOne(fetch = FetchType.EAGER)
@@ -29,7 +30,7 @@ public class Card {
     // ---- Constructors ----
     public Card(){}
 
-    public Card(String cardholder, CardType type, CardColor color, String number, int cvv, LocalDate fromDate, LocalDate thruDate) {
+    public Card(String cardholder, CardType type, CardColor color, String number, int cvv, LocalDate fromDate, LocalDate thruDate, Boolean isActive) {
         this.cardholder = cardholder;
         this.type = type;
         this.color = color;
@@ -37,6 +38,7 @@ public class Card {
         this.cvv = cvv;
         this.fromDate = fromDate;
         this.thruDate = thruDate;
+        this.isActive = isActive;
     }
 
     // ---- Getters & Setters ----
@@ -106,5 +108,13 @@ public class Card {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

@@ -4,7 +4,7 @@ import com.mindhub.homebanking.models.*;
 
 public interface CardService {
     boolean existsByNumber(String number);
-    boolean existsByClientAndColorAndType(Client client, CardColor color, CardType type);
+    boolean existsByClientAndColorAndTypeAndIsActive(Client client, CardColor color, CardType type, Boolean isActive);
 
     Card findById(Long id);
     void saveCard(Card card);

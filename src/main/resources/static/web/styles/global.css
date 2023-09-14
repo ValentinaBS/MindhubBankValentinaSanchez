@@ -22,7 +22,8 @@ body {
     min-height: 100vh;
 }
 
-.accounts-section, .account-section {
+.accounts-section,
+.account-section {
     min-height: 50vh;
 }
 
@@ -125,7 +126,8 @@ h1 {
     font-size: 0.8rem;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
     border-width: 2px;
 }
 
@@ -133,7 +135,8 @@ h1 {
     color: gray;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
     border: 2px solid var(--main);
     box-shadow: none;
 }
@@ -142,18 +145,28 @@ h1 {
     font-size: 0.9rem
 }
 
-.error i{
+.error i {
     color: var(--debit);
+}
+
+.empty-img {
+    max-width: 300px;
 }
 
 @media only screen and (min-width: 1024px) {
     .navbar-collapse {
         margin-top: 0;
     }
+
     .log--out-desktop {
         display: block;
     }
+
     .log--out-mobile {
         display: none;
+    }
+
+    .empty-img {
+        max-width: 500px;
     }
 }

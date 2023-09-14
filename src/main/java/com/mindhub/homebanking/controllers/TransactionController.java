@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.regex.Pattern;
+
+import static com.mindhub.homebanking.utils.TransactionUtils.regExpAmountValidation;
 
 @RestController
 @RequestMapping("/api")
@@ -31,10 +32,6 @@ public class TransactionController {
     @Autowired
     private ClientService clientService;
 
-    private boolean regExpAmountValidation(String input) {
-        return Pattern.matches("[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{2}", input);
-    }
-
     @Transactional
     @PostMapping("/transactions")
     public ResponseEntity<Object> createTransaction(@RequestParam Double amount, @RequestParam String description,
@@ -43,7 +40,7 @@ public class TransactionController {
         Client authClient = clientService.findByEmail(authentication.getName());
 
         if (authClient != null) {
-            if (amount == null || amount == 0.0) {
+            if (amount == null || amount <= 0.0) {
                 return new ResponseEntity<>("You must specify an amount", HttpStatus.FORBIDDEN);
             }
             if (accountOrigin.isBlank()) {
@@ -55,7 +52,7 @@ public class TransactionController {
             if (description.isBlank()) {
                 return new ResponseEntity<>("You must write a description", HttpStatus.FORBIDDEN);
             }
-            if (!regExpAmountValidation(amount.toString())) {
+            if (!regExpAmountValidation(amount)) {
                 return new ResponseEntity<>("Enter an amount with the next format: 1000.00", HttpStatus.FORBIDDEN);
             }
             if (accountOrigin.equals(accountDestination)){

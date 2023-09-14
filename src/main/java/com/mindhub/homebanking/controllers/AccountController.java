@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Random;
+
+import static com.mindhub.homebanking.utils.AccountUtils.getRandomAccountNumber;
 
 @RestController
 // Methods in a RestController return JSON objects or XML. This controller will work with API REST.
@@ -24,18 +25,6 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private ClientService clientService;
-
-    private String getRandomAccountNumber() {
-        String formattedAccountNumber;
-        int randomNumber;
-        do {
-            // Generates a random number between 0 (inclusive) and 99999999 (exclusive)
-            randomNumber = new Random().nextInt(100000000);
-            // Ensures that the output will always be in an 8-digit format
-            formattedAccountNumber = "VIN-" + String.format("%08d", randomNumber);
-        } while (accountService.existsByNumber(formattedAccountNumber)); // Avoids repeated account numbers
-        return formattedAccountNumber;
-    }
 
     @GetMapping("/accounts")
     public List<AccountDTO> getAccounts(){
@@ -57,7 +46,7 @@ public class AccountController {
                 return new ResponseEntity<>("You can't create more than 3 accounts.", HttpStatus.FORBIDDEN);
             }
 
-            String formattedAccountNumber = getRandomAccountNumber();
+            String formattedAccountNumber = getRandomAccountNumber(accountService);
 
             Account newAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0);
             authClient.addAccount(newAccount);

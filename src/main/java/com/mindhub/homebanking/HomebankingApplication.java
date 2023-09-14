@@ -16,9 +16,9 @@ import java.util.List;
 @SpringBootApplication
 public class HomebankingApplication {
 
-	@Autowired
+	//@Autowired
 	// Injects passwordEncoder to encode passwords
-	private PasswordEncoder passwordEncoder;
+	//private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);

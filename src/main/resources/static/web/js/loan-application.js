@@ -24,41 +24,41 @@ const options = {
         this.loadAccounts();
 
         this.moneyFormatter = new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD'
+            style: 'currency',
+            currency: 'USD'
         });
     },
     methods: {
-        loadLoans(){
+        loadLoans() {
             axios.get('/api/loans')
-            .then(res => {
-                this.allLoans = res.data;
-                this.loadCurrentLoans();
-            })
-            .catch(error => {
-                console.error("Error loading all loans:", error);
-            });
+                .then(res => {
+                    this.allLoans = res.data;
+                    this.loadCurrentLoans();
+                })
+                .catch(error => {
+                    console.error("Error loading all loans:", error);
+                });
         },
-        loadCurrentLoans(){
+        loadCurrentLoans() {
             axios.get('/api/clients/current')
-            .then(res => {
-                this.currentClient = res.data;
-                this.currentClientLoans = this.currentClient.loans;
+                .then(res => {
+                    this.currentClient = res.data;
+                    this.currentClientLoans = this.currentClient.loans;
 
-                this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
-            })
-            .catch(error => {
-                console.error("Error loading current loans:", error);
-            });
+                    this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
+                })
+                .catch(error => {
+                    console.error("Error loading current loans:", error);
+                });
         },
-        loadAccounts(){
+        loadAccounts() {
             axios.get('/api/clients/current/accounts')
-            .then(res => {
-                this.clientAccounts = res.data;
-            })
-            .catch(error => {
-                console.error("Error loading client accounts:", error);
-            });
+                .then(res => {
+                    this.clientAccounts = res.data;
+                })
+                .catch(error => {
+                    console.error("Error loading client accounts:", error);
+                });
         },
         showSelectedInstallments() {
             this.selectedLoanInstallments = this.inputLoan.payments.sort((a, b) => a - b);
@@ -103,7 +103,7 @@ const options = {
                 reverseButtons: true
             }).then(result => {
                 if (result.isConfirmed) {
-                    axios.post('/api/loans', {id: this.inputLoan.id, amount: this.amount, payments: this.installments, destinataryAccountNumber: this.destinatary})
+                    axios.post('/api/loans', { id: this.inputLoan.id, amount: this.amount, payments: this.installments, destinataryAccountNumber: this.destinatary })
                         .then(res => {
                             Swal.fire({
                                 position: 'center',

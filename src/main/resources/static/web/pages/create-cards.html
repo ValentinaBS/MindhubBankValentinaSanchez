@@ -13,6 +13,7 @@
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/cards.css">
 </head>
@@ -61,7 +62,7 @@
                 Get a new credit/debit card just for you!
             </p>
             <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center gap-5">
-                <form @submit.prevent
+                <form data-aos="zoom-in" @submit.prevent
                     class="create-cards-form d-flex flex-column justify-content-md-evenly align-items-center px-5 pb-md-4 pb-4 pt-5 text-center mx-auto mx-md-0 shadow rounded-1">
                     <fieldset class="mb-3 text-start">
                         <legend>Choose the card type:</legend>
@@ -116,14 +117,14 @@
                         Create a new card
                     </button>
                 </form>
-                <img class="create-cards-img ms-lg-5" src="../images/cards/create-cards.svg" alt="Handrawn man holding a card">
+                <img data-aos="fade-left" class="create-cards-img ms-lg-5" src="../images/cards/create-cards.svg" alt="Handrawn man holding a card">
             </div>
         </section>
 
         <section class="text-center">
             <h2>Blogs you may be interested in</h2>
             <div class="mt-5 d-flex flex-column align-items-center row-gap-5">
-                <article class="card card-blogs border-0 shadow rounded-4 mb-3">
+                <article data-aos="zoom-in" class="card card-blogs border-0 shadow rounded-4 mb-3">
                     <div class="row g-0">
                         <img src="../images/cards/blog-savings.jpg" class="img-borders-left img-fluid object-fit-cover col-md-6" alt="Person saving a coin in a piggy bank">
                         <div class="col-md-6 py-4 py-md-5">
@@ -146,7 +147,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="card card-blogs border-0 shadow rounded-4 mb-3">
+                <article data-aos="zoom-in" class="card card-blogs border-0 shadow rounded-4 mb-3">
                     <div class="d-flex flex-column-reverse flex-md-row g-0">
                         <div class="col-md-6 py-4 py-md-5">
                             <div class="card-body">
@@ -216,6 +217,10 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
     <script src="../js/create-cards.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 
 </html>
