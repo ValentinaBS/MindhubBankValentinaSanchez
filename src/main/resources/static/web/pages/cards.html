@@ -147,13 +147,31 @@
                                                 </option>
                                             </template>
                                         </select>
+                                        <template v-if="errorMessage">
+                                            <div class="error d-flex align-items-center justify-content-center mt-4">
+                                                <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                                                {{ errorMessage }}
+                                            </div>
+                                        </template>
                                     </div>
+                                    <template v-if="deleteCardConfirmation && debitCardInput">
+                                        <p class="text-center">
+                                            Are you sure you want to delete this card?
+                                        </p>
+                                    </template>
                                     <div class="modal-footer border-0">
                                         <button type="button" class="btn secondary-btn"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button @click="removeCard(this.debitCardInput)" type="button" class="btn primary-btn">
-                                            Delete card
-                                        </button>
+                                            <template v-if="deleteCardConfirmation && debitCardInput">
+                                                <button @click="removeCard(this.debitCardInput)" type="button" class="btn primary-btn">
+                                                    Yes, delete card
+                                                </button>
+                                            </template>
+                                            <template v-else>
+                                                <button @click="confirmDelete(this.debitCardInput)" type="button" class="btn primary-btn">
+                                                    Delete card
+                                                </button>
+                                            </template>
                                     </div>
                                 </div>
                             </div>
@@ -256,13 +274,31 @@
                                     </option>
                                 </template>
                             </select>
+                            <template v-if="errorMessage">
+                                <div class="error d-flex align-items-center justify-content-center mt-4">
+                                    <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                                    {{ errorMessage }}
+                                </div>
+                            </template>
                         </div>
+                        <template v-if="deleteCardConfirmation && creditCardInput">
+                            <p class="text-center">
+                                Are you sure you want to delete this card?
+                            </p>
+                        </template>
                         <div class="modal-footer border-0">
                             <button type="button" class="btn secondary-btn"
                                 data-bs-dismiss="modal">Close</button>
-                            <button @click="removeCard(this.creditCardInput)" type="button" class="btn primary-btn">
-                                Delete card
-                            </button>
+                            <template v-if="deleteCardConfirmation && creditCardInput">
+                                <button @click="removeCard(this.creditCardInput)" type="button" class="btn primary-btn">
+                                    Yes, delete card
+                                </button>
+                            </template>
+                            <template v-else>
+                                <button @click="confirmDelete(this.creditCardInput)" type="button" class="btn primary-btn">
+                                    Delete card
+                                </button>
+                            </template>
                         </div>
                     </div>
                 </div>

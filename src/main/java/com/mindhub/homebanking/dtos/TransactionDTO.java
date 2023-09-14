@@ -13,6 +13,8 @@ public class TransactionDTO {
     private String description;
     private LocalDateTime transferDate;
     private TransactionType type;
+    private Double currentBalance;
+    private Boolean active;
 
     // ---- Constructors ----
     public TransactionDTO(Transaction transaction) {
@@ -21,6 +23,8 @@ public class TransactionDTO {
         this.description = transaction.getDescription();
         this.transferDate = transaction.getTransferDate();
         this.type = transaction.getType();
+        this.currentBalance = transaction.getCurrentBalance();
+        this.active = transaction.getActive();
     }
 
     // ---- Getters ----
@@ -42,5 +46,13 @@ public class TransactionDTO {
 
     public TransactionType getType() {
         return type;
+    }
+
+    public Double getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public Boolean getActive() {
+        return active;
     }
 }

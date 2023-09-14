@@ -17,6 +17,8 @@ public class Transaction {
     private String description;
     private LocalDateTime transferDate;
     private TransactionType type;
+    private Double currentBalance;
+    private Boolean active;
 
     // ---- Relations ----
     @ManyToOne(fetch = FetchType.EAGER)
@@ -27,11 +29,13 @@ public class Transaction {
 
     // ---- Constructors ----
     public Transaction(){} // It's used to map by Hibernate. DTOs don't because they don´t persist.
-    public Transaction(Double amount, String description, LocalDateTime transferDate, TransactionType type) {
+    public Transaction(Double amount, String description, LocalDateTime transferDate, TransactionType type, Double currentBalance, Boolean active) {
         this.amount = amount;
         this.description = description;
         this.transferDate = transferDate;
         this.type = type;
+        this.currentBalance = currentBalance;
+        this.active = active;
     }
 
     // ---- Getters & Setters ----
@@ -72,5 +76,19 @@ public class Transaction {
     }
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Double getCurrentBalance() {
+        return currentBalance;
+    }
+    public void setCurrentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

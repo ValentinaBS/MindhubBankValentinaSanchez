@@ -15,4 +15,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     boolean existsByNumber(String number);
 
     boolean existsByClientAndColorAndTypeAndIsActive(Client client, CardColor color, CardType type, Boolean isActive);
+
+    boolean existsByIdAndClient_Id(long id, long clientId);
+
 }

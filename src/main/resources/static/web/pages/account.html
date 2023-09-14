@@ -80,7 +80,8 @@
                                 <th class="account-corner-left" scope="col">Type</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Date</th>
-                                <th class="account-corner-right" scope="col">Description</th>
+                                <th scope="col">Description</th>
+                                <th class="account-corner-right" scope="col">Current Balance</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,6 +100,7 @@
                                         '2-digit', minute: '2-digit' })}}
                                     </td>
                                     <td>{{ transaction.description }}</td>
+                                    <td>{{ moneyFormatter.format(transaction.currentBalance) }}</td>
                                 </tr>
                             </template>
                         </tbody>

@@ -4,6 +4,10 @@ import com.mindhub.homebanking.models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.Set;
+
 @RepositoryRestResource
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+
+    Set<Transaction> findByAccount_Id(Long accountId);
 } // Creates a repository to save the transactions in the database

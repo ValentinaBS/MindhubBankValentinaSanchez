@@ -26,6 +26,11 @@ public class CardServiceImplement implements CardService {
     }
 
     @Override
+    public boolean existsByIdAndClient_Id(Long id, Long clientId) {
+        return cardRepository.existsByIdAndClient_Id(id, clientId);
+    }
+
+    @Override
     public Card findById(Long id) {
         return cardRepository.findById(id).orElse(null);
     }

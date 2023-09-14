@@ -15,6 +15,7 @@ public class AccountDTO {
     private LocalDate creationDate;
     private Double balance;
     private Set<TransactionDTO> transactions;
+    private Boolean active;
 
     // ---- Constructors ----
     public AccountDTO(Account account) {
@@ -28,6 +29,8 @@ public class AccountDTO {
         this.balance = account.getBalance();
 
         this.transactions = account.getTransactions().stream().map(TransactionDTO::new).collect(Collectors.toSet());
+
+        this.active = account.getActive();
     }
 
     // ---- Getters ----
@@ -49,5 +52,9 @@ public class AccountDTO {
 
     public Double getBalance() {
         return balance;
+    }
+
+    public Boolean getActive() {
+        return active;
     }
 }

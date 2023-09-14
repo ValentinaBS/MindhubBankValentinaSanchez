@@ -24,7 +24,7 @@ const options = {
                 .then(res => {
                     this.client = res.data;
                     this.firstName = this.client.firstName;
-                    this.clientAccounts = this.client.accounts;
+                    this.clientAccounts = this.client.accounts.filter(account => account.active);
                     this.clientLoans = this.client.loans
                 })
                 .catch(err => console.error(err))
@@ -60,6 +60,33 @@ const options = {
                             }
                             console.log(error.config);
                         })
+                }
+            })
+        },
+        removeAccount(accountId){
+            Swal.fire({
+                title: 'Are you sure you want to delete this account?',
+                icon: 'warning',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn primary-btn btn-lg',
+                    cancelButton: 'btn secondary-btn btn-lg me-4'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete this account',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    axios.patch(`/api/clients/current/accounts/${accountId}`)
+                    .then(res => {
+                        document.location.reload()
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    })
                 }
             })
         },

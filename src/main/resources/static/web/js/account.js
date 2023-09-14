@@ -22,6 +22,7 @@ const options = {
                 this.transactions = this.chosenAccount.transactions.sort((a, b) => {
                     return (a.transferDate > b.transferDate) ? -1 : ((a.transferDate < b.transferDate) ? 1 : 0);
                 });
+                console.log(this.transactions)
             })
             .catch(err => {
                 window.location.href = '/web/pages/accounts.html'

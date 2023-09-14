@@ -69,11 +69,11 @@ public class TransactionController {
                 return new ResponseEntity<>("You don't have enough funds to transfer", HttpStatus.FORBIDDEN);
             }
 
-            Transaction debitTransaction = new Transaction(-amount, description + " | " + accountOrigin, LocalDateTime.now(), TransactionType.DEBIT);
+            Transaction debitTransaction = new Transaction(-amount, description + " | " + accountOrigin, LocalDateTime.now(), TransactionType.DEBIT, originAccount.getBalance() - amount, true);
             originAccount.addTransaction(debitTransaction);
             transactionService.saveTransaction(debitTransaction);
 
-            Transaction creditTransaction = new Transaction(amount, description + " | " + accountDestination, LocalDateTime.now(), TransactionType.CREDIT);
+            Transaction creditTransaction = new Transaction(amount, description + " | " + accountDestination, LocalDateTime.now(), TransactionType.CREDIT, destinationAccount.getBalance() + amount, true);
             destinationAccount.addTransaction(creditTransaction);
             transactionService.saveTransaction(creditTransaction);
 

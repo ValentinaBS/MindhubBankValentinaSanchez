@@ -9,17 +9,19 @@ const options = {
             cardsCredit: [],
             dateFormatter: {},
             currentDate: "",
-            debitCardInput: {},
-            creditCardInput: {}
+            debitCardInput: null,
+            creditCardInput: null,
+            deleteCardConfirmation: false,
+            errorMessage: "",
         }
     },
     created() {
         axios.get("/api/clients/current")
             .then(res => {
                 this.client = res.data;
-                this.clientCards = this.client.cards;
-                this.cardsDebit = this.clientCards.filter(card => card.type == "DEBIT" && card.isActive);
-                this.cardsCredit = this.clientCards.filter(card => card.type == "CREDIT" && card.isActive);
+                this.clientCards = this.client.cards.filter(card => card.isActive);
+                this.cardsDebit = this.clientCards.filter(card => card.type == "DEBIT");
+                this.cardsCredit = this.clientCards.filter(card => card.type == "CREDIT");
             })
             .catch(err => console.error(err))
 
@@ -39,14 +41,23 @@ const options = {
         removeCard(card) {
             axios.patch(`/api/clients/current/cards/${card.id}`)
                 .then(res => {
-                    window.location.href = '/web/pages/cards.html'
-                    card = {};
+                    document.location.reload()
+                    card = null;
+                    this.deleteCardConfirmation = false;
                 })
                 .catch(error => {
                     console.log(error.response.data);
                     console.log(error.response.status);
                     console.log(error.response.headers);
                 })
+        },
+        confirmDelete(card) {
+            if(card == null) {
+                this.errorMessage = "You must select a card to delete."
+                return
+            }
+            this.errorMessage = "";
+            this.deleteCardConfirmation = true;
         },
         logOut() {
             Swal.fire({

@@ -64,6 +64,8 @@ public class CardController {
     @PatchMapping("/clients/current/cards/{id}")
     public ResponseEntity<Object> removeCard(@PathVariable Long id, Authentication authentication) {
 
+        Client authClient = clientService.findByEmail(authentication.getName());
+
         if(id == null) {
             return new ResponseEntity<>("Unknown card", HttpStatus.FORBIDDEN);
         }
@@ -78,29 +80,13 @@ public class CardController {
         if(!card.getIsActive()){
             return new ResponseEntity<>("This card is already removed", HttpStatus.FORBIDDEN);
         }
+        if(!cardService.existsByIdAndClient_Id(id, authClient.getId())) {
+            return new ResponseEntity<>("This card doesn't belong to the current user", HttpStatus.FORBIDDEN);
+        }
 
         card.setIsActive(false);
         cardService.saveCard(card);
 
         return new ResponseEntity<>("Card removed successfully", HttpStatus.OK);
     }
-
-    /*    @DeleteMapping("/clients/current/cards/{id}")
-    public ResponseEntity<Object> deleteCard(@PathVariable Long id) {
-        Card card = cardService.findById(id);
-        cardService.deleteCard(card);
-        return new ResponseEntity<>("Card deleted successfully", HttpStatus.OK);
-    }*/
 }
-
-
-//Patch, agregar propiedad en cards llamada active. mostrar sus tarjetas en base a la propiedad.
-//Tocar el back
-//En account agregar una columna con el monto con el que queda la cuenta. Su saldo actual. Back y front.
-//Post. Desactivar cuentas y transacciones. Tiene que ser una cuenta vacía, sino ofrecerle transferir. No puede ser la única cuenta.
-//Loan con propiedad Double percentage.
-//Nueva propiedad en Account, Enum type.
-//Monto máximo, interes, cuotas, nombre
-//Hacer nuevo DTO para recibir propiedades. Se puede levantar en Live Server, problemas en CORS. Sacar el monto de la tarjeta de las cuentas del cliente, la primera que tenga el monto es la que va a retirar. findByCard para buscar el cliente.
-//Descontar cuotas totales para pagar.
-//En account.html hay que poner un filtro de fecha personalizado. Todo desde el back. Buscar librerias.

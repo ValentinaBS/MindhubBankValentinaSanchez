@@ -65,7 +65,7 @@
             <div class="m-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
                 <template v-if="clientAccounts.length > 0" v-for="account of clientAccounts">
                     <article data-aos="fade-down" class="card accounts-card shadow py-3">
-                        <div class="card-body">
+                        <div class="card-body px-4">
                             <p class="card-text">
                                 Account number: {{ account.number }}
                             </p>
@@ -78,10 +78,17 @@
                             <p class="card-text">
                                 Creation date: {{ account.creationDate }}
                             </p>
-                            <a v-bind:href="'account.html?id=' + account.id"
-                                class="btn secondary-btn py-2 fw-bold w-75">
-                                Transactions
-                            </a>
+                            <div class="d-flex flex-column-reverse flex-md-row row-gap-3 justify-content-around">
+                                <button @click="removeAccount(account.id)" class="btn secondary-btn py-2 fw-bold">
+                                    <i class="bi bi-trash-fill me-1"></i>
+                                    Delete Account
+                                </button>
+                                <a v-bind:href="'account.html?id=' + account.id"
+                                    class="btn secondary-btn py-2 fw-bold">
+                                    <i class="bi bi-cash-stack me-1"></i>
+                                    Transactions
+                                </a>
+                            </div>
                         </div>
                     </article>
                 </template>

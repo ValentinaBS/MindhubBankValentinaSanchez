@@ -18,6 +18,7 @@ public class Account {
     private String number;
     private LocalDate creationDate;
     private Double balance;
+    private Boolean active;
 
     // ---- Relations ----
     @ManyToOne(fetch = FetchType.EAGER)
@@ -32,10 +33,11 @@ public class Account {
 
     // ---- Constructors ----
     public Account(){} // It's used to map by Hibernate. DTOs don't because they don´t persist.
-    public Account(String number, LocalDate creationDate, Double balance) {
+    public Account(String number, LocalDate creationDate, Double balance, Boolean active) {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
+        this.active = active;
     }
 
     // ---- Getters & Setters ----
@@ -64,6 +66,13 @@ public class Account {
         this.balance = balance;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public Client getClient() {
         return client;
     }
@@ -74,6 +83,11 @@ public class Account {
     public Set<Transaction> getTransactions() {
         return transactions;
     }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);

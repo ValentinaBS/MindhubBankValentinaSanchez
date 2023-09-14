@@ -6,11 +6,19 @@ import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class TransactionServiceImplement implements TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+
+    @Override
+    public Set<Transaction> findByAccount_Id(Long accountId) {
+        return transactionRepository.findByAccount_Id(accountId);
+    }
 
     @Override
     public void saveTransaction(Transaction transaction) {

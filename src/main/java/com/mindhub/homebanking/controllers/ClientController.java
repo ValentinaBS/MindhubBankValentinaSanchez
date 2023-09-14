@@ -74,7 +74,7 @@ public class ClientController {
             String formattedAccountNumber = AccountUtils.getRandomAccountNumber(accountService);
 
             // Creates default account to associate it to a newly registered client
-            Account defaultAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0);
+            Account defaultAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0, true);
             newClient.addAccount(defaultAccount);
             accountService.saveAccount(defaultAccount);
 
