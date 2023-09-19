@@ -7,7 +7,12 @@ const options = {
             firstName: "",
             clientAccounts: [],
             clientLoans: [],
-            moneyFormatter: {}
+            moneyFormatter: {},
+            accountType: "CHECKING",
+            selectedLoanToPay: {},
+            loanAccount: null,
+            payLoanConfirmation: false,
+            errorMessage: ""
         }
     },
     created() {
@@ -25,7 +30,7 @@ const options = {
                     this.client = res.data;
                     this.firstName = this.client.firstName;
                     this.clientAccounts = this.client.accounts.filter(account => account.active);
-                    this.clientLoans = this.client.loans
+                    this.clientLoans = this.client.loans.filter(loan => loan.active);
                 })
                 .catch(err => console.error(err))
         },
@@ -44,24 +49,24 @@ const options = {
                 reverseButtons: true
             }).then(result => {
                 if (result.isConfirmed) {
-                    axios.post('/api/clients/current/accounts')
-                        .then(() => {
-                            this.loadCurrentClient();
-                        })
-                        .catch(error => {
-                            if (error.response) {
-                                console.log(error.response.data);
-                                console.log(error.response.status);
-                                console.log(error.response.headers);
-                            } else if (error.request) {
-                                console.log(error.request);
-                            } else {
-                                console.log('Error', error.message);
-                            }
-                            console.log(error.config);
-                        })
+                    axios.post('/api/clients/current/accounts', `type=${this.accountType}`)
+                    .then(() => {
+                        document.location.reload()
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+                            console.log(error.request);
+                        } else {
+                            console.log('Error', error.message);
+                        }
+                        console.log(error.config);
+                    })
                 }
-            })
+            }) 
         },
         removeAccount(accountId){
             Swal.fire({
@@ -80,15 +85,77 @@ const options = {
                 if (result.isConfirmed) {
                     axios.patch(`/api/clients/current/accounts/${accountId}`)
                     .then(res => {
-                        document.location.reload()
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Your account has been deleted!',
+                            showConfirmButton: true,
+                            buttonsStyling: false,
+                            customClass: {
+                                confirmButton: 'btn primary-btn btn-lg',
+                            }
+                        })
+                        .then(result => {
+                            if (result.isConfirmed) {
+                                document.location.reload()
+                            }
+                        })
                     })
                     .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oh no!',
+                            text: `${error.response.data}`,
+                            confirmButtonText: 'Ok',
+                            buttonsStyling: false,
+                            customClass: {
+                                confirmButton: 'btn primary-btn btn-lg',
+                            }
+                        })
                         console.log(error.response.data);
                         console.log(error.response.status);
                         console.log(error.response.headers);
                     })
                 }
             })
+        },
+        payLoan() {
+            axios.patch(`/api/loans/${this.selectedLoanToPay.id}`, `accountNumber=${this.loanAccount}`)
+            .then(() => {
+                document.location.reload();
+                this.resetMessages()
+            })
+            .catch(error => {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                    this.errorMessage = error.response.data;
+                    this.payLoanConfirmation = false;
+                } else if (error.request) {
+                    console.log(error.request);
+                } else {
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            })
+        },
+        selectedLoan(loan) {
+            this.selectedLoanToPay = loan;
+        },
+        confirmPay(account) {
+            if(account == null) {
+                this.errorMessage = "You must select an account to pay."
+                return
+            }
+            this.errorMessage = "";
+            this.payLoanConfirmation = true;
+        },
+        resetMessages() {
+            this.errorMessage = "";
+            this.payLoanConfirmation = false;
+            this.selectedLoanToPay = {};
+            this.loanAccount = null;
         },
         logOut() {
             Swal.fire({

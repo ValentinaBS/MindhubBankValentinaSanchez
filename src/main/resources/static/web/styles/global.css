@@ -153,6 +153,14 @@ h1 {
     max-width: 300px;
 }
 
+.table-head {
+    --bs-table-color: white;
+}
+
+.table-titles {
+    --bs-table-bg: var(--main);
+}
+
 @media only screen and (min-width: 1024px) {
     .navbar-collapse {
         margin-top: 0;

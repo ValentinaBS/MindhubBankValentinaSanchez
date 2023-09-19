@@ -8,61 +8,153 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet">
-    <title>Client Manager</title>
+    <title>Mindhub Bank | Client Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/manager.css">
 </head>
 
 <body>
 <div class="layout" id="app" v-cloak>
-    <h1 class="mb-3 mt-4 text-center">
-        Client Manager
-    </h1>
-    <form @submit.prevent @submit="addClient" class="mx-4 my-5 d-flex flex-column row-gap-4 align-items-center">
-        <div class="mb-3 w-75">
-            <label for="firstName" class="form-label">First name:</label>
-            <input v-model="firstName" type="text" class="form-control" id="firstName" placeholder="Jane">
+    <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
+        <a class="navbar-brand" href="#">
+            <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
+        </a>
+        <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapsibleNavbar">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
+            <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
+                <li class="nav-item text-center">
+                    <a class="nav-link active rounded-2" href="#">Client Manager</a>
+                </li>
+                <li class="nav-item text-center">
+                    <a class="nav-link rounded-2" href="create-loan.html">Create Loan</a>
+                </li>
+            </ul>
+            <button @click="logOut" class="btn log--out-mobile mt-4">
+                Log Out
+                <i class="bi bi-box-arrow-right ms-1"></i>
+            </button>
         </div>
-        <div class="mb-3 w-75">
-            <label for="lastName" class="form-label">Last name:</label>
-            <input v-model="lastName" type="text" class="form-control" id="lastName" placeholder="Doe">
+        <button @click="logOut" class="btn log--out-desktop">
+            Log Out
+            <i class="bi bi-box-arrow-right ms-1"></i>
+        </button>
+    </nav>
+    <section class="my-5">
+        <h1 class="mb-3 text-center">
+            Client Manager
+        </h1>
+        <form @submit.prevent @submit="addClient" class="manager-form mx-auto my-5 d-flex flex-column row-gap-4 align-items-center">
+            <div class="mb-3 w-75">
+                <label for="firstName" class="form-label">First name:</label>
+                <input v-model="firstName" type="text" class="form-control" id="firstName" placeholder="Jane">
+            </div>
+            <div class="mb-3 w-75">
+                <label for="lastName" class="form-label">Last name:</label>
+                <input v-model="lastName" type="text" class="form-control" id="lastName" placeholder="Doe">
+            </div>
+            <div class="mb-3 w-75">
+                <label for="email" class="form-label">Email address:</label>
+                <input v-model="email" type="email" class="form-control" id="email" placeholder="janedoe@email.com">
+            </div>
+            <div class="mb-3 w-75">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input
+                            :type="isPasswordShowing ? 'text' : 'password'"
+                            class="form-control"
+                            id="password"
+                            v-model="password"
+                            minlength="8"
+                            maxlength="15"
+                    >
+                    <span @click="showPassword" class="input-group-text btn primary-btn form-show-password">
+                        <i class="bi" :class="isPasswordShowing ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+                    </span>
+                </div>
+            </div>
+            <template v-if="errorMessage">
+                <div class="error d-flex align-items-center justify-content-center mt-4">
+                    <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                    {{ errorMessage }}
+                </div>
+            </template>
+            <div class="w-75 text-end">
+                <button  type="submit" class="btn primary-btn">Submit</button>
+            </div>
+        </form>
+        <h2 class="mt-5 text-center">
+            Client list
+        </h2>
+        <div class="table-responsive text-nowrap">
+            <table class="table manager-table my-5 mx-4 mx-md-auto">
+                <thead class="table-head">
+                    <tr class="text-center table-titles">
+                        <th class="manager-corner-left" scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th class="manager-corner-right" scope="col">Email Address</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <template v-for="client in clientList">
+                        <tr>
+                            <td>{{client.firstName}}</td>
+                            <td>{{client.lastName}}</td>
+                            <td>{{client.email}}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
         </div>
-        <div class="mb-3 w-75">
-            <label for="email" class="form-label">Email address:</label>
-            <input v-model="email" type="email" class="form-control" id="email" placeholder="janedoe@email.com">
+        <h2 class="mt-5 text-center">
+            Client REST Response
+        </h2>
+        <p class="mx-4 my-5 text-break">
+            {{restResponse}}
+        </p>
+    </section>
+
+    <footer class="mt-5 px-3 py-4">
+        <div class="d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
+                </li>
+            </ul>
+            <p class="mb-0 me-3 text-white">
+                ©Mindhub Bank 2023 - All rights reserved
+            </p>
         </div>
-        <div class="w-75 text-end">
-            <button  type="submit" class="btn primary-btn">Submit</button>
+        <div class="d-flex flex-wrap pt-3 mt-3 justify-content-start justify-content-md-center border-top">
+            <a class="footer-link me-4 rounded-1 px-3 py-2"
+                href="https://www.linkedin.com/in/valentina-belen-sanchez/">
+                <i class="bi bi-linkedin me-1"></i>
+                Valentina Belén Sánchez
+            </a>
+            <a class="footer-link rounded-1 px-3 py-2" href="https://github.com/ValentinaBS">
+                <i class="bi bi-github me-1"></i>
+                ValentinaBS
+            </a>
         </div>
-    </form>
-    <h2 class="mt-5 text-center">
-        Client list
-    </h2>
-    <table class="table mx-auto my-5 w-75 m">
-        <thead>
-        <tr>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email Address</th>
-        </tr>
-        </thead>
-        <tbody>
-        <template v-for="client in clientList">
-            <tr>
-                <td>{{client.firstName}}</td>
-                <td>{{client.lastName}}</td>
-                <td>{{client.email}}</td>
-            </tr>
-        </template>
-        </tbody>
-    </table>
-    <h2 class="mt-5 text-center">
-        Client REST Response
-    </h2>
-    <div class="mx-4 my-5">
-        {{restResponse}}
-    </div>
+    </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -70,6 +162,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
 <script src="../js/manager.js"></script>
 </body>
 

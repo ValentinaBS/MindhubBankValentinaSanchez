@@ -15,4 +15,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findByClient(Client client);
 
     boolean existsByIdAndClient_Id(long id, long clientId);
+
+    long countByActiveAndClient_Id(Boolean active, long clientId);
 } // Creates a repository to save the accounts in the database

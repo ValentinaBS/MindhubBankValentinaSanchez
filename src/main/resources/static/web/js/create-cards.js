@@ -35,7 +35,21 @@ const options = {
                 if (result.isConfirmed) {
                     axios.post('/api/clients/current/cards', `color=${this.cardColor}&type=${this.cardType}`)
                         .then(res => {
-                            window.location.href = '/web/pages/cards.html'
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Your new card has been created!',
+                                showConfirmButton: true,
+                                buttonsStyling: false,
+                                customClass: {
+                                    confirmButton: 'btn primary-btn btn-lg',
+                                }
+                            })
+                                .then(result => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/web/pages/cards.html'
+                                    }
+                                })
                             this.cardType = "";
                             this.cardColor = "";
                         })

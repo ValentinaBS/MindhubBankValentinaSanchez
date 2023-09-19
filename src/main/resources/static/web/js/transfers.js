@@ -25,7 +25,7 @@ const options = {
         loadCurrentClient() {
             axios.get('/api/clients/current/accounts')
                 .then(res => {
-                    this.clientAccounts = res.data;
+                    this.clientAccounts = res.data.filter(account => account.active);;
                 })
                 .catch(err => console.error(err))
         },
@@ -74,7 +74,7 @@ const options = {
                             })
                                 .then(result => {
                                     if (result.isConfirmed) {
-                                        document.location.reload()
+                                        window.location.href = '/web/pages/accounts.html'
                                     }
                                 })
                             this.destinatary = "";

@@ -34,6 +34,11 @@ public class AccountServiceImplement implements AccountService {
     }
 
     @Override
+    public long countByActiveAndClient_Id(Boolean active, long clientId) {
+        return accountRepository.countByActiveAndClient_Id(active, clientId);
+    }
+
+    @Override
     public Account findById(Long id) {
         return accountRepository.findById(id).orElse(null);
     }

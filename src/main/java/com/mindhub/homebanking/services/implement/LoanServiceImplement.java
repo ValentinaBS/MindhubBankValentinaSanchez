@@ -23,11 +23,21 @@ public class LoanServiceImplement implements LoanService {
     }
 
     @Override
+    public boolean existsByName(String name) {
+        return loanRepository.existsByName(name);
+    }
+
+    @Override
     public List<LoanDTO> getLoansDTO() {
         return loanRepository
                 .findAll()
                 .stream()
                 .map(LoanDTO::new)
                 .collect(toList());
+    }
+
+    @Override
+    public void saveLoan(Loan loan) {
+        loanRepository.save(loan);
     }
 }

@@ -39,7 +39,7 @@ public class CardController {
             if(type.toString().isBlank()) {
                 return new ResponseEntity<>("You must select a type of card", HttpStatus.FORBIDDEN);
             }
-            if(type.toString().isBlank()) {
+            if(color.toString().isBlank()) {
                 return new ResponseEntity<>("You must select a card color", HttpStatus.FORBIDDEN);
             }
 

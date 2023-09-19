@@ -10,6 +10,7 @@ public interface AccountService {
 
     boolean existsByNumber(String number);
     boolean existsByIdAndClient_Id(Long id, Long clientId);
+    long countByActiveAndClient_Id(Boolean active, long clientId);
     Account findById(Long id);
     Account findByNumber(String number);
     List<Account> findByClient(Client client);

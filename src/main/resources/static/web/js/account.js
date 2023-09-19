@@ -9,7 +9,8 @@ const options = {
             urlParams: {},
             debitClass: 'debit',
             creditClass: 'credit',
-            moneyFormatter: {}
+            moneyFormatter: {},
+            loading: true
         }
     },
     created() {
@@ -32,6 +33,10 @@ const options = {
             style: 'currency',
             currency: 'USD'
         })
+
+        setTimeout(() => { 
+            this.loading = false;
+        }, 1000)
     },
     methods: {
         logOut() {

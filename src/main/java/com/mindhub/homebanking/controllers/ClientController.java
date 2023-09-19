@@ -2,6 +2,7 @@ package com.mindhub.homebanking.controllers;
 import java.time.LocalDate;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.AccountType;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
@@ -74,7 +75,7 @@ public class ClientController {
             String formattedAccountNumber = AccountUtils.getRandomAccountNumber(accountService);
 
             // Creates default account to associate it to a newly registered client
-            Account defaultAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0, true);
+            Account defaultAccount = new Account(formattedAccountNumber, LocalDate.now(), 0.0, true, AccountType.SAVINGS);
             newClient.addAccount(defaultAccount);
             accountService.saveAccount(defaultAccount);
 

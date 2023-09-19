@@ -51,6 +51,16 @@ header {
 }
 
 /* Account */
+.loader-container {
+    min-height: 80vh;
+}
+
+.spinner-border {
+    color: var(--main);
+    height: 5rem;
+    width: 5rem;
+}
+
 .account-card {
     border: 0;
     max-width: 320px;
@@ -67,14 +77,6 @@ header {
 
 .account-corner-right {
     border-radius: 0 0.5rem 0 0;
-}
-
-.table-head {
-    --bs-table-color: white;
-}
-
-.table-titles {
-    --bs-table-bg: var(--main);
 }
 
 .table .debit {

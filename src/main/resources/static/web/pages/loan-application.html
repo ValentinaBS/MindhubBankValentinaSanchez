@@ -69,7 +69,7 @@
                             <option disabled value="">- Select a loan -</option>
                             <template v-for="loan of availableLoans">
                                 <option :value="loan">
-                                    {{ loan.name }}
+                                    {{ loan.name }} | Interest: {{ loan.percentage.toFixed(2) }}%
                                 </option>
                             </template>
                         </select>
@@ -116,7 +116,7 @@
                         </select>
                         <template v-if="installments && !(isNaN(amount))">
                             <span id="installmentsAmount" class="form-text">
-                                Amount to pay per installment: {{ moneyFormatter.format((amount * 1.20) / installments) }}
+                                Amount to pay per installment: {{ moneyFormatter.format((+amount + (+amount * (inputLoan.percentage / 100))) / installments) }}
                             </span>
                         </template>
                     </fieldset>
@@ -132,7 +132,7 @@
                         Get your loan
                     </button>
                 </form>
-                <img data-aos="fade-left" class="loan-img ms-lg-5" src="../images/loan-application/loan.svg" alt="Handrawn man holding papers">
+                <img data-aos="zoom-in" class="loan-img ms-lg-5" src="../images/loan-application/loan.svg" alt="Handrawn man holding papers">
             </div>
         </section>
 

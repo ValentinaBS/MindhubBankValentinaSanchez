@@ -40,8 +40,8 @@
                                         v-model="fNameInput"
                                         placeholder="Jane"
                                 >
-                                <template v-if="showErrorMessage && fNameInput == ''">
-                                    <div class="login-error">
+                                <template v-if="showErrorMessage && (fNameInput == '' || fNameInput == 'admin')">
+                                    <div class="error">
                                         <i class="bi bi-x-circle-fill mx-1"></i>
                                         {{ errorMessage }}
                                     </div>

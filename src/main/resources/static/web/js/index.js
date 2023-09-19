@@ -58,11 +58,17 @@ const options = {
                 })
         },
         submitSignUp() {
+            if(this.fNameInput == "admin") {
+                this.showErrorMessage = true;
+                this.errorMessage = "You can't register an account with 'admin' as a first name."
+                return
+            }
+
             axios.post("/api/clients", `email=${this.emailInput}&password=${this.passwordInput}&firstName=${this.fNameInput}&lastName=${this.lNameInput}`)
                 .then(() => {
                     this.submitLogin();
-                    this.firstName = "";
-                    this.lastName = "";
+                    this.fNameInput = "";
+                    this.lNameInput = "";
                 })
                 .catch(error => {
                     if (error.response) {

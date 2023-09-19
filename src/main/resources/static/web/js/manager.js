@@ -7,7 +7,10 @@ const options = {
             restResponse: null,
             firstName: "",
             lastName: "",
-            email: ""
+            email: "",
+            password: "",
+            errorMessage: "",
+            isPasswordShowing: false
         }
     },
     created(){
@@ -23,18 +26,47 @@ const options = {
             .catch(err => console.error(err))
         },
         addClient(){
-            if(this.firstName != "" && this.lastName != "" && this.email != "") {
-                this.postClient()
+
+            if(this.firstName == "" || this.lastName == "" || this.email == "" || this.password == "") {
+                this.errorMessage = "Please don't leave any empty fields."
+                return
             }
-        },
-        postClient(){
-            axios.post('/rest/clients', {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email
+
+            axios.post('/api/clients', `firstName=${this.firstName}&lastName=${this.lastName}&email=${this.email}&password=${this.password}`)
+            .then(() => {
+                document.location.reload();
+                this.errorMessage = "";
+                this.firstName = "";
+                this.lastName = "";
+                this.email = "";
+                this.password = "";
             })
-            .then(res => this.loadData())
-            .catch(err => console.error(err))
+            .catch(err => {
+                this.errorMessage = err.response.data;
+            })
+        },
+        showPassword() {
+            this.isPasswordShowing = !(this.isPasswordShowing);
+        },
+        logOut() {
+            Swal.fire({
+                title: 'Are you sure you want to log out?',
+                icon: 'warning',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn primary-btn btn-lg',
+                    cancelButton: 'btn secondary-btn btn-lg me-4'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Log out',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    axios.post('/api/logout')
+                        .then(window.location.href = '/web/index.html')
+                }
+            })
         }
     }
 }

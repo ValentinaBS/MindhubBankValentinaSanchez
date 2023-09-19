@@ -64,38 +64,45 @@
                 </h2>
                 <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
                     <template v-if="cardsDebit.length > 0" v-for:="card in cardsDebit">
-                        <div data-aos="zoom-in" class="card-model mb-4 mt-3">
-                            <div class="card-inner">
-                                <div class="card-front" :class="card.color == 'PLATINUM' ? 'card-front-platinum' :
-                                            card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
-                                    <div class="card-bg" :class="card.color == 'PLATINUM' ? 'card-bg-platinum' :
-                                            card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
+                        <div>
+                            <div class="card-model mb-4 mt-3">
+                                <div class="card-inner">
+                                    <div class="card-front" :class="card.color == 'PLATINUM' ? 'card-front-platinum' :
+                                                card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
+                                        <div class="card-bg" :class="card.color == 'PLATINUM' ? 'card-bg-platinum' :
+                                                card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
+                                        </div>
+                                        <div class="card-glow"></div>
+                                        <div class="card-type">{{ card.color }}</div>
+                                        <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
+                                        <div class="card-contactless">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
+                                                <path fill="none" stroke="#f9f9f9" stroke-width="6"
+                                                    stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
+                    0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
+                                            </svg>
+                                        </div>
+                                        <div class="card-chip"></div>
+                                        <div class="card-holder">{{ card.cardholder }}</div>
+                                        <div class="card-number">{{ card.number }}</div>
+                                        <div class="card-valid">
+                                            {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                        </div>
                                     </div>
-                                    <div class="card-glow"></div>
-                                    <div class="card-type">{{ card.color }}</div>
-                                    <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
-                                    <div class="card-contactless">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
-                                            <path fill="none" stroke="#f9f9f9" stroke-width="6" stroke-linecap="round"
-                                                d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
-                0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
-                                        </svg>
+                                    <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
+                                                card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
+                                        <div class="card-signature">
+                                            {{ dateFormatter.format(new Date(card.thruDate)) }}
+                                        </div>
+                                        <div class="card-seccode">{{ card.cvv }}</div>
                                     </div>
-                                    <div class="card-chip"></div>
-                                    <div class="card-holder">{{ card.cardholder }}</div>
-                                    <div class="card-number">{{ card.number }}</div>
-                                    <div class="card-valid">
-                                        {{ dateFormatter.format(new Date(card.fromDate)) }}
-                                    </div>
-                                </div>
-                                <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
-                                            card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
-                                    <div class="card-signature">
-                                        {{ dateFormatter.format(new Date(card.thruDate)) }}
-                                    </div>
-                                    <div class="card-seccode">{{ card.cvv }}</div>
                                 </div>
                             </div>
+                            <button @click="removeCard(card.id)"
+                                class="cards-anchor btn secondary-btn mx-auto mt-4 mb-2 py-2 px-5 d-flex align-items-center column-gap-2">
+                                <i class="bi bi-trash-fill fs-5"></i>
+                                Remove card
+                            </button>
                         </div>
                     </template>
                     <template v-else>
@@ -106,78 +113,16 @@
                             alt="Drawing of a woman in an empty forest">
                     </template>
                 </div>
-                <div class="d-flex flex-wrap align-items-center justify-content-center column-gap-5 mx-2">
-                    <template v-if="cardsDebit.length < 3">
-                        <div>
-                            <a href="create-cards.html"
-                                class="cards-anchor btn primary-btn mt-5 mb-2 py-2 px-4 d-flex align-items-center column-gap-2">
-                                <i class="bi bi-plus-lg fs-5"></i>
-                                Get a new debit card
-                            </a>
-                            <p class="text-center">(Max. 3 cards per card type)</p>
-                        </div>
-                    </template>
-                    <template v-if="cardsDebit.length > 0">
-                        <div>
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#debitModal"
-                                class="cards-anchor btn secondary-btn mt-5 mb-2 py-2 px-5 d-flex align-items-center column-gap-2">
-                                <i class="bi bi-trash-fill fs-5"></i>
-                                Remove a card
-                            </button>
-                            <p class="text-center">(This action will be permanent)</p>
-                        </div>
-                        <div class="modal fade" id="debitModal" tabindex="-1"
-                            aria-labelledby="debitModalTitle" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content p-3">
-                                    <div class="modal-header border-0">
-                                        <h4 class="modal-title" id="debitModalTitle">
-                                            Which debit card would you like to remove?
-                                        </h4>
-                                    </div>
-                                    <div class="modal-body pt-3 pb-4">
-                                        <label class="form-check-label" for="debitCards">
-                                            Select one of your cards:
-                                        </label>
-                                        <select id="debitCards" class="form-select my-2" v-model="debitCardInput">
-                                            <option disabled value="">- Select a card -</option>
-                                            <template v-for="card in cardsDebit">
-                                                <option :value="card">
-                                                    {{ card.color }} | {{ card.number }}
-                                                </option>
-                                            </template>
-                                        </select>
-                                        <template v-if="errorMessage">
-                                            <div class="error d-flex align-items-center justify-content-center mt-4">
-                                                <i class="bi bi-x-circle-fill fs-5 me-1"></i>
-                                                {{ errorMessage }}
-                                            </div>
-                                        </template>
-                                    </div>
-                                    <template v-if="deleteCardConfirmation && debitCardInput">
-                                        <p class="text-center">
-                                            Are you sure you want to delete this card?
-                                        </p>
-                                    </template>
-                                    <div class="modal-footer border-0">
-                                        <button type="button" class="btn secondary-btn"
-                                            data-bs-dismiss="modal">Close</button>
-                                            <template v-if="deleteCardConfirmation && debitCardInput">
-                                                <button @click="removeCard(this.debitCardInput)" type="button" class="btn primary-btn">
-                                                    Yes, delete card
-                                                </button>
-                                            </template>
-                                            <template v-else>
-                                                <button @click="confirmDelete(this.debitCardInput)" type="button" class="btn primary-btn">
-                                                    Delete card
-                                                </button>
-                                            </template>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </div>
+                <template v-if="cardsDebit.length < 3">
+                    <div>
+                        <a href="create-cards.html"
+                            class="cards-anchor btn primary-btn mx-auto mt-5 mb-2 py-2 px-4 d-flex align-items-center column-gap-2">
+                            <i class="bi bi-plus-lg fs-5"></i>
+                            Get a new debit card
+                        </a>
+                        <p class="text-center">(Max. 3 cards per card type)</p>
+                    </div>
+                </template>
             </section>
             <section class="mb-2">
                 <h2 class="text-center">
@@ -185,43 +130,50 @@
                 </h2>
                 <div class="mx-4 d-flex flex-wrap justify-content-around align-items-center gap-3">
                     <template v-if="cardsCredit.length > 0" v-for:="card in cardsCredit">
-                        <div data-aos="zoom-in" class="card-model mb-4 mt-3">
-                            <div class="card-inner">
-                                <div class="card-front" :class="card.color == 'PLATINUM' ? 'card-front-platinum' :
-                                        card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
-                                    <div class="card-bg" :class="card.color == 'PLATINUM' ? 'card-bg-platinum' :
-                                            card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
-                                    </div>
-                                    <div class="card-glow"></div>
-                                    <div class="card-type">
-                                        {{ card.color }}
-                                        {{ card.thruDate < currentDate ? '(Expired)' : '' }} 
-                                    </div>
-                                            <img class="logo" src="../images/logo-white.png" alt="Mindhub Bank logo">
-                                            <div class="card-contactless">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
-                                                    <path fill="none" stroke="#f9f9f9" stroke-width="6"
-                                                        stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
-                0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
-                                                </svg>
-                                            </div>
-                                            <div class="card-chip"></div>
-                                            <div class="card-holder">{{ card.cardholder }}</div>
-                                            <div class="card-number">{{ card.number }}</div>
-                                            <div class="card-valid">
-                                                {{ dateFormatter.format(new Date(card.fromDate)) }}
-                                            </div>
-                                    </div>
-                                    <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
-                                        card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
-                                        <div class="card-signature"
-                                            :class="card.thruDate < currentDate ? 'text-danger' : ''">
-                                            {{ dateFormatter.format(new Date(card.thruDate)) }}
+                        <div>
+                            <div class="card-model mb-4 mt-3">
+                                <div class="card-inner">
+                                    <div class="card-front" :class="card.color == 'PLATINUM' ? 'card-front-platinum' :
+                                            card.color == 'GOLD'? 'card-front-gold' : 'card-front-silver'">
+                                        <div class="card-bg" :class="card.color == 'PLATINUM' ? 'card-bg-platinum' :
+                                                card.color == 'GOLD'? 'card-bg-gold' : 'card-bg-silver'">
                                         </div>
-                                        <div class="card-seccode">{{ card.cvv }}</div>
+                                        <div class="card-glow"></div>
+                                        <div class="card-type">
+                                            {{ card.color }}
+                                            {{ card.thruDate < currentDate ? '(Expired)' : '' }} </div>
+                                                <img class="logo" src="../images/logo-white.png"
+                                                    alt="Mindhub Bank logo">
+                                                <div class="card-contactless">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="56">
+                                                        <path fill="none" stroke="#f9f9f9" stroke-width="6"
+                                                            stroke-linecap="round" d="m35,3a50,50 0 0,1 0,50M24,8.5a39,39 0 0,1 0,39M13.5,13.55a28.2,28.5
+                                                            0 0,1 0,28.5M3,19a18,17 0 0,1 0,18" />
+                                                    </svg>
+                                                </div>
+                                                <div class="card-chip"></div>
+                                                <div class="card-holder">{{ card.cardholder }}</div>
+                                                <div class="card-number">{{ card.number }}</div>
+                                                <div class="card-valid">
+                                                    {{ dateFormatter.format(new Date(card.fromDate)) }}
+                                                </div>
                                     </div>
+                                        <div class="card-back" :class="card.color == 'PLATINUM' ? 'card-back-platinum' :
+                                            card.color == 'GOLD'? 'card-back-gold' : 'card-back-silver'">
+                                            <div class="card-signature"
+                                                :class="card.thruDate < currentDate ? 'text-danger' : ''">
+                                                {{ dateFormatter.format(new Date(card.thruDate)) }}
+                                            </div>
+                                            <div class="card-seccode">{{ card.cvv }}</div>
+                                        </div>
                                 </div>
                             </div>
+                            <button @click="removeCard(card.id)"
+                                class="cards-anchor btn secondary-btn mx-auto mt-4 mb-2 py-2 px-5 d-flex align-items-center column-gap-2">
+                                <i class="bi bi-trash-fill fs-5"></i>
+                                Remove card
+                            </button>
+                        </div>
                     </template>
                     <template v-else>
                         <h3 class="text-center mt-5 w-100">
@@ -231,78 +183,16 @@
                             alt="Drawing of a man holding an empty box with a woman">
                     </template>
                 </div>
-                <div class="d-flex flex-wrap align-items-center justify-content-center column-gap-5 mx-2">
-                    <template v-if="cardsCredit.length < 3">
-                        <div>
-                            <a href="create-cards.html"
-                                class="cards-anchor btn primary-btn mt-5 mb-2 py-2 px-4 d-flex align-items-center column-gap-2">
-                                <i class="bi bi-plus-lg fs-5"></i>
-                                Get a new credit card
-                            </a>
-                            <p class="text-center">(Max. 3 cards per card type)</p>
-                        </div>
-                    </template>
-                    <template v-if="cardsCredit.length > 0">
-                        <div>
-                            <button data-bs-toggle="modal" data-bs-target="#creditModal"
-                                class="cards-anchor btn secondary-btn mt-5 mb-2 py-2 px-5 d-flex align-items-center column-gap-2">
-                                <i class="bi bi-trash-fill fs-5"></i>
-                                Remove a card
-                            </button>
-                            <p class="text-center">(This action will be permanent)</p>
-                        </div>
-                    </template>
-                </div>
-                <div class="modal modal-cards fade" id="creditModal" tabindex="-1"
-                aria-labelledby="creditModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content p-3">
-                        <div class="modal-header border-0">
-                            <h4 class="modal-title" id="creditModalTitle">
-                                Which credit card would you like to remove?
-                            </h4>
-                        </div>
-                        <div class="modal-body pt-3 pb-4">
-                            <label class="form-check-label" for="creditCards">
-                                Select one of your cards:
-                            </label>
-                            <select id="creditCards" class="form-select my-2" v-model="creditCardInput">
-                                <option disabled value="">- Select a card -</option>
-                                <template v-for="card in cardsCredit">
-                                    <option :value="card">
-                                        {{ card.color }} | {{ card.number }}
-                                    </option>
-                                </template>
-                            </select>
-                            <template v-if="errorMessage">
-                                <div class="error d-flex align-items-center justify-content-center mt-4">
-                                    <i class="bi bi-x-circle-fill fs-5 me-1"></i>
-                                    {{ errorMessage }}
-                                </div>
-                            </template>
-                        </div>
-                        <template v-if="deleteCardConfirmation && creditCardInput">
-                            <p class="text-center">
-                                Are you sure you want to delete this card?
-                            </p>
-                        </template>
-                        <div class="modal-footer border-0">
-                            <button type="button" class="btn secondary-btn"
-                                data-bs-dismiss="modal">Close</button>
-                            <template v-if="deleteCardConfirmation && creditCardInput">
-                                <button @click="removeCard(this.creditCardInput)" type="button" class="btn primary-btn">
-                                    Yes, delete card
-                                </button>
-                            </template>
-                            <template v-else>
-                                <button @click="confirmDelete(this.creditCardInput)" type="button" class="btn primary-btn">
-                                    Delete card
-                                </button>
-                            </template>
-                        </div>
+                <template v-if="cardsCredit.length < 3">
+                    <div>
+                        <a href="create-cards.html"
+                            class="cards-anchor btn primary-btn mx-auto mt-5 mb-2 py-2 px-4 d-flex align-items-center column-gap-2">
+                            <i class="bi bi-plus-lg fs-5"></i>
+                            Get a new credit card
+                        </a>
+                        <p class="text-center">(Max. 3 cards per card type)</p>
                     </div>
-                </div>
-            </div>
+                </template>
             </section>
         </section>
 

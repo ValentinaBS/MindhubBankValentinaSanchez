@@ -54,7 +54,7 @@ const options = {
         loadAccounts() {
             axios.get('/api/clients/current/accounts')
                 .then(res => {
-                    this.clientAccounts = res.data;
+                    this.clientAccounts = res.data.filter(account => account.active);
                 })
                 .catch(error => {
                     console.error("Error loading client accounts:", error);

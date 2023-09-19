@@ -9,10 +9,6 @@ const options = {
             cardsCredit: [],
             dateFormatter: {},
             currentDate: "",
-            debitCardInput: null,
-            creditCardInput: null,
-            deleteCardConfirmation: false,
-            errorMessage: "",
         }
     },
     created() {
@@ -38,26 +34,46 @@ const options = {
         this.currentDate = `${year}-${month}-${day}`;
     },
     methods: {
-        removeCard(card) {
-            axios.patch(`/api/clients/current/cards/${card.id}`)
-                .then(res => {
-                    document.location.reload()
-                    card = null;
-                    this.deleteCardConfirmation = false;
-                })
-                .catch(error => {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                })
-        },
-        confirmDelete(card) {
-            if(card == null) {
-                this.errorMessage = "You must select a card to delete."
-                return
-            }
-            this.errorMessage = "";
-            this.deleteCardConfirmation = true;
+        removeCard(cardId) {
+            Swal.fire({
+                title: 'Are you sure you want to delete this card?',
+                icon: 'warning',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn primary-btn btn-lg',
+                    cancelButton: 'btn secondary-btn btn-lg me-4'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete this card',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    axios.patch(`/api/clients/current/cards/${cardId}`)
+                    .then(res => {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Your card has been deleted!',
+                            showConfirmButton: true,
+                            buttonsStyling: false,
+                            customClass: {
+                                confirmButton: 'btn primary-btn btn-lg',
+                            }
+                        })
+                        .then(result => {
+                            if (result.isConfirmed) {
+                                document.location.reload()
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    })
+                }
+            })
         },
         logOut() {
             Swal.fire({

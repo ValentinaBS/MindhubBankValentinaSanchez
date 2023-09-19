@@ -67,7 +67,10 @@
                     <article data-aos="fade-down" class="card accounts-card shadow py-3">
                         <div class="card-body px-4">
                             <p class="card-text">
-                                Account number: {{ account.number }}
+                                Account number: {{ account.number }} | 
+                                <span class="fw-bold">
+                                    {{ account.type.charAt(0) + account.type.toLowerCase().slice(1) }}
+                                </span>
                             </p>
                             <p class="card-text">
                                 Amount:
@@ -84,7 +87,7 @@
                                     Delete Account
                                 </button>
                                 <a v-bind:href="'account.html?id=' + account.id"
-                                    class="btn secondary-btn py-2 fw-bold">
+                                    class="btn primary-btn py-2">
                                     <i class="bi bi-cash-stack me-1"></i>
                                     Transactions
                                 </a>
@@ -99,30 +102,124 @@
                 </template>
             </div>
             <template v-if="clientAccounts.length < 3">
-                <button @click="createAccount"
+                <button data-bs-toggle="modal" data-bs-target="#accountModal"
                     class="btn primary-btn mt-5 mb-2 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
                     <i class="bi bi-plus-lg fs-5"></i>
                     Create a new account
                 </button>
                 <p>(Max. 3 accounts per client)</p>
             </template>
+            <div class="modal modal-cards fade" id="accountModal" tabindex="-1"
+                aria-labelledby="accountModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content p-3">
+                        <div class="modal-header border-0">
+                            <h4 class="modal-title" id="accountModalTitle">
+                                What type of account would you like to create?
+                            </h4>
+                        </div>
+                        <div class="modal-body pt-3 pb-4">
+                            <fieldset class="mx-auto">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="accountType" id="savings" value="SAVINGS"
+                                        v-model="accountType">
+                                    <label class="form-check-label" for="savings">
+                                        Savings
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="accountType" id="checking" value="CHECKING"
+                                        v-model="accountType" checked>
+                                    <label class="form-check-label" for="checking">
+                                        Checking
+                                    </label>
+                                </div>
+                            </fieldset>
+                            <template v-if="errorMessage">
+                                <div class="error d-flex align-items-center justify-content-center mt-4">
+                                    <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                                    {{ errorMessage }}
+                                </div>
+                            </template>
+                        </div>
+                        <div class="modal-footer mx-auto border-0">
+                            <button type="button" class="btn secondary-btn"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button @click="createAccount" type="button" class="btn primary-btn">
+                                Create account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <section class="accounts-loans">
                 <h2>Your Loans</h2>
+                <div class="modal fade" id="loanModal" tabindex="-1"
+                aria-labelledby="loanTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content p-3">
+                            <div class="modal-header border-0">
+                                <h4 class="modal-title" id="loanTitle">
+                                    With which account do you want to pay your loan?
+                                </h4>
+                            </div>
+                            <div class="modal-body pt-3 pb-4">
+                                <p>
+                                    The amount you have to pay per installment is: 
+                                    <span class="fw-bold">
+                                        {{ moneyFormatter.format(selectedLoanToPay.amount / selectedLoanToPay.paymentsLeft) }}
+                                    </span>
+                                </p>
+                                <label class="form-check-label" for="loanAccounts">
+                                    Select one of your accounts:
+                                </label>
+                                <select id="loanAccounts" class="form-select my-2" v-model="loanAccount">
+                                    <option disabled value="">- Select an account -</option>
+                                    <template v-for="account of clientAccounts">
+                                        <template v-if="account.balance != 0">
+                                            <option :value="account.number">
+                                                {{ account.number }} | {{ moneyFormatter.format(account.balance) }}
+                                            </option>
+                                        </template>
+                                    </template>
+                                </select>
+                                <template v-if="errorMessage">
+                                    <div class="error d-flex align-items-center justify-content-center mt-4">
+                                        <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                                        {{ errorMessage }}
+                                    </div>
+                                </template>
+                            </div>
+                            <template v-if="payLoanConfirmation && loanAccount">
+                                <p class="text-center">
+                                    Are you sure you want to pay with this account?
+                                </p>
+                            </template>
+                            <div class="modal-footer border-0 mx-auto mx-md-0">
+                                <button @click="resetMessages" type="button" class="btn secondary-btn"
+                                    data-bs-dismiss="modal">Close</button>
+                                <template v-if="payLoanConfirmation && loanAccount">
+                                    <button @click="payLoan" type="button" class="btn primary-btn">
+                                        Yes, pay an installment
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button @click="confirmPay(this.loanAccount)" type="button" class="btn primary-btn">
+                                        Pay installment
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div
                     class="mt-4 mb-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
                     <template v-if="clientLoans.length > 0" v-for="loan of clientLoans">
                         <article data-aos="fade-up" class="card accounts-card shadow py-3">
                             <div class="card-body">
                                 <h3 class="card-text mb-3">
-                                    <template v-if="loan.name === 'Mortgage'">
-                                        <i class="bi bi-house-fill accounts-icon"></i>
-                                    </template>
-                                    <template v-else-if="loan.name === 'Personal'">
-                                        <i class="bi bi-person-fill accounts-icon"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="bi bi-car-front-fill accounts-icon"></i>
-                                    </template>
                                     {{ loan.name }}
                                 </h3>
                                 <p class="card-text">
@@ -132,8 +229,16 @@
                                     </span>
                                 </p>
                                 <p class="card-text">
-                                    Payments: {{ loan.payments }} installments
+                                    Total payments: {{ loan.payments }} installments
                                 </p>
+                                <p class="card-text">
+                                    Payments left: <span class="fw-bold">{{ loan.paymentsLeft }} installments</span>
+                                </p>
+                                <button @click="selectedLoan(loan)" data-bs-toggle="modal" data-bs-target="#loanModal"
+                                        type="button" class="btn primary-btn py-2 mt-2">
+                                    <i class="bi bi-cash me-1"></i>
+                                    Pay installments
+                                </button>
                             </div>
                         </article>
                     </template>

@@ -15,6 +15,11 @@ public class ClientLoanServiceImplement implements ClientLoanService {
     private ClientLoanRepository clientLoanRepository;
 
     @Override
+    public ClientLoan findById(Long id) {
+        return clientLoanRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public boolean existsByClientAndLoan(Client client, Loan loan) {
         return clientLoanRepository.existsByClientAndLoan(client, loan);
     }

@@ -10,6 +10,8 @@ public class ClientLoanDTO {
     private String name;
     private double amount;
     private int payments;
+    private int paymentsLeft;
+    private boolean active;
 
     // ---- Constructors ----
     public ClientLoanDTO(ClientLoan clientLoan) {
@@ -23,6 +25,10 @@ public class ClientLoanDTO {
         this.amount = clientLoan.getAmount();
 
         this.payments = clientLoan.getPayments();
+
+        this.paymentsLeft = clientLoan.getPaymentsLeft();
+
+        this.active = clientLoan.getActive();
 
     }
 
@@ -48,4 +54,11 @@ public class ClientLoanDTO {
         return payments;
     }
 
+    public int getPaymentsLeft() {
+        return paymentsLeft;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
 }

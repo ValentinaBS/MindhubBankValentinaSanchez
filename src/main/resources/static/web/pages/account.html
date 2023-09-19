@@ -53,69 +53,76 @@
                 <i class="bi bi-box-arrow-right ms-1"></i>
             </button>
         </nav>
-        <section class="account-section text-center my-5 mx-4">
-            <h1>Your Account</h1>
-            <div data-aos="fade-up" class="card account-card shadow py-4 my-4 mx-auto">
-                <div class="card-body">
-                    <p class="card-text">
-                        Account number: {{ chosenAccount.number }}
-                    </p>
-                    <p class="card-text">
-                        Amount:
-                        <span class="d-block account-amount fw-bold fs-3">
-                            {{ moneyFormatter.format(chosenAccount.balance) }}
-                        </span>
-                    </p>
-                    <p class="card-text">
-                        Creation date: {{ chosenAccount.creationDate }}
-                    </p>
-                </div>
-            </div>
-            <h2 class="mt-5">Your Transactions</h2>
-            <template v-if="transactions.length > 0">
-                <div data-aos="zoom-in-up" class="table-responsive text-nowrap">
-                    <table class="table account-table my-3 mx-auto">
-                        <thead class="table-head">
-                            <tr class="text-center table-titles">
-                                <th class="account-corner-left" scope="col">Type</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Description</th>
-                                <th class="account-corner-right" scope="col">Current Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-for:="transaction of transactions">
-                                <tr>
-                                    <td class="fw-bold"
-                                        v-bind:class="[transaction.type == 'DEBIT' ? debitClass : creditClass]">{{
-                                        transaction.type }}</td>
-                                    <td>{{ transaction.type == 'DEBIT' ? '-' : '' }}{{ transaction.type == 'DEBIT' ?
-                                        moneyFormatter.format(transaction.amount.toString().slice(1)) :
-                                        moneyFormatter.format(transaction.amount) }}</td>
-                                    <td>
-                                        {{ new Date(transaction.transferDate).toLocaleDateString('en-US')
-                                        + ' | '
-                                        + new Date(transaction.transferDate).toLocaleTimeString('en-US', { hour:
-                                        '2-digit', minute: '2-digit' })}}
-                                    </td>
-                                    <td>{{ transaction.description }}</td>
-                                    <td>{{ moneyFormatter.format(transaction.currentBalance) }}</td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-            </template>
-            <template v-else>
-                <h3 class="text-center my-4">
-                    You haven't made any transactions with this account.
-                </h3>
-                <img class="empty-img w-100" src="../images/error1.svg" alt="Drawing of a woman in an empty forest">
-            </template>
-        </section>
 
-        <img class="account-img mt-5" src="../images/accounts/banner-account.png" alt="Winter Club promotion">
+        <div v-if="loading" class="d-flex justify-content-center align-items-center loader-container">
+            <div class="spinner-border" role="status"></div>
+        </div>
+
+        <div v-show="!loading">
+            <section class="account-section text-center my-5 mx-4">
+                <h1>Your Account</h1>
+                <div class="card account-card shadow py-4 my-4 mx-auto">
+                    <div class="card-body">
+                        <p class="card-text">
+                            Account number: {{ chosenAccount.number }}
+                        </p>
+                        <p class="card-text">
+                            Amount:
+                            <span class="d-block account-amount fw-bold fs-3">
+                                {{ moneyFormatter.format(chosenAccount.balance) }}
+                            </span>
+                        </p>
+                        <p class="card-text">
+                            Creation date: {{ chosenAccount.creationDate }}
+                        </p>
+                    </div>
+                </div>
+                <h2 class="mt-5">Your Transactions</h2>
+                <template v-if="transactions.length > 0">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table account-table my-3 mx-auto">
+                            <thead class="table-head">
+                                <tr class="text-center table-titles">
+                                    <th class="account-corner-left" scope="col">Type</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Description</th>
+                                    <th class="account-corner-right" scope="col">Current Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template v-for:="transaction of transactions">
+                                    <tr>
+                                        <td class="fw-bold"
+                                            v-bind:class="[transaction.type == 'DEBIT' ? debitClass : creditClass]">{{
+                                            transaction.type }}</td>
+                                        <td>{{ transaction.type == 'DEBIT' ? '-' : '' }}{{ transaction.type == 'DEBIT' ?
+                                            moneyFormatter.format(transaction.amount.toString().slice(1)) :
+                                            moneyFormatter.format(transaction.amount) }}</td>
+                                        <td>
+                                            {{ new Date(transaction.transferDate).toLocaleDateString('en-US')
+                                            + ' | '
+                                            + new Date(transaction.transferDate).toLocaleTimeString('en-US', { hour:
+                                            '2-digit', minute: '2-digit' })}}
+                                        </td>
+                                        <td>{{ transaction.description }}</td>
+                                        <td>{{ moneyFormatter.format(transaction.currentBalance) }}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template v-else>
+                    <h3 class="text-center my-4">
+                        You haven't made any transactions with this account.
+                    </h3>
+                    <img class="empty-img w-100" src="../images/error1.svg" alt="Drawing of a woman in an empty forest">
+                </template>
+            </section>
+
+            <img class="account-img mt-5" src="../images/accounts/banner-account.png" alt="Winter Club promotion">
+        </div>
 
         <footer class="mt-5 px-3 py-4">
             <div class="d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
@@ -161,10 +168,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
     <script src="../js/account.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-    </script>
 </body>
 
 </html>

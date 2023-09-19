@@ -14,6 +14,8 @@ public class ClientLoan {
     private long id;
     private double amount;
     private int payments;
+    private int paymentsLeft;
+    private boolean active;
 
     // ---- Relations ----
     @ManyToOne(fetch = FetchType.EAGER)
@@ -26,9 +28,11 @@ public class ClientLoan {
 
     // ---- Constructors ----
     public  ClientLoan() { }
-    public ClientLoan(double amount, int payments) {
+    public ClientLoan(double amount, int payments, int paymentsLeft, boolean active) {
         this.amount = amount;
         this.payments = payments;
+        this.paymentsLeft = paymentsLeft;
+        this.active = active;
     }
 
     // ---- Getters & Setters ----
@@ -49,6 +53,20 @@ public class ClientLoan {
     }
     public void setPayments(Integer payments) {
         this.payments = payments;
+    }
+
+    public int getPaymentsLeft() {
+        return paymentsLeft;
+    }
+    public void setPaymentsLeft(int paymentsLeft) {
+        this.paymentsLeft = paymentsLeft;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Client getClient() {
