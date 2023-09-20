@@ -18,6 +18,7 @@ const options = {
                 this.clientCards = this.client.cards.filter(card => card.isActive);
                 this.cardsDebit = this.clientCards.filter(card => card.type == "DEBIT");
                 this.cardsCredit = this.clientCards.filter(card => card.type == "CREDIT");
+                console.log(this.cardsDebit)
             })
             .catch(err => console.error(err))
 
@@ -26,12 +27,8 @@ const options = {
             year: '2-digit'
         })
 
-        const newDate = new Date();
-        const year = newDate.getFullYear();
-        const month = String(newDate.getMonth() + 1).padStart(2, '0');
-        const day = String(newDate.getDate()).padStart(2, '0');
         // "YYYY-MM-DD"
-        this.currentDate = `${year}-${month}-${day}`;
+        this.currentDate = new Date().toISOString().slice(0, 10);
     },
     methods: {
         removeCard(cardId) {
@@ -40,8 +37,8 @@ const options = {
                 icon: 'warning',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn primary-btn btn-lg',
-                    cancelButton: 'btn secondary-btn btn-lg me-4'
+                    confirmButton: 'btn primary-btn btn-lg mb-3 mb-md-0',
+                    cancelButton: 'btn secondary-btn btn-lg me-md-5 mb-3 mt-2 my-md-2'
                 },
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete this card',
@@ -81,8 +78,8 @@ const options = {
                 icon: 'warning',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn primary-btn btn-lg',
-                    cancelButton: 'btn secondary-btn btn-lg me-4'
+                    confirmButton: 'btn primary-btn btn-lg mb-3 mb-md-0',
+                    cancelButton: 'btn secondary-btn btn-lg me-md-5 mb-3 mt-2 my-md-2'
                 },
                 showCancelButton: true,
                 confirmButtonText: 'Log out',

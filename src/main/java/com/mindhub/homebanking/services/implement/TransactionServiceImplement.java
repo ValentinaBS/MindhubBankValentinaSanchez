@@ -6,6 +6,8 @@ import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -18,6 +20,11 @@ public class TransactionServiceImplement implements TransactionService {
     @Override
     public Set<Transaction> findByAccount_Id(Long accountId) {
         return transactionRepository.findByAccount_Id(accountId);
+    }
+
+    @Override
+    public List<Transaction> findByTransferDateBetweenAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, String accountNumber) {
+        return transactionRepository.findByTransferDateBetweenAndAccount_Number(dateInit, dateEnd, accountNumber);
     }
 
     @Override

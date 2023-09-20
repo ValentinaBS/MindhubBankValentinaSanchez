@@ -43,7 +43,7 @@ const options = {
             axios.get('/api/clients/current')
                 .then(res => {
                     this.currentClient = res.data;
-                    this.currentClientLoans = this.currentClient.loans;
+                    this.currentClientLoans = this.currentClient.loans.filter(loan => loan.active);;
 
                     this.availableLoans = this.allLoans.filter(loan => !this.currentClientLoans.some(clientLoan => clientLoan.name === loan.name));
                 })

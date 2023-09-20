@@ -28,16 +28,14 @@ public class WebAuthorization {
         http.authorizeRequests()
 
                 .antMatchers(HttpMethod.POST, "/api/clients", "/api/login", "/api/logout").permitAll()
-                .antMatchers("/web/index.html", "/web/global.css", "/web/styles/**", "/web/js/**", "/web/images/**").permitAll()
+                .antMatchers("/web/index.html", "/web/global.css", "/web/styles/**", "/web/js/**", "/web/images/**", "/api/loans").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/loans/create").hasAuthority("ADMIN")
                 .antMatchers("/rest/**", "/h2-console/**", "/web/adminPages/**").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/loans").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/api/loans", "/api/transactions").hasAuthority("CLIENT")
                 .antMatchers(HttpMethod.PATCH, "/api/clients/current/cards/{id}", "/api/clients/current/accounts/{id}", "/api/loans/{id}").hasAuthority("CLIENT")
-                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}", "/api/transactions", "/api/loans").hasAuthority("CLIENT")
-
-                .antMatchers("/api/loans").hasAuthority("ADMIN")
+                .antMatchers("/web/pages/**", "/api/clients/current", "/api/clients/current/**", "/api/accounts/{id}", "/api/transactions").hasAuthority("CLIENT")
 
                 .anyRequest().denyAll();
 

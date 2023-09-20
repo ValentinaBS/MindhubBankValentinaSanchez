@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.LoanApplicationDTO;
 import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.models.*;
@@ -11,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,14 +37,25 @@ public class LoanController {
     private ClientLoanService clientLoanService;
 
     @GetMapping("/loans")
-    public List<LoanDTO> getLoans() {
-        return loanService.getLoansDTO();
+    public ResponseEntity<Object> getLoans(Authentication authentication) {
+
+        Client authClient = clientService.findByEmail(authentication.getName());
+        if (authClient == null) {
+            return new ResponseEntity<>("Unauthorized user", HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>(loanService.getLoansDTO(), HttpStatus.OK);
+        }
+
     }
 
     @Transactional
     @PostMapping("/loans")
     public ResponseEntity<Object> createClientLoan(@RequestBody LoanApplicationDTO loanApplicationDTO, Authentication authentication) {
 
+            Client authClient = clientService.findByEmail(authentication.getName());
+            if (authClient == null) {
+                return new ResponseEntity<>("Unauthorized user", HttpStatus.UNAUTHORIZED);
+            }
             if (loanApplicationDTO.getDestinataryAccountNumber().isBlank()) {
                 return new ResponseEntity<>("You must specify an account number.", HttpStatus.FORBIDDEN);
             }
@@ -63,11 +77,10 @@ public class LoanController {
             if (account == null) {
                 return new ResponseEntity<>("The destination account doesn't exist.", HttpStatus.FORBIDDEN);
             }
+
             if (!account.getActive()) {
                 return new ResponseEntity<>("The destination account isn't active.", HttpStatus.FORBIDDEN);
             }
-
-            Client authClient = clientService.findByEmail(authentication.getName());
             if(!(accountService.existsByIdAndClient_Id(account.getId(), authClient.getId()))) {
                 return new ResponseEntity<>("The destination account doesn't belong to the current user.", HttpStatus.FORBIDDEN);
             }
@@ -128,26 +141,27 @@ public class LoanController {
             return new ResponseEntity<>("The account doesn't belong to the current user.", HttpStatus.FORBIDDEN);
         }
 
-        double amountToPay = clientLoan.getAmount() / clientLoan.getPaymentsLeft();
-        if (amountToPay <= 0 || clientLoan.getPaymentsLeft() <= 0) {
+        double amount = clientLoan.getAmount() / clientLoan.getPaymentsLeft();
+        BigDecimal amountToPay = new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP);
+        if (amountToPay.doubleValue() <= 0 || clientLoan.getPaymentsLeft() <= 0) {
             return new ResponseEntity<>("There are no more installments to pay.", HttpStatus.FORBIDDEN);
         }
-        if (amountToPay > account.getBalance()) {
+        if (amountToPay.doubleValue() > account.getBalance()) {
             return new ResponseEntity<>("You don't have enough funds to pay this installment.", HttpStatus.FORBIDDEN);
         }
 
-        clientLoan.setAmount(clientLoan.getAmount() - amountToPay);
+        clientLoan.setAmount(clientLoan.getAmount() - amountToPay.doubleValue());
         clientLoan.setPaymentsLeft(clientLoan.getPaymentsLeft() - 1);
         if (clientLoan.getPaymentsLeft() == 0) {
             clientLoan.setActive(false);
         }
         clientLoanService.saveClientLoan(clientLoan);
 
-        Transaction debitTransaction = new Transaction(-amountToPay, clientLoan.getLoan().getName() + " | Installment payment", LocalDateTime.now(), TransactionType.DEBIT, account.getBalance() - amountToPay, true);
+        Transaction debitTransaction = new Transaction(-amountToPay.doubleValue(), clientLoan.getLoan().getName() + " | Installment payment", LocalDateTime.now(), TransactionType.DEBIT, account.getBalance() - amountToPay.doubleValue(), true);
         account.addTransaction(debitTransaction);
         transactionService.saveTransaction(debitTransaction);
 
-        account.setBalance(account.getBalance() - amountToPay);
+        account.setBalance(account.getBalance() - amountToPay.doubleValue());
         accountService.saveAccount(account);
 
         return new ResponseEntity<>("The installment has been paid successfully.", HttpStatus.CREATED);

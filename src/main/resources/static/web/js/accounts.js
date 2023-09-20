@@ -74,8 +74,8 @@ const options = {
                 icon: 'warning',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn primary-btn btn-lg',
-                    cancelButton: 'btn secondary-btn btn-lg me-4'
+                    confirmButton: 'btn primary-btn btn-lg mb-3 mb-md-0',
+                    cancelButton: 'btn secondary-btn btn-lg me-md-5 mb-3 mt-2 my-md-2'
                 },
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete this account',
@@ -154,7 +154,6 @@ const options = {
         resetMessages() {
             this.errorMessage = "";
             this.payLoanConfirmation = false;
-            this.selectedLoanToPay = {};
             this.loanAccount = null;
         },
         logOut() {

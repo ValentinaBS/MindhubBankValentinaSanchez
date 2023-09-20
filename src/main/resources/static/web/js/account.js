@@ -9,6 +9,9 @@ const options = {
             urlParams: {},
             debitClass: 'debit',
             creditClass: 'credit',
+            dateStartInput: '',
+            dateEndInput: '',
+            errorMessage: '',
             moneyFormatter: {},
             loading: true
         }
@@ -39,6 +42,49 @@ const options = {
         }, 1000)
     },
     methods: {
+        downloadTransactions() {
+
+            if (this.dateStartInput == "" || this.dateEndInput == "") {
+                this.errorMessage = "Please enter a start and ending date.";
+                return
+            }
+
+            this.dateStartInput = this.dateStartInput.replace('T', ' ');
+            this.dateEndInput = this.dateEndInput.replace('T', ' ');
+
+            axios.get('/api/transactions' + `?dateStart=${this.dateStartInput}&dateEnd=${this.dateEndInput}&accountNumber=${this.chosenAccount.number}`, 
+                {responseType: "blob"}) // To recieve binary data
+                .then(res => {
+                    // Creates a Blob object with the PDFs content and creates a URL
+                    let blob = new Blob([res.data], { type: "application/pdf" });
+                    let url = window.URL.createObjectURL(blob);
+
+                    // Creates a link to download the PDF
+                    let a = document.createElement("a");
+                    a.href = url;
+                    a.download = "Transactions_Mindhub_Bank.pdf";
+
+                    // Simulates a click to start the download
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // Cleans the URL object
+                    window.URL.revokeObjectURL(url);
+
+                    this.dateStartInput = '';
+                    this.dateEndInput = '';
+                    this.errorMessage = '';
+                })
+                .catch(error => {
+                    const reader = new FileReader();
+
+                    reader.onload = (e) => {
+                        this.errorMessage = e.target.result;
+                    };// Read the Blob as text
+
+                    reader.readAsText(error.response.data);
+                })
+        },
         logOut() {
             Swal.fire({
                 title: 'Are you sure you want to log out?',
