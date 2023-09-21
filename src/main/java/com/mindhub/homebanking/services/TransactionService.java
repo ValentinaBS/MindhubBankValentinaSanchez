@@ -10,7 +10,7 @@ public interface TransactionService {
 
     Set<Transaction> findByAccount_Id(Long accountId);
 
-    List<Transaction> findByTransferDateBetweenAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, String accountNumber);
+    List<Transaction> findByTransferDateBetweenAndActiveAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, Boolean active, String accountNumber);
 
     void saveTransaction(Transaction transaction);
 }

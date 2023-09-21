@@ -23,8 +23,8 @@ public class TransactionServiceImplement implements TransactionService {
     }
 
     @Override
-    public List<Transaction> findByTransferDateBetweenAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, String accountNumber) {
-        return transactionRepository.findByTransferDateBetweenAndAccount_Number(dateInit, dateEnd, accountNumber);
+    public List<Transaction> findByTransferDateBetweenAndActiveAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, Boolean active, String accountNumber) {
+        return transactionRepository.findByTransferDateBetweenAndActiveAndAccount_Number(dateInit, dateEnd, active, accountNumber);
     }
 
     @Override

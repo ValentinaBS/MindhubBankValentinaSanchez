@@ -21,6 +21,7 @@ import static com.mindhub.homebanking.utils.ClientUtils.regExpPassValidation;
 
 @RestController
 // Methods in a RestController return JSON objects or XML. This controller will work with API REST.
+// We put it in Spring's context.
 // Defines this class as a Rest Controller. They listen and respond petitions.
 @RequestMapping("/api")
 public class ClientController {

@@ -14,12 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @EnableWebSecurity
-// Enables security configurations for this class
+// Enables personalized security configurations for this class
 @Configuration
 // Configures the Spring Security module before running the app
 public class WebAuthorization {
 
-    // We want to add something to our app context and run it first
+    // We want to add something to Spring's context and run it first
     @Bean
     // HttpSecurity allows configuring web based security for specific http requests.
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,10 +52,11 @@ public class WebAuthorization {
         http.logout().logoutUrl("/api/logout");
 
         // turn off checking for CSRF(Cross-Site Request Forgery) tokens
-        // Two step token validation
+        // The server puts a token to each form it sends from the server to the user. It has to match the token from the user.
         http.csrf().disable();
 
         // disabling frameOptions so h2-console can be accessed
+        // By default sensitive data is covered, so it can't be used by third-parties
         http.headers().frameOptions().disable();
 
         // if user is not authenticated, just send an authentication failure response in case an unidentified/unauthorized user tries to access a page.

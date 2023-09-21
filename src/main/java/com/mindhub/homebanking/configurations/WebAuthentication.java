@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 // Configures the Spring Security module before running the app
+// It will have one or more Beans
 @Configuration
 // Inherits methods from the GlobalAuthenticationConfigurerAdapter class
 public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {

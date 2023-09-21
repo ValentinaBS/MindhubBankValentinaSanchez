@@ -64,8 +64,6 @@ public class CardController {
     @PatchMapping("/clients/current/cards/{id}")
     public ResponseEntity<Object> removeCard(@PathVariable Long id, Authentication authentication) {
 
-        Client authClient = clientService.findByEmail(authentication.getName());
-
         if(id == null) {
             return new ResponseEntity<>("Unknown card", HttpStatus.FORBIDDEN);
         }
@@ -80,6 +78,8 @@ public class CardController {
         if(!card.getIsActive()){
             return new ResponseEntity<>("This card is already removed", HttpStatus.FORBIDDEN);
         }
+
+        Client authClient = clientService.findByEmail(authentication.getName());
         if(!cardService.existsByIdAndClient_Id(id, authClient.getId())) {
             return new ResponseEntity<>("This card doesn't belong to the current user", HttpStatus.FORBIDDEN);
         }

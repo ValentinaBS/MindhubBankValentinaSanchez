@@ -15,7 +15,7 @@ public class Client {
     // ---- Properties ----
     @Id // Indicates Primary Key
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native") // Generates ID value automatically
+    @GenericGenerator(name = "native", strategy = "native") // Generates ID value natively from the database
     private long id;
     private String firstName;
     private String lastName;
@@ -24,7 +24,7 @@ public class Client {
 
     // ---- Relations ----
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
-    // How do we want to bring the data. EAGER brings Client with Account. LAZY brings Client only.
+    // How do we want to bring the data. EAGER brings everything, Client with Account. LAZY waits until you order it.
     private Set<Account> accounts = new HashSet<>();
     // Initialising a space to save all accounts, without duplicates
 
@@ -36,8 +36,8 @@ public class Client {
 
     // ---- Constructors ----
     // Special method that creates an instance of a class, called with the new operator.
-    public Client(){ } // It's used to map by Hibernate. DTOs don't because they don´t persist.
-    // Para pasar un registro de la base de datos a Objeto Java, Hibernate necesita un constructor vacío.
+    public Client(){ } // It's used to map by Hibernate to send data to the database. DTOs don't because they don´t persist.
+
     public Client(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -80,7 +80,7 @@ public class Client {
         return accounts;
     }
     public void addAccount(Account account) {
-        account.setClient(this);
+        account.setClient(this); // references the instanced client
         accounts.add(account);
     }
 

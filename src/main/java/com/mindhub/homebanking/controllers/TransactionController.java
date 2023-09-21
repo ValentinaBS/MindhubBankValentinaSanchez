@@ -76,7 +76,7 @@ public class TransactionController {
 
         LocalDateTime dateInitFormatted = LocalDateTime.parse(dateStart, formatter);
         LocalDateTime dateEndFormatted = LocalDateTime.parse(dateEnd, formatter);
-        List<Transaction> transactions = transactionService.findByTransferDateBetweenAndAccount_Number(dateInitFormatted, dateEndFormatted, accountNumber);
+        List<Transaction> transactions = transactionService.findByTransferDateBetweenAndActiveAndAccount_Number(dateInitFormatted, dateEndFormatted, true, accountNumber);
         if (dateEndFormatted.isBefore(dateInitFormatted)) {
             return new ResponseEntity<>("The end date is before the start date.", HttpStatus.FORBIDDEN);
         }
@@ -117,7 +117,7 @@ public class TransactionController {
         table.addCell("Date");
         table.addCell("Balance");
 
-        for (Transaction transaction : transactions.stream().filter(Transaction::getActive).collect(Collectors.toList())) {
+        for (Transaction transaction : transactions) {
             table.addCell(transaction.getType().toString());
             table.addCell(transaction.getDescription());
             table.addCell(transaction.getAmount().toString());

@@ -13,6 +13,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Set<Transaction> findByAccount_Id(Long accountId);
 
-    List<Transaction> findByTransferDateBetweenAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, String accountNumber);
+    List<Transaction> findByTransferDateBetweenAndActiveAndAccount_Number(LocalDateTime dateInit, LocalDateTime dateEnd, Boolean active, String accountNumber);
 
 } // Creates a repository to save the transactions in the database

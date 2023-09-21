@@ -98,7 +98,7 @@ const options = {
                     cancelButton: 'btn secondary-btn btn-lg me-md-5 mb-3 mt-2 my-md-2'
                 },
                 showCancelButton: true,
-                confirmButtonText: 'Yes',
+                confirmButtonText: 'Yes, ask for this loan',
                 cancelButtonText: 'Cancel',
                 reverseButtons: true
             }).then(result => {
