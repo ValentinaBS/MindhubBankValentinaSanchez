@@ -83,6 +83,11 @@ const options = {
                     };// Read the Blob as text
 
                     reader.readAsText(error.response.data);
+
+                    console.log(error.response.data.text()
+                        .then(res=>{
+                            console.log(res);
+                        }));
                 })
         },
         logOut() {

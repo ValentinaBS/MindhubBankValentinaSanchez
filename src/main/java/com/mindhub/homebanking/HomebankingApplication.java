@@ -24,7 +24,7 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 
-	@Bean // Run this first, can only be used in methods
+	@Bean // Run this first and puts it in Spring's context, can only be used in methods
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		// CommandLineRunner are methods that can be implemented to run at application startup
 		return (args) -> {

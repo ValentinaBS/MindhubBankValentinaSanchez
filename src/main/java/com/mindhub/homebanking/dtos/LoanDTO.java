@@ -15,6 +15,8 @@ public class LoanDTO {
     private Double percentage;
 
     // ---- Constructor ----
+
+    // To receive, empty constructor. Create another dto.
     public LoanDTO() {}
     public LoanDTO(Loan loan) {
         this.id = loan.getId();

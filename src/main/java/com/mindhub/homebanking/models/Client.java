@@ -24,7 +24,8 @@ public class Client {
 
     // ---- Relations ----
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
-    // How do we want to bring the data. EAGER brings everything, Client with Account. LAZY waits until you order it.
+    // Whenever a Client object loads, related accounts will load immediately, in the same query.
+    // EAGER brings everything, Client with Account. LAZY waits until you order it, brings Client only if you don't request otherwise.
     private Set<Account> accounts = new HashSet<>();
     // Initialising a space to save all accounts, without duplicates
 
@@ -36,7 +37,7 @@ public class Client {
 
     // ---- Constructors ----
     // Special method that creates an instance of a class, called with the new operator.
-    public Client(){ } // It's used to map by Hibernate to send data to the database. DTOs don't because they don´t persist.
+    public Client(){ } // Hibernate may require it to instance a class during a data recovery from the database
 
     public Client(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
