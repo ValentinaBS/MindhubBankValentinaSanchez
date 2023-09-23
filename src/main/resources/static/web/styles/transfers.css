@@ -1,0 +1,25 @@
+.transfers-form {
+    width: 320px;
+}
+
+.transfer-img  {
+    max-width: 300px;
+}
+
+@media only screen and (min-width: 768px) {
+    .transfers-form {
+        width: 350px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .transfer-img  {
+        max-width: 400px;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .transfers-form {
+        width: 500px;
+    }
+}

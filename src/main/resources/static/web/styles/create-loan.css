@@ -1,0 +1,37 @@
+.create-loan-form {
+    width: 320px;
+}
+
+.create-loan-img  {
+    max-width: 300px;
+}
+
+.create-loan-table {
+    max-width: 1000px;
+}
+
+.create-loan-corner-left {
+    border-radius: 0.5rem 0 0 0;
+}
+
+.create-loan-corner-right {
+    border-radius: 0 0.5rem 0 0;
+}
+
+@media only screen and (min-width: 768px) {
+    .create-loan-form {
+        width: 350px;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .create-loan-img  {
+        max-width: 400px;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .create-loan-form {
+        width: 500px;
+    }
+}

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-for="http://www.w3.org/1999/XSL/Transform" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../images/favicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet">
+    <title>Mindhub Bank | My Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/accounts.css">
+</head>
+
+<body>
+    <div class="layout" id="app" v-cloak>
+        <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
+            <a class="navbar-brand" href="accounts.html">
+                <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
+            </a>
+            <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapsibleNavbar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
+                <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
+                    <li class="nav-item text-center">
+                        <a class="nav-link active rounded-2" href="accounts.html">Accounts</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="cards.html">Cards</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="loan-application.html">Loans</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="transfers.html">Transactions</a>
+                    </li>
+                </ul>
+                <button @click="logOut" class="btn log--out-mobile mt-4">
+                    Log Out
+                    <i class="bi bi-box-arrow-right ms-1"></i>
+                </button>
+            </div>
+            <button @click="logOut" class="btn log--out-desktop">
+                Log Out
+                <i class="bi bi-box-arrow-right ms-1"></i>
+            </button>
+        </nav>
+
+        <div v-if="loading" class="d-flex justify-content-center align-items-center loader-container">
+            <div class="spinner-border" role="status"></div>
+        </div>
+
+        <div v-show="!loading">
+            <section class="account-section text-center my-5 mx-4">
+                <h1>Your Account</h1>
+                <div class="card account-card shadow py-4 my-4 mx-auto">
+                    <div class="card-body">
+                        <p class="card-text">
+                            Account number: {{ chosenAccount.number }}
+                        </p>
+                        <p class="card-text">
+                            Amount:
+                            <span class="d-block account-amount fw-bold fs-3">
+                                {{ moneyFormatter.format(chosenAccount.balance) }}
+                            </span>
+                        </p>
+                        <p class="card-text">
+                            Creation date: {{ chosenAccount.creationDate }}
+                        </p>
+                    </div>
+                </div>
+                <h2 class="mt-5">Your Transactions</h2>
+                <template v-if="transactions.length > 0">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table account-table my-3 mx-auto">
+                            <thead class="table-head">
+                                <tr class="text-center table-titles">
+                                    <th class="account-corner-left" scope="col">Type</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Description</th>
+                                    <th class="account-corner-right" scope="col">Current Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template v-for:="transaction of transactions">
+                                    <tr>
+                                        <td class="fw-bold"
+                                            v-bind:class="[transaction.type == 'DEBIT' ? debitClass : creditClass]">{{
+                                            transaction.type }}</td>
+                                        <td>{{ transaction.type == 'DEBIT' ? '-' : '' }}{{ transaction.type == 'DEBIT' ?
+                                            moneyFormatter.format(transaction.amount.toString().slice(1)) :
+                                            moneyFormatter.format(transaction.amount) }}</td>
+                                        <td>
+                                            {{ new Date(transaction.transferDate).toLocaleDateString('en-US')
+                                            + ' | '
+                                            + new Date(transaction.transferDate).toLocaleTimeString('en-US', { hour:
+                                            '2-digit', minute: '2-digit' })}}
+                                        </td>
+                                        <td>{{ transaction.description }}</td>
+                                        <td>{{ moneyFormatter.format(transaction.currentBalance) }}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template v-else>
+                    <h3 class="text-center my-4">
+                        You haven't made any transactions with this account.
+                    </h3>
+                    <img class="empty-img w-100" src="../images/error1.svg" alt="Drawing of a woman in an empty forest">
+                </template>
+
+                <h3 class="mt-5 text-center">Download your transactions as PDFs</h3>
+                <form @submit.prevent
+                    class="account-form d-flex flex-column justify-content-md-evenly px-5 pb-md-4 py-5 mx-auto">
+                    <div class="mb-3 text-start">
+                        <label class="form-label" for="dateStart">
+                            Choose a starting date:
+                        </label>
+                        <input class="form-control" v-model="dateStartInput" type="datetime-local" id="dateStart" name="dateStart">
+                    </div>
+                    <div class="text-start">
+                        <label class="form-label" for="dateEnd">
+                            Choose an end date:
+                        </label>
+                        <input class="form-control" v-model="dateEndInput" type="datetime-local" id="dateEnd" name="dateEnd">
+                    </div>
+                    <template v-if="errorMessage">
+                        <div class="error d-flex align-items-center justify-content-center mt-4">
+                            <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                            {{ errorMessage }}
+                        </div>
+                    </template>
+                    <button @click="downloadTransactions" type="submit" class="btn primary-btn my-4 mx-auto py-2 px-4 d-flex align-items-center justify-content-center column-gap-2">
+                        <i class="bi bi-download"></i>
+                        Download PDF
+                    </button>
+                </form>
+
+            </section>
+
+            <img class="account-img mt-5" src="../images/accounts/banner-account.png" alt="Winter Club promotion">
+        </div>
+
+        <footer class="mt-5 px-3 py-4">
+            <div class="d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </li>
+                </ul>
+                <p class="mb-0 me-3 text-white">
+                    ©Mindhub Bank 2023 - All rights reserved
+                </p>
+            </div>
+            <div class="d-flex flex-wrap pt-3 mt-3 justify-content-start justify-content-md-center border-top">
+                <a class="footer-link me-4 rounded-1 px-3 py-2"
+                    href="https://www.linkedin.com/in/valentina-belen-sanchez/">
+                    <i class="bi bi-linkedin me-1"></i>
+                    Valentina Belén Sánchez
+                </a>
+                <a class="footer-link rounded-1 px-3 py-2" href="https://github.com/ValentinaBS">
+                    <i class="bi bi-github me-1"></i>
+                    ValentinaBS
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+    <script src="../js/account.js"></script>
+</body>
+
+</html>

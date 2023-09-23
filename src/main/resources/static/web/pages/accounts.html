@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-for="http://www.w3.org/1999/XSL/Transform">
+<html lang="en" xmlns:v-for="http://www.w3.org/1999/XSL/Transform" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -10,107 +10,311 @@
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700&display=swap" rel="stylesheet">
     <title>Mindhub Bank | My Accounts</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../styles.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/accounts.css">
 </head>
 
 <body>
-<div class="layout" id="app">
-    <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
-        <a class="navbar-brand" href="#">
-            <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
-        </a>
-        <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <i class="bi bi-list"></i>
-        </button>
-        <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
-            <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
-                <li class="nav-item text-center">
-                    <a class="nav-link active rounded-2" href="#">Accounts</a>
-                </li>
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Cards</a>
-                </li>
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Loans</a>
-                </li>
-                <li class="nav-item text-center">
-                    <a class="nav-link rounded-2" href="#">Transactions</a>
-                </li>
-            </ul>
-            <button class="btn log--out-mobile mt-4">
+    <div class="layout" id="app" v-cloak>
+        <nav class="navbar navbar-expand-lg px-4 py-3 shadow">
+            <a class="navbar-brand" href="#">
+                <img class="nav-img" src="../images/logo.png" alt="Mindhub Bank logo">
+            </a>
+            <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapsibleNavbar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="collapsibleNavbar">
+                <ul class="navbar-nav column-gap-5 row-gap-2 mx-auto">
+                    <li class="nav-item text-center">
+                        <a class="nav-link active rounded-2" href="#">Accounts</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="cards.html">Cards</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="loan-application.html">Loans</a>
+                    </li>
+                    <li class="nav-item text-center">
+                        <a class="nav-link rounded-2" href="transfers.html">Transactions</a>
+                    </li>
+                </ul>
+                <button @click="logOut" class="btn log--out-mobile mt-4">
+                    Log Out
+                    <i class="bi bi-box-arrow-right ms-1"></i>
+                </button>
+            </div>
+            <button @click="logOut" class="btn log--out-desktop">
                 Log Out
                 <i class="bi bi-box-arrow-right ms-1"></i>
             </button>
-        </div>
-        <button class="btn log--out-desktop">
-            Log Out
-            <i class="bi bi-box-arrow-right ms-1"></i>
-        </button>
-    </nav>
+        </nav>
 
-    <header class="container-fluid accounts-banner d-flex justify-content-center align-items-center">
-        <h1 class="fw-bold text-white">
-            ¡Welcome, Melba!
-        </h1>
-    </header>
+        <header class="container-fluid accounts-banner d-flex justify-content-center align-items-center">
+            <h2 class="accounts-welcome fw-bold text-white text-center">
+                ¡Welcome, {{ firstName }}!
+            </h2>
+        </header>
 
-    <section class="text-center my-5 mx-4">
-        <h1>Your Accounts</h1>
-        <div class="m-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
-            <template v-if="clientAccounts.length > 0" v-for="account of clientAccounts">
-                <article class="card accounts-card shadow py-3">
-                    <div class="card-body">
-                        <p class="card-text">
-                            Account number: {{ account.number }}
-                        </p>
-                        <p class="card-text">
-                            Amount:
-                            <span class="d-block account-amount fw-bold fs-3">${{ Intl.NumberFormat('en-US').format(account.balance) }}</span>
-                        </p>
-                        <p class="card-text">
-                            Creation date: {{ account.creationDate }}
-                        </p>
+        <section class="accounts-section text-center my-5 mx-4">
+            <h1>Your Accounts</h1>
+            <div class="m-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
+                <template v-if="clientAccounts.length > 0" v-for="account of clientAccounts">
+                    <article data-aos="fade-down" class="card accounts-card shadow py-3">
+                        <div class="card-body px-4">
+                            <p class="card-text">
+                                Account number: {{ account.number }} | 
+                                <span class="fw-bold">
+                                    {{ account.type.charAt(0) + account.type.toLowerCase().slice(1) }}
+                                </span>
+                            </p>
+                            <p class="card-text">
+                                Amount:
+                                <span class="d-block account-amount fw-bold fs-3">
+                                    {{ moneyFormatter.format(account.balance) }}
+                                </span>
+                            </p>
+                            <p class="card-text">
+                                Creation date: {{ account.creationDate }}
+                            </p>
+                            <div class="d-flex flex-column-reverse flex-md-row row-gap-3 justify-content-around">
+                                <button @click="removeAccount(account.id)" class="btn secondary-btn py-2 fw-bold">
+                                    <i class="bi bi-trash-fill me-1"></i>
+                                    Delete Account
+                                </button>
+                                <a v-bind:href="'account.html?id=' + account.id"
+                                    class="btn primary-btn py-2">
+                                    <i class="bi bi-cash-stack me-1"></i>
+                                    Transactions
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+                <template v-else>
+                    <h3 class="text-center mt-3 w-100">You don't have any accounts. Open one with us!</h3>
+                    <img class="empty-img mt-4 w-100" src="../images/error2.svg"
+                        alt="Drawing of a man holding an empty box with a woman">
+                </template>
+            </div>
+            <template v-if="clientAccounts.length < 3">
+                <button data-bs-toggle="modal" data-bs-target="#accountModal"
+                    class="btn primary-btn mt-5 mb-2 mx-auto py-2 px-4 d-flex align-items-center column-gap-2">
+                    <i class="bi bi-plus-lg fs-5"></i>
+                    Create a new account
+                </button>
+                <p>(Max. 3 accounts per client)</p>
+            </template>
+            <div class="modal modal-cards fade" id="accountModal" tabindex="-1"
+                aria-labelledby="accountModalTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content p-3">
+                        <div class="modal-header border-0">
+                            <h4 class="modal-title" id="accountModalTitle">
+                                What type of account would you like to create?
+                            </h4>
+                        </div>
+                        <div class="modal-body pt-3 pb-4">
+                            <fieldset class="mx-auto">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="accountType" id="savings" value="SAVINGS"
+                                        v-model="accountType">
+                                    <label class="form-check-label" for="savings">
+                                        Savings
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="accountType" id="checking" value="CHECKING"
+                                        v-model="accountType" checked>
+                                    <label class="form-check-label" for="checking">
+                                        Checking
+                                    </label>
+                                </div>
+                            </fieldset>
+                            <template v-if="errorMessage">
+                                <div class="error d-flex align-items-center justify-content-center mt-4">
+                                    <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                                    {{ errorMessage }}
+                                </div>
+                            </template>
+                        </div>
+                        <div class="modal-footer mx-auto border-0">
+                            <button type="button" class="btn secondary-btn"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button @click="createAccount" type="button" class="btn primary-btn">
+                                Create account
+                            </button>
+                        </div>
                     </div>
-                </article>
-            </template>
-            <template v-else>
-                <h3 class="text-center">You don't have any accounts. Open one with us!</h3>
-            </template>
-        </div>
-    </section>
+                </div>
+            </div>
+            <section class="accounts-loans">
+                <h2>Your Loans</h2>
+                <div class="modal fade" id="loanModal" tabindex="-1"
+                aria-labelledby="loanTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content p-3">
+                            <div class="modal-header border-0">
+                                <h4 class="modal-title" id="loanTitle">
+                                    With which account do you want to pay your loan?
+                                </h4>
+                            </div>
+                            <div class="modal-body pt-3 pb-4">
+                                <p>
+                                    The amount you have to pay per installment is: 
+                                    <span class="fw-bold">
+                                        {{ moneyFormatter.format(selectedLoanToPay.amount / selectedLoanToPay.paymentsLeft) }}
+                                    </span>
+                                </p>
+                                <label class="form-check-label" for="loanAccounts">
+                                    Select one of your accounts:
+                                </label>
+                                <select id="loanAccounts" class="form-select my-2" v-model="loanAccount">
+                                    <option disabled value="">- Select an account -</option>
+                                    <template v-for="account of clientAccounts">
+                                        <template v-if="account.balance != 0">
+                                            <option :value="account.number">
+                                                {{ account.number }} | {{ moneyFormatter.format(account.balance) }}
+                                            </option>
+                                        </template>
+                                    </template>
+                                </select>
+                                <template v-if="errorMessage">
+                                    <div class="error d-flex align-items-center justify-content-center mt-4">
+                                        <i class="bi bi-x-circle-fill fs-5 me-1"></i>
+                                        {{ errorMessage }}
+                                    </div>
+                                </template>
+                            </div>
+                            <template v-if="payLoanConfirmation && loanAccount">
+                                <p class="text-center">
+                                    Are you sure you want to pay with this account?
+                                </p>
+                            </template>
+                            <div class="modal-footer border-0 mx-auto mx-md-0">
+                                <button @click="resetMessages" type="button" class="btn secondary-btn"
+                                    data-bs-dismiss="modal">Close</button>
+                                <template v-if="payLoanConfirmation && loanAccount">
+                                    <button @click="payLoan" type="button" class="btn primary-btn">
+                                        Yes, pay an installment
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button @click="confirmPay(this.loanAccount)" type="button" class="btn primary-btn">
+                                        Pay installment
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="mt-4 mb-4 d-flex flex-wrap justify-content-around align-items-center row-gap-5 column-gap-3">
+                    <template v-if="clientLoans.length > 0" v-for="loan of clientLoans">
+                        <article data-aos="fade-up" class="card accounts-card shadow py-3">
+                            <div class="card-body">
+                                <h3 class="card-text mb-3">
+                                    {{ loan.name }}
+                                </h3>
+                                <p class="card-text">
+                                    Amount:
+                                    <span class="d-block account-amount fw-bold fs-3">
+                                        {{ moneyFormatter.format(loan.amount) }}
+                                    </span>
+                                </p>
+                                <p class="card-text">
+                                    Total payments: {{ loan.payments }} installments
+                                </p>
+                                <p class="card-text">
+                                    Payments left: <span class="fw-bold">{{ loan.paymentsLeft }} installments</span>
+                                </p>
+                                <button @click="selectedLoan(loan)" data-bs-toggle="modal" data-bs-target="#loanModal"
+                                        type="button" class="btn primary-btn py-2 mt-2">
+                                    <i class="bi bi-cash me-1"></i>
+                                    Pay installments
+                                </button>
+                            </div>
+                        </article>
+                    </template>
+                    <template v-else>
+                        <div>
+                            <h3 class="text-center my-5">
+                                You don't have any loans. Get yours with us!
+                            </h3>
+                            <img class="empty-img" src="../images/error1.svg"
+                                alt="Drawing of a woman in an empty forest">
+                            <a href="loan-application.html"
+                                class="accounts-anchor btn primary-btn my-5 mx-auto py-2 px-4 d-flex align-items-center justify-content-center column-gap-2">
+                                <i class="bi bi-plus-lg fs-5"></i>
+                                Get a loan
+                            </a>
+                        </div>
+                    </template>
+                </div>
+                <template v-if="clientLoans.length > 0">
+                    <a href="loan-application.html"
+                        class="accounts-anchor btn primary-btn mt-5 mb-2 mx-auto py-2 px-4 d-flex align-items-center justify-content-center column-gap-2">
+                        <i class="bi bi-plus-lg fs-5"></i>
+                        Get a loan
+                    </a>
+                </template>
+            </section>
+        </section>
 
-    <footer class="mt-5 px-3 py-4 d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
-                    <i class="bi bi-instagram"></i>
+        <footer class="mt-5 px-3 py-4">
+            <div class="d-flex flex-column flex-sm-row row-gap-3 align-items-center justify-content-between">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 rounded-1 fs-3" href="#">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </li>
+                </ul>
+                <p class="mb-0 me-3 text-white">
+                    ©Mindhub Bank 2023 - All rights reserved
+                </p>
+            </div>
+            <div class="d-flex flex-wrap pt-3 mt-3 justify-content-start justify-content-md-center border-top">
+                <a class="footer-link me-4 rounded-1 px-3 py-2"
+                    href="https://www.linkedin.com/in/valentina-belen-sanchez/">
+                    <i class="bi bi-linkedin me-1"></i>
+                    Valentina Belén Sánchez
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
-                    <i class="bi bi-facebook"></i>
+                <a class="footer-link rounded-1 px-3 py-2" href="https://github.com/ValentinaBS">
+                    <i class="bi bi-github me-1"></i>
+                    ValentinaBS
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mx-3 rounded-1 fs-3" href="#">
-                    <i class="bi bi-whatsapp"></i>
-                </a>
-            </li>
-        </ul>
-        <p class="mb-0 me-3 text-white">
-            ©Mindhub Bank 2023 - All rights reserved
-        </p>
-    </footer>
-</div>
+            </div>
+        </footer>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="../js/accounts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="../js/accounts.js"></script>
 </body>
 
 </html>
