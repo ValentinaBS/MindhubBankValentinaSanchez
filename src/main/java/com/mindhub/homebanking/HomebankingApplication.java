@@ -16,9 +16,9 @@ import java.util.List;
 @SpringBootApplication
 public class HomebankingApplication {
 
-	//@Autowired
-	// Injects passwordEncoder to encode passwords
-	//private PasswordEncoder passwordEncoder;
+	@Autowired
+	//Injects passwordEncoder to encode passwords
+	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
@@ -28,7 +28,7 @@ public class HomebankingApplication {
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		// CommandLineRunner are methods that can be implemented to run at application startup
 		return (args) -> {
-/*			// Create clients
+			// Create clients
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("MelBA98!"));
 			Client client2 = new Client("Alex", "Fulsch", "alexfu@mindhub.com", passwordEncoder.encode("a"));
 			Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin123"));
@@ -39,16 +39,16 @@ public class HomebankingApplication {
 			clientRepository.save(client3);
 
 			// Create accounts
-			Account account1 = new Account("VIN-00000001", LocalDate.now(), 1249.5);
-			Account account2 = new Account("VIN-00000002", LocalDate.now().plusDays(1), 1267.5);
-			Account account3 = new Account("VIN-00000003", LocalDate.now(), 0.0);
-			Account account4 = new Account("VIN-00000004", LocalDate.now().plusDays(2), 0.0);
+			Account account1 = new Account("VIN-00000001", LocalDate.now(), 1249.5, true, AccountType.SAVINGS);
+			Account account2 = new Account("VIN-00000002", LocalDate.now().plusDays(1), 1267.5, true, AccountType.CHECKING);
+			Account account3 = new Account("VIN-00000003", LocalDate.now(), 0.0, true, AccountType.SAVINGS);
+			Account account4 = new Account("VIN-00000004", LocalDate.now().plusDays(2), 0.0, true, AccountType.CHECKING);
 
 			// Create transactions
-			Transaction trans1 = new Transaction(-2300.5, "Rent", LocalDateTime.now(), TransactionType.DEBIT);
-			Transaction trans2 = new Transaction(3550.0, "Wage pay", LocalDateTime.now().minusDays(1), TransactionType.CREDIT);
-			Transaction trans3 = new Transaction(-1232.5, "Groceries", LocalDateTime.now(), TransactionType.DEBIT);
-			Transaction trans4 = new Transaction(2500.0, "Birthday gift", LocalDateTime.now().minusDays(2), TransactionType.CREDIT);
+			Transaction trans1 = new Transaction(-2300.5, "Rent", LocalDateTime.now(), TransactionType.DEBIT, 0.0, true);
+			Transaction trans2 = new Transaction(3550.0, "Wage pay", LocalDateTime.now().minusDays(1), TransactionType.CREDIT, 0.0, true);
+			Transaction trans3 = new Transaction(-1232.5, "Groceries", LocalDateTime.now(), TransactionType.DEBIT, 0.0, true);
+			Transaction trans4 = new Transaction(2500.0, "Birthday gift", LocalDateTime.now().minusDays(2), TransactionType.CREDIT, 0.0, true);
 
 			// Assign accounts to clients
 			client1.addAccount(account1);
@@ -78,15 +78,15 @@ public class HomebankingApplication {
 			List<Integer> installmentsMortgage = List.of(12, 24, 36, 48, 60);
 			List<Integer> installmentsPersonal = List.of(6, 12, 24);
 			List<Integer> installmentsAutomotive = List.of(6, 12, 24, 36);
-			Loan loan1 = new Loan("Mortgage", 500000, installmentsMortgage);
-			Loan loan2 = new Loan("Personal", 100000, installmentsPersonal);
-			Loan loan3 = new Loan("Automotive", 300000, installmentsAutomotive);
+			Loan loan1 = new Loan("Mortgage", 500000, installmentsMortgage, 24.20);
+			Loan loan2 = new Loan("Personal", 100000, installmentsPersonal, 12.60);
+			Loan loan3 = new Loan("Automotive", 300000, installmentsAutomotive, 20.35);
 
 			// Create client loans
-			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60);
-			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12);
-			ClientLoan clientLoan3 = new ClientLoan(100000.0, 24);
-			ClientLoan clientLoan4 = new ClientLoan(200000.0, 36);
+			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60, 60, true);
+			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12, 12, true);
+			ClientLoan clientLoan3 = new ClientLoan(100000.0, 24, 24, true);
+			ClientLoan clientLoan4 = new ClientLoan(200000.0, 36, 36, true);
 
 			// Assign clientLoans to clients
 			client1.addClientLoan(clientLoan1);
@@ -112,9 +112,9 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan4);
 
 			// Create cards
-			Card card1 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.DEBIT, CardColor.GOLD, "3333-5464-7777-4333", 243, LocalDate.now(), LocalDate.now().plusYears(5));
-			Card card2 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.CREDIT, CardColor.PLATINUM, "2332-6551-5554-2222", 987, LocalDate.now(), LocalDate.now().plusYears(5));
-			Card card3 = new Card(client2.getFirstName() + " " + client2.getLastName(), CardType.CREDIT, CardColor.SILVER, "1112-8895-4455-5541", 556, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card1 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.DEBIT, CardColor.GOLD, "3333-5464-7777-4333", 243, LocalDate.now(), LocalDate.now().plusYears(5), true);
+			Card card2 = new Card(client1.getFirstName() + " " + client1.getLastName(), CardType.CREDIT, CardColor.PLATINUM, "2332-6551-5554-2222", 987, LocalDate.now(), LocalDate.now().plusYears(5), true);
+			Card card3 = new Card(client2.getFirstName() + " " + client2.getLastName(), CardType.CREDIT, CardColor.SILVER, "1112-8895-4455-5541", 556, LocalDate.now(), LocalDate.now().plusYears(5), true);
 
 			// Assign cards to clients
 			client1.addCard(card1);
@@ -124,7 +124,7 @@ public class HomebankingApplication {
 			// Save cards to the database
 			cardRepository.save(card1);
 			cardRepository.save(card2);
-			cardRepository.save(card3);*/
+			cardRepository.save(card3);
 		};
 	}
 }
