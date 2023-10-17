@@ -77,9 +77,11 @@ const options = {
                             customClass: {
                                 confirmButton: 'btn primary-btn btn-lg',
                             }
-                        })
-
-                        document.location.reload()
+                        }).then(result => {
+                            if (result.isConfirmed) {
+                                document.location.reload()
+                            }
+                        }
                     })
                     .catch(error => {
                         if (error.response) {
